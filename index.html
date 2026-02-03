@@ -1,0 +1,2789 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإدمان الرقمي</title>
+
+<style>
+
+html, body{
+  overflow-x: hidden;
+}
+
+
+
+section.slide{
+  scroll-margin-top: 160px;
+}
+
+
+
+
+.topbar-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:16px 20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  position:relative;
+}
+.topbar-inner > *{
+  flex-shrink:0;
+}
+
+
+[data-theme="dark"] .topbar{
+  background:transparent;
+}
+
+[data-theme="dark"] .topbar-inner{
+  background:rgba(18,20,26,.9);
+  border-radius:24px;
+  padding:14px 24px;
+  box-shadow:0 10px 35px rgba(0,0,0,.7);
+}
+
+.profile-btn{
+  font-size: clamp(20px, 2.4vw, 18px);
+  text-decoration:none;
+  cursor:pointer;
+}
+
+:root{
+  --light-card-bg: #f1f5fb;      /* أزرق فاتح جدًا */
+  --light-card-border: rgba(37,99,235,.12);
+  --light-card-shadow:
+    inset 0 1px 2px rgba(255,255,255,.9),
+    0 18px 45px rgba(30,64,175,.18);
+}
+
+
+:root{
+  --bg:#f6f7fb;
+  --text:#111;
+  --bar:rgba(255,255,255,.92);
+  --border:rgba(0,0,0,.08);
+  --primary:#2563eb;
+}
+
+[data-theme="dark"]{
+ --bg:#0f1115;
+  --text:#fff;
+
+  /* 🔥 لون موحّد لكل البراويز */
+  --card-bg: rgba(28,30,38,.95);
+
+  /* ✨ Shadow ناعم وراقي */
+  --card-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 14px 40px rgba(0,0,0,.75);
+
+  --border:rgba(255,255,255,.12);
+  --primary:#3b82f6;
+}
+
+
+[data-theme="dark"] .title-frame{
+  background:rgba(18,20,26,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 10px 35px rgba(0,0,0,.8);
+}
+
+[data-theme="dark"] .topbar{
+  background:rgba(20,22,28,.85);
+  box-shadow:0 10px 35px rgba(0,0,0,.6);
+}
+
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:system-ui;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* ===== Global Reading Typography ===== */
+body{
+  font-size: 18px;
+  line-height: 1.95;
+  letter-spacing: .2px;
+}
+
+
+/* منع التحديد */
+.topbar, button, .lang, .lang-item, .switch, h1, h2{
+  user-select:none;
+}
+
+/* ===== TOP BAR ===== */
+.topbar{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:90%;
+  max-width:1200px;
+  background:var(--bar);
+  backdrop-filter:blur(14px);
+  border-radius:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
+  z-index:100;
+}
+
+.topbar{
+  padding-inline: clamp(12px, 4vw, 28px);
+}
+
+
+.topbar-inner{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title-slot{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+  max-width:70%;
+}
+
+
+
+
+[data-theme="dark"] .title-frame{
+  background:rgba(255,255,255,.08);
+}
+
+ .title-text{
+  font-weight:900;
+  font-size:22px;
+  line-height:1.4;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;  /* ← ذكي مش وحش */
+}
+
+
+
+
+
+
+  
+
+.profile-btn{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(0,0,0,.06);
+  text-decoration:none;
+}
+
+[data-theme="dark"] .profile-btn{
+  background:rgba(255,255,255,.12);
+}
+
+
+
+
+/* ===== CONTROLS ===== */
+.profile-btn{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(0,0,0,.06);
+  font-size: clamp(18px, 2.4vw, 18px);
+  text-decoration:none;
+  cursor:pointer;
+}
+
+[data-theme="dark"] .profile-btn{
+  background:rgba(255,255,255,.12);
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+/* ===== SWITCH ===== */
+.switch{
+  
+  width:54px;
+  height:28px;
+  background:rgba(0,0,0,.15);
+  border-radius:999px;
+  position:relative;
+  cursor:pointer;
+}
+
+.knob{
+  width:22px;
+  height:22px;
+  background:#fff;
+  border-radius:50%;
+  position:absolute;
+  top:3px;
+  left:3px;
+  transition:.3s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+[data-theme="dark"] .knob{
+  left:29px;
+  background:#000;
+  color:#fff;
+}
+[data-theme="dark"] .topbar{
+  box-shadow:0 14px 40px rgba(0,0,0,.6);
+}
+
+
+
+
+/* ===== SLIDES ===== */
+.slide{
+  min-height:100vh;
+  padding-top:60px;
+  padding-bottom:120px; /* مسافة كبيرة وواضحة */
+}
+
+
+.slide-content{
+  max-width:720px;
+   padding-inline: clamp(12px, 4vw, 20px);
+  margin-top:0;   /* مهم */
+  line-height:1.9;
+}
+
+
+
+.slide p{
+  font-size: clamp(18px, 2.4vw, 18px);
+  margin-bottom:22px;
+}
+/* ===== FOOTER ===== */
+.site-footer{
+  margin-top:-40px;
+  padding:50px 20px;
+  background:var(--bar);
+  border-top:1px solid var(--border);
+}
+
+.footer-inner{
+  max-width:900px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+  text-align:center;
+}
+
+.footer-text{
+  font-size: clamp(18px, 2.6vw, 22px);
+  font-weight: 700;
+  opacity: .9;
+  text-align: center;
+}
+
+
+.footer-btn{
+  text-decoration:none;
+  padding:12px 36px;
+  border-radius:999px;
+  background:var(--primary);
+  color:#fff;
+  font-size: clamp(15px, 2.4vw, 18px);
+  font-weight:700;
+  transition:.25s;
+}
+
+.footer-btn:hover{
+  transform:translateY(-2px);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+
+
+/* ===== Slide Animation ===== */
+
+.topbar{
+  animation: dropBar 1s ease forwards;
+  opacity:0;
+}
+
+@keyframes dropBar{
+  from{
+    transform:translate(-50%,-20px);
+    opacity:0;
+  }
+  to{
+    transform:translate(-50%,0);
+    opacity:1;
+  }
+}
+
+
+
+@keyframes fadeUp{
+  from{
+    transform:translateY(20px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+#progress-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  height:3px;
+  width:0%;
+  background:var(--primary);
+  z-index:9999;
+  transition:width .1s linear;
+}
+
+/* === FIX نهائي لزر قائمة العناوين === */
+
+
+/* Tooltip */
+.toc-toggle .tooltip{
+  position: absolute;
+  bottom: 70px;
+  right: 50%;
+  transform: translateX(50%);
+
+  background: #111;
+  color: #fff;
+  font-size:13px;
+  padding: 6px 10px;
+  text-align: center;
+  max-width: 200px;
+  border-radius: 8px;
+
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: .3s;
+}
+@media (max-width:600px){
+  .toc-toggle .tooltip{
+    font-size:11px;
+  }
+}
+
+.toc-toggle:hover .tooltip{
+  opacity: 1;
+}
+
+
+
+/* صندوق المحتويات */
+
+.toc-panel{
+  position:fixed;
+  top:0;
+  right:0;
+
+  width:300px;
+  max-width:90vw;
+  height:100vh;
+
+  transform: translateX(100%);
+  transition: transform .4s ease;
+
+  background:var(--bar);
+  backdrop-filter:blur(16px);
+  padding:30px 20px;
+  box-shadow:-10px 0 30px rgba(0,0,0,.2);
+  z-index:998;
+}
+
+.toc-panel.open{
+  transform: translateX(0);
+}
+
+
+.toc-panel h3{
+  margin-bottom:20px;
+}
+
+.toc-panel ul{
+  padding:0;
+}
+
+.toc-panel li{
+  list-style:none;
+  margin-bottom:14px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.toc-panel li:hover{
+  color:var(--primary);
+}
+
+
+/* الفقرات ترجع طبيعية */
+.slide-content{
+  text-align: right;
+}
+
+
+/* الكلام يرجع طبيعي تحت العنوان */
+.slide-content p{
+  text-align: right;
+}
+
+/* ===== Dark Mode ===== */
+[data-theme="dark"] .slide h2{
+  background: rgba(18,20,26,.9);
+  color: #fff;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 10px 35px rgba(0,0,0,.8);
+}
+
+/* حاوية العنوان */
+.section-title{
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+
+
+
+  
+
+/* دارك مود */
+[data-theme="dark"] .section-title h2{
+  background: rgba(18,20,26,.9);
+  color: #fff;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 10px 35px rgba(0,0,0,.8);
+}
+
+/* النص يرجع طبيعي */
+.slide-content{
+  text-align: right;
+}
+
+/* ===== صندوق محتويات البحث ===== */
+.toc-box{
+  max-width:720px;
+  margin:120px auto 60px;
+  padding:24px;
+  border-radius:24px;
+  background:var(--bar);
+  box-shadow:0 20px 40px rgba(0,0,0,.15);
+}
+
+/* عنوان محتويات البحث */
+.toc-title{
+  text-align:center;
+  font-weight:900;
+  font-size: clamp(18px, 2.4vw, 18px);
+  margin-bottom:18px;
+  user-select:none;
+  padding:10px 24px;
+  border-radius:999px;
+  background:rgba(255,255,255,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 24px rgba(0,0,0,.18);
+}
+
+[data-theme="dark"] .toc-title{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+/* ليستة العناوين */
+.toc-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+.toc-list li{
+  margin-bottom:10px;
+}
+
+.toc-list a{
+  display:block;
+  padding:12px 18px;
+  border-radius:12px;
+  text-decoration:none;
+  color:var(--text);
+  background:rgba(0,0,0,.04);
+  font-weight:600;
+}
+
+[data-theme="dark"] .toc-list a{
+  background:rgba(255,255,255,.08);
+}
+
+.toc-list a:hover{
+  background:var(--primary);
+  color:#fff;
+}
+
+
+
+
+
+
+
+
+
+/* ===== أنيميشن عام لكل الأزرار ===== */
+button,
+.profile-btn,
+.switch,
+.toc-toggle,
+.footer-btn{
+  transition:.25s ease;
+}
+
+button:hover,
+.profile-btn:hover,
+.switch:hover,
+.toc-toggle:hover,
+.footer-btn:hover{
+  transform:translateY(-2px) scale(1.04);
+}
+
+button:active,
+.profile-btn:active,
+.switch:active,
+.toc-toggle:active{
+  transform:scale(.95);
+}
+
+/* ===== عنوان محتويات البحث ===== */
+.toc-title{
+  text-align:center;
+  font-weight:900;
+  font-size: clamp(18px, 2.4vw, 18px);
+  margin-bottom:18px;
+  user-select:none;
+
+  padding:10px 28px;
+  border-radius:999px;
+  background:rgba(255,255,255,.9);
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 10px 30px rgba(0,0,0,.18);
+}
+
+[data-theme="dark"] .toc-title{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+/* ===== عناصر محتويات البحث ===== */
+.toc-panel li{
+  padding:10px 12px;
+  border-radius:10px;
+  transition:.25s;
+}
+
+.toc-panel li:hover{
+  background:var(--primary);
+  color:#fff;
+  transform:translateX(-4px);
+}
+
+/* العنصر النشط في محتويات البحث */
+.toc-panel li.active{
+  background:var(--primary);
+  color:#fff;
+}
+
+/* ===== Scroll لقائمة محتويات البحث ===== */
+.toc-panel{
+  overflow-y: auto;      /* يفتح اسكرول */
+  overscroll-behavior: contain;
+}
+
+/* شكل الاسكرول */
+.toc-panel::-webkit-scrollbar{
+  width:6px;
+}
+
+.toc-panel::-webkit-scrollbar-thumb{
+  background:rgba(0,0,0,.3);
+  border-radius:10px;
+}
+
+[data-theme="dark"] .toc-panel::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.25);
+}
+
+/* منع التحديد */
+.toc-toggle,
+.toc-panel,
+.toc-panel *{
+  user-select:none;
+}
+
+
+
+.toc-toggle.hidden{
+  opacity:0;
+  pointer-events:none;
+}
+
+
+
+
+/* ===== عنوان السلايد (نسخة نهائية) ===== */
+.section-title{
+  text-align:center;
+  margin-bottom:80px;
+}
+
+
+
+/* دارك مود */
+[data-theme="dark"] .section-title h2{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 10px 35px rgba(0,0,0,.8);
+}
+
+/* === FIX نهائي لعناوين السلايد === */
+.section-title{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+
+
+
+
+/* === FIX نهائي لأول سلايد === */
+body{
+  padding-top:140px;
+}
+
+#slide-1{
+  min-height: calc(100vh - 140px);
+}
+
+/* ===== FIX نهائي للعناوين ===== */
+.section-title{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+.section-title h2{
+  margin:0;
+  padding:14px 40px;
+
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight:900;
+  line-height:1.6;
+
+  direction:rtl;
+  text-align:center;
+
+  white-space:normal;
+  max-width:90%;
+
+  border-radius:999px;
+  background:rgba(255,255,255,.9);
+  color:#111;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 10px 30px rgba(0,0,0,.18);
+}
+
+/* دارك مود */
+[data-theme="dark"] .section-title h2{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+/* ===== FORCE FIX للعناوين ===== */
+.section-title{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+.section-title h2{
+  writing-mode: horizontal-tb !important;
+  direction: rtl !important;
+
+  display:block !important;
+  width:auto !important;
+  max-width:90% !important;
+
+  text-align:center !important;
+  white-space:normal !important;
+
+  font-size: clamp(26px, 2.4vw, 18px);
+  font-weight:900;
+  line-height:1.6;
+
+  padding:14px 40px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.9);
+  color:#111;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 10px 30px rgba(0,0,0,.18);
+}
+
+[data-theme="dark"] .section-title h2{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+.section-title h2{
+  position: relative;
+  overflow: hidden;
+}
+.section-title h2::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.35),
+      rgba(255,255,255,0) 60%
+    );
+  opacity:.25;
+  pointer-events:none;
+}
+[data-theme="dark"] .section-title h2::before{
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,0) 60%
+    );
+}
+
+
+/* ===== Tooltip عام ===== */
+.tooltip-wrap{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tooltip-text{
+  position: absolute;
+  bottom: -42px;
+  right: 50%;
+  transform: translateX(50%) translateY(6px);
+
+  background: rgba(0,0,0,.8);
+  color: #fff;
+
+  padding: 6px 14px;
+  border-radius: 999px;
+
+  font-size: clamp(13px, 2.4vw, 18px);
+  font-weight: 600;
+  white-space: nowrap;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s ease;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+}
+
+/* سهم صغير */
+.tooltip-text::after{
+  content:"";
+  position:absolute;
+  top:-6px;
+  right:50%;
+  transform:translateX(50%);
+  border:6px solid transparent;
+  border-bottom-color:rgba(0,0,0,.8);
+}
+
+.tooltip-wrap:hover .tooltip-text{
+  opacity:1;
+  transform: translateX(50%) translateY(0);
+}
+
+/* دارك مود */
+[data-theme="dark"] .tooltip-text{
+  background: rgba(255,255,255,.15);
+  color:#fff;
+}
+[data-theme="dark"] .tooltip-text::after{
+  border-bottom-color: rgba(255,255,255,.15);
+}
+
+/* === Animation مضبوط لزر القائمة === */
+.toc-toggle{
+  position: fixed !important;
+  bottom: 32px;
+  right: 32px;
+
+  width: 56px;
+  height: 56px;
+
+  background: var(--primary);
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  font-size: clamp(22px, 2.4vw, 18px);
+  cursor: pointer;
+
+  box-shadow: 0 12px 30px rgba(0,0,0,.25);
+  z-index: 9999;
+
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.toc-toggle{
+  bottom: clamp(16px, 5vw, 32px);
+  right: clamp(16px, 5vw, 32px);
+  width: clamp(48px, 10vw, 56px);
+  height: clamp(48px, 10vw, 56px);
+}
+
+
+.toc-toggle:hover{
+  transform: translateY(-6px) scale(1.08);
+  box-shadow: 0 18px 40px rgba(0,0,0,.35);
+}
+
+.toc-toggle:active{
+  transform: translateY(2px) scale(.95);
+}
+
+@keyframes pulseTitle{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+  100%{transform:scale(1)}
+}
+
+.pulse-title{
+  animation:pulseTitle .6s ease;
+}
+
+.current-section{
+  position:fixed;
+  top:110px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:8px 22px;
+  border-radius:999px;
+  background:var(--bar);
+  font-weight:700;
+  font-size: clamp(16px, 2.4vw, 18px);
+  opacity:0;
+  transition:.3s;
+  z-index:90;
+}
+
+
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  50%{transform:translateX(4px)}
+  75%{transform:translateX(-4px)}
+  100%{transform:translateX(0)}
+}
+.toc-toggle.shake{
+  animation:shake .6s ease;
+}
+
+.toc-panel li.active{
+  position:relative;
+  font-weight:900;
+}
+.toc-panel li.active::before{
+  content:"●";
+  position:absolute;
+  right:-14px;
+}
+
+.slide-content p{
+  max-width:680px;
+  margin-inline:auto;
+}
+
+.end-message{
+  text-align:center;
+  margin-top:40px;
+  font-weight:800;
+  opacity:.8;
+}
+
+.current-topic{
+  position:absolute;
+  left:20px;
+  top:50%;
+  transform:translateY(-50%) translateX(-10px);
+
+  padding:8px 22px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 24px rgba(0,0,0,.18);
+
+  font-weight:900;
+  font-size: clamp(16px, 2.4vw, 18px);
+  white-space:nowrap;
+
+  opacity:0;
+  pointer-events:none;
+  transition:.35s ease;
+}
+
+
+[data-theme="dark"] .current-topic{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+
+.slide{
+  padding-bottom:120px;
+}
+
+/* ===== نظام السلايد الجديد ===== */
+
+
+/* توسيط المحتوى */
+.slide-content{
+  max-width:720px;
+  margin-inline:auto;
+}
+
+@media (max-width: 600px){
+  .toc-panel{
+    width: 88vw;
+  }
+}
+
+@media (max-width:600px){
+  .toc-panel{
+    width: 75vw;
+    padding: 20px 16px;
+  }
+
+  .toc-panel li{
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+@media (max-width:600px){
+  .title-text{
+    font-size:16px;
+  }
+.title-frame{
+    max-width: 55%;
+    padding:8px 18px;
+  }
+}
+ 
+
+
+@media (max-width:420px){
+  .title-text{
+    font-size:13px;
+  }
+
+  .title-frame{
+    max-width: 50%;
+    padding:6px 12px;
+  }
+}
+
+/* ===== TITLE FRAME (FINAL FIX) ===== */
+.title-frame{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:10px 26px;
+  margin-top:0.5px;              /* ✅ حل اللزق */
+  border-radius:999px;
+
+  background:rgba(255,255,255,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 24px rgba(0,0,0,.18);
+
+  max-width:100%;
+}
+
+
+[data-theme="dark"] .title-frame{
+  background:rgba(18,20,26,.9);
+}
+
+.profile-btn,
+.switch{
+  flex-shrink:0;   /* ❌ ممنوع ينكمش */
+}
+
+.title-slot{
+  flex:1;                /* ياخد المساحة المتاحة فقط */
+  display:flex;
+  justify-content:center;
+  min-width:0;           /* مهم جدًا */
+}
+
+@media (max-width: 600px){
+
+  .mobile-subtitle{
+    display: block;
+    max-width: 100%;
+
+    white-space: nowrap;        /* ❌ ممنوع سطرين */
+    overflow: hidden;           /* ❌ ممنوع خروج */
+    text-overflow: ellipsis;    /* … قص ذكي */
+
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+
+    padding: 6px 14px;
+    border-radius: 999px;
+
+    background: rgba(255,255,255,.85);
+    backdrop-filter: blur(10px);
+
+    box-shadow: 0 6px 16px rgba(0,0,0,.12);
+  }
+
+  [data-theme="dark"] .mobile-subtitle{
+    background: rgba(18,20,26,.85);
+    color: #fff;
+  }
+
+.topbar{
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .topbar-inner{
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+}
+}
+
+
+@media (max-width:600px){
+  .mobile-subtitle{
+    display:block;
+  }
+
+  .title-frame{
+    padding: 8px 22px;
+      }
+
+  .title-text{
+    font-size:16px;
+  }
+}
+
+.title-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  max-width:100%;
+}
+
+.title-main{
+  font-weight:900;
+  font-size:20px;
+  line-height:1.5;
+
+  text-align:center;
+  white-space:normal;     /* ✅ يلف الكلام */
+  word-break:break-word; /* ✅ مفيش خنق */
+}
+
+[data-theme="dark"] .title-frame,
+[data-theme="dark"] .mobile-subtitle{
+  background:rgba(18,20,26,.85);
+  color:#fff;
+}
+
+@media (max-width:600px){
+  .title-main{
+    font-size:16px;
+  }
+
+  .mobile-subtitle{
+    display:inline-flex;
+  }
+}
+
+.profile-btn,
+.switch{
+  flex-shrink:0;
+}
+
+.profile-btn{
+  order:1;
+}
+
+.title-slot{
+  order:2;
+}
+
+.switch{
+  order:3;
+}
+
+.profile-btn{
+  position: relative;
+  z-index: 2;
+}
+
+.switch{
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== DARK MODE – GLOBAL CARD STYLE ===== */
+[data-theme="dark"] .topbar,
+[data-theme="dark"] .title-frame,
+[data-theme="dark"] .section-title h2,
+[data-theme="dark"] .toc-panel,
+[data-theme="dark"] .toc-title,
+[data-theme="dark"] .toc-box,
+[data-theme="dark"] .mobile-subtitle,
+[data-theme="dark"] .current-topic,
+[data-theme="dark"] .site-footer{
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+}
+
+[data-theme="dark"] .topbar,
+[data-theme="dark"] .section-title h2{
+  transition:
+    background .3s ease,
+    box-shadow .3s ease,
+    transform .3s ease;
+}
+
+/* ===== DARK MODE FIX – SWITCH VISIBILITY ===== */
+[data-theme="dark"] .switch{
+  background: rgba(255,255,255,.12);   /* أفتح من الخلفية */
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.15),
+    0 6px 18px rgba(0,0,0,.6);
+}
+
+/* الـ knob (القمر) */
+[data-theme="dark"] .knob{
+  background: #111;          /* يبان أكتر */
+  color: #fff;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.2),
+    0 4px 10px rgba(0,0,0,.6);
+}
+
+/* ===== Dark Mode Unified Frames ===== */
+[data-theme="dark"] .title-frame,
+[data-theme="dark"] .section-title h2,
+[data-theme="dark"] .toc-panel,
+[data-theme="dark"] .site-footer,
+[data-theme="dark"] .mobile-subtitle {
+  background: rgba(28,30,36,.95);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 12px 30px rgba(0,0,0,.65);
+}
+
+
+/* ===== TITLE SOFT REVEAL ANIMATION ===== */
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    box-shadow:
+      inset 0 1px 2px rgba(255,255,255,.05),
+      0 0 0 rgba(0,0,0,0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    box-shadow:
+      inset 0 1px 2px rgba(255,255,255,.08),
+      0 14px 40px rgba(0,0,0,.35);
+  }
+}
+
+.section-title h2{
+  animation: titleReveal .7s ease forwards;
+}
+
+[data-theme="dark"] .section-title h2{
+  animation: titleReveal .7s ease forwards;
+}
+
+@keyframes lightBreath {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.03); }
+  100% { filter: brightness(1); }
+}
+
+
+@keyframes titleReveal {
+  from{
+    opacity:0;
+    transform: translateY(12px);
+  }
+  to{
+    opacity:1;
+    transform: translateY(0);
+  }
+}
+
+.section-title h2{
+  animation: titleReveal .8s ease both;
+}
+
+
+
+/* ===== SECTION TITLE – CLEAR ANIMATION ===== */
+.section-title h2{
+  opacity: 0;
+  transform: translateY(25px);
+  transition:
+    opacity .8s ease,
+    transform .8s ease,
+    box-shadow .8s ease;
+}
+
+/* لما يدخل الشاشة */
+.section-title h2.in-view{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== LIGHT MODE – READING FEEDBACK ===== */
+[data-theme="light"] .slide.reading{
+  background: rgba(255,255,255,.55);
+  border-radius: 24px;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.6),
+    0 20px 45px rgba(0,0,0,.12);
+  transition: background .6s ease, box-shadow .6s ease;
+}
+
+@keyframes darkShadowPulse {
+  0%   { box-shadow: var(--card-shadow); }
+  50%  { box-shadow: inset 0 1px 2px rgba(255,255,255,.08),
+                  0 22px 55px rgba(0,0,0,.85); }
+  100% { box-shadow: var(--card-shadow); }
+}
+
+[data-theme="dark"] .section-title h2.in-view{
+  animation: darkShadowPulse 4s ease-in-out infinite;
+}
+
+/* ===== SLIDE CLEAN BACKGROUND (NO BOOK EFFECT) ===== */
+.slide{
+  background: var(--bg);
+  box-shadow: none;
+  padding-bottom: 120px; /* مسافة مريحة بس مش مبالغ فيها */
+}
+
+.slide{
+  transition: background .4s ease;
+}
+
+/* ===== FORCE ONE COLOR BACKGROUND ===== */
+html,
+body,
+.slide,
+.slide-content {
+  background: var(--bg) !important;
+}
+
+/* ===== REMOVE BOOK / CARD FEEL COMPLETELY ===== */
+.slide,
+.slide-content,
+.slide-end {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* ===== ABSOLUTE COLOR LOCK ===== */
+[data-theme="light"] {
+  --bg: #f6f7fb;
+}
+
+[data-theme="dark"] {
+  --bg: #0f1115;
+}
+
+/* ===== PREVENT THEME FLASH ===== */
+.theme-lock,
+.theme-lock * {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* ===== Mobile TOC – حجم مريح ===== */
+/* ===== Mobile TOC – SIDE PANEL (FINAL FIX) ===== */
+@media (max-width: 600px){
+
+  .toc-panel{
+    top: 0;
+    right: 0;
+    position:fixed;
+
+    width: 78vw;          /* ⬅️ حجم مريح */
+    max-width: 320px;
+    height: 100vh;
+
+    transform: translateX(100%); /* ❌ مخفية */
+    transition: transform .35s ease;
+
+    border-radius: 0 0 0 28px;
+    padding: 20px 16px;
+
+    overflow-y: auto;
+  }
+
+  .toc-panel.open{
+    transform: translateX(0);   /* ✅ تطلع من اليمين */
+  }
+
+  .toc-title{
+    font-size: 16px;
+    padding: 8px 18px;
+    margin-bottom: 14px;
+  }
+
+  .toc-panel li{
+    font-size: 15px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+  }
+}
+
+/* ===== TOC CLOSE BUTTON ===== */
+/* زر إغلاق قائمة المحتويات */
+.toc-close{
+  position:absolute;
+  top:16px;
+  right:16px;
+
+  width:34px;
+  height:34px;
+
+  border:none;
+  border-radius:50%;
+  background:rgba(0,0,0,.08);
+
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:.25s ease;
+  z-index:10;
+}
+
+
+/* Hover */
+.toc-close:hover{
+  background:var(--primary);
+  color:#fff;
+  transform:rotate(90deg) scale(1.05);
+}
+
+/* Dark mode */
+[data-theme="dark"] .toc-close{
+  background:rgba(255,255,255,.12);
+  color:#fff;
+}
+
+.toc-title-wrap{
+  display:flex;
+  justify-content:center;
+  margin-bottom:20px;
+}
+
+.toc-title{
+  display:inline-block;      /* 🔑 المفتاح */
+  padding:12px 28px;
+  border-radius:999px;
+  font-weight:900;
+  white-space:nowrap;
+
+  background:rgba(255,255,255,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 24px rgba(0,0,0,.18);
+}
+
+[data-theme="dark"] .toc-title{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+/* ===== ARTICLE – CLEAN FRAME ===== */
+/* ===== ARTICLE – TOPBAR STYLE FRAME ===== */
+.article{
+  position: relative;
+
+  margin-bottom: 48px;
+  padding: 36px 34px;
+
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(12px);
+
+  border-radius: 32px;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.7),
+    0 20px 48px rgba(0,0,0,.16);
+
+  opacity: 0;
+  transform: translateY(40px);
+
+  transition:
+    opacity .6s ease,
+    transform .6s ease,
+    box-shadow .6s ease;
+}
+
+/* ===============================
+   ARTICLE – FINAL CLEAN LIGHT MODE
+================================= */
+
+/* ===== ARTICLE – READING MODE ===== */
+[data-theme="light"] .article{
+  background: #ffffff; /* أبيض صافي للقراءة */
+  border: 1px solid rgba(0,0,0,.05);
+
+  border-radius: 26px;
+
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.08);
+
+  padding: 34px 32px;
+  margin-bottom: 28px;
+
+  transition:
+    box-shadow .35s ease,
+    transform .35s ease;
+}
+
+
+/* دارك مود */
+[data-theme="dark"] .article{
+  background: rgba(28,30,38,.95);
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 26px 60px rgba(0,0,0,.85);
+}
+
+
+
+/* Hover */
+.article:hover{
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.7),
+    0 34px 70px rgba(0,0,0,.22);
+  transform: translateY(-4px);
+}
+
+
+
+
+/* ===== ARTICLE TITLE ===== */
+/* ===== ARTICLE SUB TITLE (STRONG) ===== */
+.article h3{
+  display: inline-block;
+
+  padding: 12px 26px;
+  margin-bottom: 22px;
+
+  font-size: clamp(20px, 2.4vw, 24px);
+  font-weight: 900;
+  letter-spacing: .3px;
+
+  border-radius: 14px;
+
+  }
+
+[data-theme="light"] .article h3{
+  background: rgba(37,99,235,.12);
+  color:#0f172a;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.9),
+    0 12px 28px rgba(37,99,235,.25);
+}
+
+
+/* دارك مود */
+[data-theme="dark"] .article h3{
+  color:#eaf1ff;
+  background: rgba(96,165,250,.22);
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 14px 34px rgba(0,0,0,.7);
+}
+
+
+.article:hover{
+  transform: translateY(-6px);
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.18);
+}
+
+[data-theme="dark"] .article:hover{
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 28px 60px rgba(0,0,0,.9);
+}
+
+
+
+
+/* ===== ARTICLE REVEAL ANIMATION ===== */
+.article{
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+.article.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.article:hover{
+  box-shadow:
+    0 26px 60px rgba(0,0,0,.2);
+  transform: translateY(-4px);
+}
+
+@media (max-width:600px){
+  .article{
+    padding: 26px 22px;
+    border-radius: 26px;
+  }
+
+  .article h3{
+    font-size: 18px;
+    padding: 10px 18px;
+  }
+}
+
+
+
+[data-theme="light"] .article::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(37,99,235,.12),
+      rgba(37,99,235,0) 40%,
+      rgba(37,99,235,.10)
+    );
+
+  opacity:.35;
+  pointer-events:none;
+}
+
+
+[data-theme="light"] .article:hover{
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.12);
+}
+
+/* ===== Article Text (Readable & Professional) ===== */
+.article p{
+  font-size: clamp(18px, 2.2vw, 20px);
+  line-height: 2;
+  letter-spacing: .25px;
+  color: #222;
+}
+
+/* ===== DARK MODE – ARTICLE TEXT FIX ===== */
+[data-theme="dark"] .article p{
+  color: #e5e7eb;   /* رمادي فاتح مريح للعين */
+}
+
+
+/* ===== Reading Progress Bar ===== */
+#reading-progress{
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  background: var(--primary);
+  z-index: 10000;
+  transition: width .15s linear;
+}
+
+/* دارك مود */
+[data-theme="dark"] #reading-progress{
+  background: #3b82f6;
+}
+
+@media (max-width:600px){
+  .title-slot{
+    max-width:85%;
+  }
+
+  }
+
+
+
+/* =============================================================================== ===== */
+</style>
+</head>
+
+<body data-theme="light">
+<div id="reading-progress"></div>
+
+
+<header class="topbar">
+  <div class="topbar-inner">
+
+
+ <!-- شمال -->
+  <div class="switch" id="themeSwitch">
+    <div class="knob" id="knob">☀️</div>
+  </div>
+
+
+
+
+    <!-- النص (العنوان فقط) -->
+  <div class="title-slot">
+    <div class="title-wrap">
+      <div class="title-frame">
+        <span id="topTitleMain" class="title-main">الإدمان الرقمي</span>
+      </div>
+      <div class="mobile-subtitle" id="mobileTitle"></div>
+    </div>
+  </div>
+
+    <!-- بروفايل -->
+   <div class="tooltip-wrap">
+  <a href="profile.html" class="profile-btn">👤</a>
+  <div class="tooltip-text">الملف التعريفي لصاحب المشروع</div>
+</div>
+
+  </div>
+</header>
+
+ 
+<!-- زر فتح المحتويات -->
+
+
+<!-- صندوق المحتويات -->
+<div class="toc-panel" id="toc">
+
+  <button class="toc-close" id="tocClose">✕</button>
+
+  <div class="toc-title-wrap">
+    <div class="toc-title">محتويات البحث</div>
+  </div>
+
+  <ul>
+    <li data-target="slide-1">مقدمة</li>
+    <li data-target="slide-2">ما هو الإدمان الرقمي؟</li>
+    <li data-target="slide-3">كيف يعمل الإدمان في الدماغ</li>
+    <li data-target="slide-4">تأثير الإدمان الرقمي على الطالب</li>
+    <li data-target="slide-5">دور وسائل التواصل الاجتماعي</li>
+    <li data-target="slide-6">التأثير النفسي والاجتماعي</li>
+    <li data-target="slide-7">دور الأسرة والمدرسة</li>
+    <li data-target="slide-8">هل التكنولوجيا كلها سيئة؟</li>
+    <li data-target="slide-9">حلول عملية</li>
+    <li data-target="slide-10">الخاتمة</li>
+  </ul>
+</div>
+
+
+
+
+<!-- ===== SLIDE 1 ===== -->
+<section class="slide" id="slide-1">
+  <div class="slide-content">
+<div class="section-title">
+  <h2>مقدمة</h2>
+</div>
+
+<!-- مقال 1 -->
+    <div class="article">
+      <h3>الهاتف الذكي كجزء من الحياة اليومية</h3>
+      <p>
+        في السنوات الأخيرة، أصبح الهاتف الذكي عنصرًا أساسيًا في حياة الإنسان، ولم يعد مجرد وسيلة إضافية نستخدمها عند الحاجة. فقد دخل الهاتف في تفاصيل يومنا بشكل واضح، بدءًا من الاستيقاظ صباحًا على المنبه، مرورًا بالتواصل مع الأصدقاء والعائلة، ومتابعة الأخبار، وحتى استخدامه في التعلم والترفيه. هذا الانتشار السريع جعل الهاتف حاضرًا في كل لحظة تقريبًا، وأصبح من الصعب تخيّل يوم كامل من دونه.
+
+ومع تطور التطبيقات وسهولة الوصول إلى الإنترنت، تحوّل الهاتف إلى أداة متعددة الوظائف، تجمع بين العمل والتسلية والتواصل في جهاز واحد. هذا الدمج جعل استخدامه يبدو طبيعيًا ومبررًا في أغلب الأوقات، خاصة مع اعتماده في الدراسة والبحث والتواصل السريع، مما عزّز مكانته كجزء لا يتجزأ من الحياة اليومية.
+
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>الاستخدام المستمر وغياب الوعي</h3>
+      <p>
+        
+مع هذا الحضور الدائم للتكنولوجيا الرقمية، بدأ الاستخدام يتحول تدريجيًا من استخدام واعٍ ومحدد إلى استخدام مستمر وغير منظم. فأصبحت الشاشات ترافق الإنسان في كل مكان: في المنزل، في المدرسة، في وسائل المواصلات، وحتى في أوقات الراحة وقبل النوم. هذا التواجد الدائم لم يعد مرتبطًا بحاجات حقيقية فقط، بل أصبح في كثير من الأحيان عادة تلقائية يمارسها الفرد دون تفكير.
+
+كثرة الاستخدام دون وعي أدت إلى قضاء ساعات طويلة أمام الهاتف، أحيانًا دون الشعور بمرور الوقت. هذا السلوك لا يظهر فجأة، بل يتكوّن تدريجيًا مع تكرار الاستخدام، حتى يصبح الهاتف هو الخيار الأول لتمضية الوقت، سواء كان ذلك بدافع الملل أو التسلية أو الهروب من الضغوط اليومية.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>بداية التساؤل وظهور الإدمان الرقمي</h3>
+      <p>
+        
+مع ازدياد هذا النمط من الاستخدام، بدأت تطرح تساؤلات مهمة حول طبيعة العلاقة بين الإنسان والتكنولوجيا. هل ما نعيشه مجرد استخدام طبيعي لأدوات حديثة؟ أم أن الأمر تجاوز ذلك ليصل إلى مرحلة يصعب فيها التحكم في السلوك؟ ومتى يتحول الاستخدام المفيد إلى اعتماد مفرط قد يحمل آثارًا سلبية؟
+
+من هنا ظهر مفهوم الإدمان الرقمي كظاهرة حديثة تعكس هذا الخلل في التوازن. وهو نوع من الإدمان لا يعتمد على مواد مخدّرة، بل على سلوك متكرر يرتبط بالشاشات والتطبيقات الرقمية. ورغم أنه قد يبدو أقل خطورة في ظاهره، إلا أن تأثيره يمتد إلى جوانب متعددة من حياة الفرد، مثل التركيز والحالة النفسية والعلاقات الاجتماعية، مما يجعله موضوعًا يستحق الدراسة والفهم
+
+      </p>
+    </div>
+
+  </div>
+<div class="slide-end"></div>
+</section>
+
+<!-- ===== SLIDE 2 ===== -->
+<section class="slide" id="slide-2">
+  <div class="slide-content">
+<div class="section-title">
+  <h2>ما هو الإدمان الرقمي؟</h2>
+</div>   
+    <!-- مقال 1 -->
+    <div class="article">
+      <h3>تعريف الإدمان الرقمي</h3>
+      <p>
+        
+الإدمان الرقمي هو حالة من التعلّق المفرط بالأجهزة والتقنيات الرقمية، مثل الهواتف الذكية ووسائل التواصل الاجتماعي، بحيث يفقد الفرد القدرة على التحكم في مدة الاستخدام أو تقليله. في هذه الحالة، لا يعود الهاتف مجرد أداة تُستخدم عند الحاجة، بل يتحول إلى عنصر أساسي يشعر الإنسان بأنه لا يستطيع الاستغناء عنه، حتى في الأوقات التي لا يكون فيها استخدامه ضروريًا.
+
+ويختلف الإدمان الرقمي عن الاستخدام العادي في أن المستخدم المدمن لا يستخدم التكنولوجيا لهدف واضح دائمًا، بل يلجأ إليها بشكل تلقائي ومتكرر، أحيانًا دون سبب محدد. وقد يدرك الفرد أن هذا الاستخدام يضره أو يضيّع وقته، لكنه يجد صعوبة في التوقف أو التقليل، وهو ما يُعد سمة أساسية من سمات الإدمان.
+
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>الفرق بين الاستخدام الطبيعي والإدماني</h3>
+      <p>
+        
+ليس كل استخدام مكثف للتكنولوجيا يُعد إدمانًا رقميًا. فالاستخدام الطبيعي يكون مرتبطًا بهدف واضح، مثل الدراسة أو العمل أو التواصل الضروري، ويمكن للفرد إيقافه بسهولة عند انتهاء الحاجة. أما الاستخدام الإدماني، فيتسم بعدم القدرة على التوقف، حتى في الأوقات غير المناسبة، مثل أثناء المذاكرة أو قبل النوم أو أثناء الحديث مع الآخرين.
+
+في حالة الإدمان الرقمي، يصبح الهاتف مصدرًا أساسيًا للراحة أو الهروب من الملل والضغوط، بدلًا من كونه وسيلة مساعدة. ويظهر ذلك في السلوكيات اليومية، مثل تفقد الهاتف بشكل متكرر دون وجود إشعارات، أو الشعور بالضيق عند نسيانه أو الابتعاد عنه لفترة قصيرة.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>المظاهر السلوكية للإدمان الرقمي</h3>
+      <p>
+        
+تظهر علامات الإدمان الرقمي في صورة سلوكيات واضحة يمكن ملاحظتها مع الوقت. من أبرز هذه المظاهر الانشغال المستمر بالهاتف، وتأجيل الواجبات أو المهام الأساسية بسبب الاستخدام الرقمي، إضافة إلى فقدان الإحساس بالوقت أثناء التصفح أو استخدام التطبيقات.
+
+كما قد يعاني الشخص من مشاعر القلق أو التوتر عند عدم القدرة على استخدام الهاتف، أو عند انقطاع الإنترنت. ومع تكرار هذه السلوكيات، يتحول الإدمان الرقمي إلى نمط حياة يؤثر في طريقة التفكير واتخاذ القرار، ويبدأ في التأثير على الجوانب الدراسية والاجتماعية والنفسية للفرد.
+      </p>
+    </div>
+
+<!-- مقال 4 -->
+    <div class="article">
+      <h3>لماذا يُعد الإدمان الرقمي مشكلة حقيقية؟</h3>
+      <p>
+        
+تكمن خطورة الإدمان الرقمي في كونه إدمانًا غير مرئي، لا يلفت الانتباه بسهولة كما هو الحال مع أنواع الإدمان الأخرى. فالهاتف أداة ضرورية في العصر الحديث، مما يجعل التمييز بين الاستخدام الصحي والاستخدام المفرط أمرًا صعبًا في بعض الأحيان.
+
+ومع ذلك، فإن استمرار هذا السلوك دون وعي قد يؤدي إلى آثار سلبية متراكمة، مثل ضعف التركيز، واضطراب النوم، وتراجع العلاقات الاجتماعية، وانخفاض الأداء الدراسي. لذلك يُنظر إلى الإدمان الرقمي اليوم باعتباره قضية نفسية وسلوكية معاصرة، تتطلب فهمًا عميقًا وتوعية مستمرة، خاصة لدى الطلاب والمراهقين.
+
+      </p>
+    </div>
+
+  </div>
+<div class="slide-end"></div>
+</section>
+
+<!-- ===== SLIDE 3 ===== -->
+<section class="slide" id="slide-3">
+  <div class="slide-content">
+<div class="section-title">
+  <h2>كيف يعمل الإدمان في الدماغ</h2>
+</div>
+
+<!-- مقال 1 -->
+    <div class="article">
+      <h3>نظام المكافأة في الدماغ</h3>
+      <p>
+        
+الدماغ البشري يعمل وفق نظام يُعرف باسم “نظام المكافأة”، وهو نظام مسؤول عن تحفيز الإنسان على تكرار السلوكيات التي يشعر بعدها بالمتعة أو الرضا. هذا النظام يعتمد بشكل أساسي على مادة كيميائية تُسمى الدوبامين، والتي تُفرَز عندما يقوم الإنسان بسلوك يراه الدماغ مجزيًا، مثل النجاح أو التعلم أو التفاعل الاجتماعي.
+
+في الوضع الطبيعي، يساعد هذا النظام الإنسان على الاستمرار في سلوكيات مفيدة. لكن المشكلة تبدأ عندما يتعرض الدماغ لمحفزات سريعة ومتكررة، كما هو الحال عند استخدام الهاتف ووسائل التواصل الاجتماعي، حيث يتم تنشيط نظام المكافأة بشكل مستمر دون جهد حقيقي.
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>دور الدوبامين في الإدمان الرقمي</h3>
+      <p>
+        
+الدوبامين لا يسبب الشعور بالسعادة بشكل مباشر، بل يخلق إحساسًا بالتوقع والرغبة في التكرار. عند تصفح الهاتف، كل إشعار أو إعجاب أو مقطع قصير يُعد محفزًا صغيرًا يؤدي إلى إفراز الدوبامين. ومع تكرار هذه المحفزات، يتعلّم الدماغ ربط الهاتف بالشعور بالمكافأة، حتى لو كانت مكافأة مؤقتة أو سطحية.
+
+مع الوقت، يصبح الدماغ أكثر حساسية لهذه المحفزات الرقمية، ويبدأ في طلبها باستمرار. وهنا يظهر السلوك القهري، حيث يشعر الشخص برغبة ملحّة في تفقد الهاتف دون سبب واضح، فقط لأن الدماغ اعتاد على توقع جرعة جديدة من الدوبامين.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>لماذا يصعب التوقف عن استخدام الهاتف؟</h3>
+      <p>
+        
+الصعوبة في التوقف عن استخدام الهاتف لا تعود إلى ضعف الإرادة فقط، بل إلى طريقة تكيّف الدماغ مع الاستخدام المتكرر. فالتطبيقات الرقمية مصممة لتقديم مكافآت غير متوقعة، مثل ظهور محتوى جديد أو إشعار مفاجئ، وهو ما يجعل الدماغ في حالة ترقّب دائم.
+
+هذا النمط يشبه إلى حد كبير آلية بعض أنواع الإدمان، حيث يصبح السلوك متكررًا دون وعي كامل. ومع مرور الوقت، تقل متعة الأنشطة الأخرى التي كانت ممتعة في السابق، مثل القراءة أو التفاعل الاجتماعي المباشر، لأن الدماغ أصبح معتادًا على التحفيز السريع والمستمر الذي يوفره الهاتف.
+
+      </p>
+    </div>
+
+ <!-- مقال 4 -->
+    <div class="article">
+      <h3>التأثير طويل المدى على الدماغ</h3>
+      <p>
+        
+الاستمرار في هذا النمط من الاستخدام قد يؤدي إلى تغييرات تدريجية في طريقة عمل الدماغ، خاصة لدى الأطفال والمراهقين. فالإفراط في المحفزات الرقمية قد يضعف القدرة على التركيز لفترات طويلة، ويجعل الدماغ أقل تحمّلًا للملل أو المهام التي تتطلب صبرًا ذهنيًا.
+
+هذه التغييرات لا تحدث فجأة، لكنها تتراكم مع الوقت، مما يجعل العودة إلى أنماط استخدام صحية أكثر صعوبة. لذلك فإن فهم آلية عمل الإدمان في الدماغ يُعد خطوة أساسية في التعامل مع الإدمان الرقمي، ليس من منظور اللوم، بل من منظور الوعي والتنظيم.
+      </p>
+    </div>
+
+  </div>
+<div class="slide-end"></div>
+</section>
+
+<!-- ===== SLIDE 4 ===== -->
+<section class="slide" id="slide-4">
+  <div class="slide-content">
+<div class="section-title">
+  <h2>تأثير الإدمان الرقمي على الطالب</h2>
+</div>
+
+<!-- مقال 1 -->
+    <div class="article">
+      <h3>ضعف التركيز والانتباه</h3>
+      <p>
+        
+يُعد ضعف التركيز من أوضح التأثيرات التي يسببها الإدمان الرقمي لدى الطالب. فالاستخدام المتكرر للهاتف، خاصة أثناء المذاكرة، يجعل العقل معتادًا على الانتقال السريع بين المهام والمثيرات. هذا التعود يُضعف قدرة الطالب على التركيز لفترات طويلة، ويجعله غير قادر على الاستمرار في مهمة واحدة دون الشعور بالملل أو الرغبة في المقاطعة.
+
+مع مرور الوقت، يصبح التشتت سلوكًا شبه دائم، حيث يجد الطالب صعوبة في متابعة شرح طويل أو قراءة نص يحتاج إلى تركيز ذهني متواصل، مما يؤثر بشكل مباشر على جودة التعلم.
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>تراجع التحصيل الدراسي</h3>
+      <p>
+        
+نتيجة ضعف التركيز، يظهر تأثير واضح على المستوى الدراسي للطالب. فقد يقضي الطالب وقتًا طويلًا في المذاكرة، لكنه لا يحقق نتائج متناسبة مع هذا الجهد بسبب الانقطاعات المتكررة التي يسببها الهاتف. هذا التناقض بين الوقت المبذول والنتائج قد يؤدي إلى الإحباط وفقدان الدافع للتعلم.
+
+في بعض الحالات، يتحول الهاتف إلى وسيلة للهروب من الشعور بالفشل أو الضغط الدراسي، فيدخل الطالب في حلقة مفرغة: تراجع دراسي → لجوء للهاتف → مزيد من التراجع.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>اضطراب النوم والإرهاق</h3>
+      <p>
+        
+من التأثيرات الخطيرة للإدمان الرقمي اضطراب النوم، خاصة عند استخدام الهاتف قبل النوم أو أثناء الليل. الضوء الصادر من الشاشة يؤثر على الساعة البيولوجية للجسم، ويقلل من إفراز هرمون النوم، مما يؤدي إلى صعوبة في النوم أو نوم غير عميق.
+
+قلة النوم تؤدي بدورها إلى الإرهاق الذهني والجسدي، وتضعف قدرة الطالب على التركيز والانتباه في اليوم الدراسي، مما ينعكس سلبًا على الأداء داخل الفصل.
+      </p>
+    </div>
+
+<!-- مقال 4 -->
+    <div class="article">
+      <h3>التأثير النفسي والسلوكي</h3>
+      <p>
+        
+الإدمان الرقمي لا يؤثر فقط على الأداء الدراسي، بل يمتد إلى الحالة النفسية للطالب. فقد يشعر بالقلق أو العصبية عند الابتعاد عن الهاتف، أو يفقد القدرة على الاستمتاع بالأنشطة البسيطة دون وجوده. كما أن المقارنات المستمرة على وسائل التواصل الاجتماعي قد تؤدي إلى انخفاض تقدير الذات والشعور بعدم الرضا.
+
+سلوكيًا، قد يظهر على الطالب ميل للعزلة أو ضعف في التفاعل مع زملائه، مما يؤثر على نموه الاجتماعي وشعوره بالانتماء داخل المدرسة.
+      </p>
+    </div>
+
+<!-- مقال 5 -->
+    <div class="article">
+      <h3>تتأثير طويل المدى على المستقبل الدراسي</h3>
+      <p>
+        
+إذا استمر الإدمان الرقمي دون وعي أو تدخل، فقد يترك آثارًا طويلة المدى على المسار الدراسي للطالب. فضعف التركيز والعادات الدراسية غير الصحية قد تؤثر على قدرته على التخطيط للمستقبل أو تحقيق أهدافه الأكاديمية.
+
+لهذا، فإن التعامل المبكر مع هذه الظاهرة، سواء من الطالب نفسه أو من الأسرة والمدرسة، يُعد خطوة ضرورية لحماية مستقبل الطالب الدراسي والنفسي.
+      </p>
+    </div>
+
+  </div>
+<div class="slide-end"></div>
+</section>
+
+<!-- ===== SLIDE 5 ===== -->
+<section class="slide" id="slide-5">
+  <div class="slide-content">
+<div class="section-title">
+ <h2>دور وسائل التواصل الاجتماعي</h2>
+</div>
+
+<!-- مقال 1 -->
+    <div class="article">
+      <h3>التصميم الجاذب وآلية الجذب المستمر</h3>
+      <p>
+        
+تلعب وسائل التواصل الاجتماعي دورًا كبيرًا في تعميق الإدمان الرقمي بسبب طريقة تصميمها. فهذه المنصات لا تُبنى بشكل عشوائي، بل تعتمد على دراسات نفسية تهدف إلى إبقاء المستخدم أطول فترة ممكنة داخل التطبيق. التمرير اللانهائي، وتدفّق المحتوى المستمر، وسهولة الانتقال بين المقاطع، كلها عناصر تجعل المستخدم يشعر أن المحتوى لا ينتهي.
+
+هذا التصميم يجعل الطالب ينتقل من استخدام بسيط إلى استخدام مفرط دون أن يشعر بمرور الوقت، فيتحول الهاتف من أداة ترفيه مؤقتة إلى عادة يومية مسيطرة.
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>الخوارزميات وصناعة الاهتمام</h3>
+      <p>
+        
+تعتمد منصات التواصل الاجتماعي على الخوارزميات التي تراقب سلوك المستخدم، مثل ما يشاهده ومدة التفاعل مع المحتوى. وبناءً على ذلك، يتم عرض محتوى مشابه بشكل متكرر. هذه الآلية تجعل الطالب محاطًا دائمًا بما يجذبه، مما يزيد من تعلّقه بالمنصة ويصعب عليه التوقف عن الاستخدام.
+
+ومع الوقت، يشعر المستخدم أن المحتوى “مفصّل عليه”، فيزداد اندماجه ويقل وعيه بمدة الاستخدام أو تأثيره على حياته اليومية.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>المقارنة الاجتماعية وتأثيرها النفسي</h3>
+      <p>
+        
+من أخطر أدوار وسائل التواصل الاجتماعي هو تعزيز المقارنة بين الأفراد. فالطالب يرى يوميًا صورًا لحياة مثالية أو إنجازات متتالية لأشخاص آخرين، دون أن يرى الجانب الحقيقي أو الصعوبات التي يمرون بها. هذه المقارنات قد تخلق شعورًا بالنقص أو الفشل، خاصة في مرحلة المراهقة.
+
+هذا الضغط النفسي قد يدفع الطالب إلى قضاء وقت أطول على المنصات بحثًا عن القبول أو التقدير، مما يزيد من التعلق بها بدلًا من تقليله.
+      </p>
+    </div>
+
+<!-- مقال 4 -->
+    <div class="article">
+      <h3>ثقافة الترند والخوف من الفوات</h3>
+      <p>
+        
+تسهم ثقافة “الترند” في تعميق الإدمان الرقمي، حيث يشعر الطالب بأنه يجب أن يكون دائم الاطلاع على كل ما هو جديد حتى لا يكون خارج الدائرة. هذا الخوف من الفوات يدفعه إلى تفقد الهاتف باستمرار، حتى دون سبب حقيقي.
+
+ومع تكرار هذا السلوك، يصبح الاستخدام عادة تلقائية، لا ترتبط بالمتعة فقط، بل بالخوف من الانعزال أو التأخر عن الآخرين.
+      </p>
+    </div>
+
+<!-- مقال 5 -->
+    <div class="article">
+      <h3>بين الاستخدام الواعي والانجراف الرقمي</h3>
+      <p>
+        
+رغم كل هذه التأثيرات، لا يمكن اعتبار وسائل التواصل الاجتماعي شرًا مطلقًا. فالمشكلة لا تكمن في وجود هذه المنصات، بل في طريقة التعامل معها. الاستخدام الواعي يعني تحديد الهدف من الدخول، وتنظيم الوقت، وعدم الانجراف وراء المحتوى بلا وعي.
+
+أما في غياب هذا الوعي، تتحول وسائل التواصل الاجتماعي إلى عامل رئيسي في تعزيز الإدمان الرقمي، خاصة لدى الطلاب الذين ما زالوا في مرحلة بناء الشخصية والوعي الذاتي.
+      </p>
+    </div>
+
+  </div>
+<div class="slide-end"></div>
+</section>
+
+
+<!-- ===== SLIDE 6 ===== -->
+<section class="slide" id="slide-6">
+  <div class="slide-content">
+<div class="section-title">
+  <h2>التأثير النفسي والاجتماعي</h2>
+</div>
+
+<!-- مقال 1 -->
+    <div class="article">
+      <h3>القلق والتوتر الدائم</h3>
+      <p>
+        
+يُعد القلق من أبرز الآثار النفسية المرتبطة بالإدمان الرقمي، حيث يعيش الطالب في حالة ترقّب مستمرة للإشعارات والتنبيهات. هذا الشعور يجعله غير قادر على الاسترخاء الذهني، وكأن هناك شيئًا مهمًا قد يحدث في أي لحظة. ومع تكرار هذا السلوك، يصبح القلق حالة شبه دائمة، حتى في أوقات الراحة.
+
+هذا التوتر المستمر يؤثر على المزاج العام، ويقلل من القدرة على التركيز، وقد يؤدي إلى العصبية الزائدة أو فقدان الصبر في المواقف اليومية البسيطة.
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>الخوف من الفوات وتأثيره على النفس</h3>
+      <p>
+        
+يرتبط الإدمان الرقمي ارتباطًا وثيقًا بما يُعرف بـ “الخوف من الفوات”، حيث يشعر الطالب بأنه قد يفوته خبر مهم أو حدث جديد إذا ابتعد عن الهاتف. هذا الإحساس يدفعه إلى تفقد الهاتف بشكل متكرر، حتى أثناء المذاكرة أو التفاعل مع الآخرين.
+
+ومع الوقت، يصبح الطالب أقل قدرة على الاستمتاع باللحظة الحالية، وأكثر تعلقًا بالعالم الرقمي، مما يزيد من الشعور بعدم الرضا الداخلي والضغط النفسي.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>ضعف العلاقات الاجتماعية الواقعية</h3>
+      <p>
+        
+من التأثيرات الاجتماعية الواضحة للإدمان الرقمي تراجع جودة العلاقات الواقعية. فالتواصل عبر الشاشات، رغم سهولته، لا يعوّض التفاعل الإنساني المباشر. الطالب الذي يقضي وقتًا طويلًا على الهاتف قد يقل تواصله مع أسرته أو أصدقائه، ويصبح أقل مشاركة في الأنشطة الاجتماعية.
+
+هذا الانسحاب التدريجي قد يؤدي إلى العزلة، وضعف مهارات الحوار، وصعوبة التعبير عن المشاعر في الواقع الحقيقي.
+      </p>
+    </div>
+
+ <!-- مقال 4 -->
+    <div class="article">
+      <h3>تتأثير المقارنة على تقدير الذات</h3>
+      <p>
+        
+تعرض وسائل التواصل الاجتماعي الطالب باستمرار لصور ومقاطع تُظهر حياة الآخرين بشكل مثالي. هذه الصور قد تخلق مقارنات غير واقعية، تجعل الطالب يشعر بأن إنجازاته أو حياته أقل قيمة. ومع تكرار هذه المقارنات، قد يتأثر تقدير الذات بشكل سلبي.
+
+في مرحلة المراهقة تحديدًا، يكون الفرد أكثر حساسية لنظرة الآخرين، مما يجعل هذا التأثير النفسي أكثر عمقًا وخطورة إذا لم يتم التعامل معه بوعي.
+      </p>
+    </div>
+
+ <!-- مقال 5 -->
+    <div class="article">
+      <h3>العزلة النفسية رغم الاتصال الدائم</h3>
+      <p>
+        
+رغم أن الطالب يكون متصلًا بالآخرين طوال الوقت عبر الهاتف، إلا أنه قد يشعر بوحدة داخلية حقيقية. فالتفاعل الرقمي السريع لا يوفّر الدعم العاطفي العميق الذي يوفره التواصل المباشر. هذا التناقض بين “الاتصال الدائم” و“الوحدة النفسية” يُعد من أخطر آثار الإدمان الرقمي.
+
+ومع استمرار هذا الوضع، قد يشعر الطالب بالفراغ أو فقدان المعنى، مما يدفعه لاستخدام الهاتف أكثر، فيدخل في دائرة مغلقة يصعب الخروج منها.
+      </p>
+    </div>
+
+  </div>
+<div class="slide-end"></div>
+</section>
+
+<!-- ===== SLIDE 7 ===== -->
+<section class="slide" id="slide-7">
+  <div class="slide-content">
+<div class="section-title">
+  <h2>دور الأسرة والمدرسة</h2>
+</div> 
+
+<!-- مقال 1 -->
+    <div class="article">
+      <h3>وعي الأسرة بطبيعة الإدمان الرقمي</h3>
+      <p>
+        
+يبدأ دور الأسرة من فهم حقيقة الإدمان الرقمي وعدم التقليل من تأثيره. كثير من الآباء يظنون أن استخدام الهاتف مجرد تسلية عابرة، بينما هو في الواقع قد يتحول إلى سلوك قهري إذا غاب الوعي. إدراك الأسرة لخطورة الاستخدام المفرط يساعدها على التعامل مع المشكلة بهدوء وعقلانية بدلًا من الإنكار أو التهاون.
+
+هذا الوعي يجعل الأسرة أكثر قدرة على ملاحظة التغيرات السلوكية على الطالب، مثل العصبية الزائدة أو العزلة أو ضعف التركيز، والتدخل في الوقت المناسب قبل تفاقم المشكلة.
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>الحوار بدلًا من المنع</h3>
+      <p>
+        
+المنع الكامل أو العقاب المستمر غالبًا ما يأتي بنتائج عكسية، حيث يزيد تعلق الطالب بالهاتف بدلًا من تقليله. الأسلوب الأكثر فاعلية يتمثل في الحوار المفتوح، الذي يشرح للطالب تأثير الاستخدام المفرط بلغة بسيطة ومقنعة، مع الاستماع لرأيه ومشاعره دون استهزاء أو تهديد.
+
+عندما يشعر الطالب بأنه شريك في اتخاذ القرار، يصبح أكثر استعدادًا للالتزام بقواعد الاستخدام وتنظيم وقته بشكل أفضل.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>تنظيم الوقت داخل الأسرة</h3>
+      <p>
+        
+من أهم أدوار الأسرة وضع نظام واضح لاستخدام الهاتف داخل المنزل، مثل تحديد أوقات خالية من الشاشات، خاصة أثناء تناول الطعام أو قبل النوم. هذه الفترات تساعد على إعادة التوازن للعلاقات الأسرية، وتشجع على الحوار والتفاعل الحقيقي بين أفراد الأسرة.
+
+كما أن التزام الوالدين أنفسهم بهذه القواعد يعطي نموذجًا عمليًا للطالب، ويعزز فكرة أن تنظيم استخدام الهاتف مسؤولية جماعية وليست مفروضة على فئة دون أخرى.
+      </p>
+    </div>
+
+<!-- مقال 4 -->
+    <div class="article">
+      <h3>دور المدرسة في التوعية الرقمية</h3>
+      <p>
+        
+تلعب المدرسة دورًا مكملًا للأسرة في مواجهة الإدمان الرقمي. فإلى جانب التعليم الأكاديمي، يمكن للمدرسة أن تزرع الوعي الرقمي لدى الطلاب من خلال المناقشات والأنشطة التي تشرح تأثير الهاتف على التركيز والصحة النفسية.
+
+عندما ترتبط هذه التوعية بالواقع الدراسي للطالب، مثل تأثير الهاتف على التحصيل والانتباه داخل الفصل، تصبح الرسالة أكثر وضوحًا وقابلية للتطبيق.
+      </p>
+    </div>
+
+<!-- مقال 5 -->
+    <div class="article">
+      <h3>تعزيز البدائل الإيجابية</h3>
+      <p>
+        
+يمكن للمدرسة أن تقلل من الاعتماد على الهاتف عبر تشجيع الأنشطة البديلة، مثل الرياضة، والأنشطة الثقافية، والعمل الجماعي. هذه الأنشطة تساعد الطالب على اكتشاف مصادر متعة وإنجاز خارج العالم الرقمي، مما يقلل من تعلقه بالشاشات.
+
+كما تسهم هذه البدائل في تنمية المهارات الاجتماعية وبناء الثقة بالنفس، وهو ما ينعكس إيجابيًا على شخصية الطالب وحياته اليومية.
+      </p>
+    </div>
+
+<!-- مقال 6 -->
+    <div class="article">
+      <h3>التعاون بين الأسرة والمدرسة</h3>
+      <p>
+        
+يكون تأثير الجهود المبذولة أقوى عندما تتعاون الأسرة والمدرسة في توجيه الطالب. الاتفاق على رسالة موحدة وأسلوب متقارب في التعامل مع الهاتف يمنع التناقض الذي قد يربك الطالب ويضعف فاعلية التوجيه.
+
+هذا التعاون يخلق بيئة داعمة تساعد الطالب على بناء عادات رقمية صحية، وتجعله أكثر وعيًا بمسؤولية استخدام التكنولوجيا.
+      </p>
+    </div>
+
+  </div>
+<div class="slide-end"></div>
+</section>
+
+<!-- ===== SLIDE 8 ===== -->
+<section class="slide" id="slide-8">
+  <div class="slide-content">
+<div class="section-title">
+  <h2>هل التكنولوجيا كلها سيئة؟</h2>
+</div>
+
+<!-- مقال 1 -->
+    <div class="article">
+      <h3>التكنولوجيا كأداة محايدة</h3>
+      <p>
+        
+التكنولوجيا في جوهرها ليست جيدة ولا سيئة، بل هي أداة تعتمد قيمتها على طريقة استخدامها. فهي مثل أي وسيلة أخرى يمكن أن تكون نافعة إذا استُخدمت بوعي، أو ضارة إذا أُسيء استخدامها. المشكلة لا تكمن في وجود الهاتف أو الإنترنت، بل في فقدان السيطرة على استخدامهما.
+
+هذا الفهم يساعد على تغيير النظرة السطحية التي تعتبر التكنولوجيا عدوًا، ويضع التركيز بدلًا من ذلك على السلوك البشري المرتبط بها.
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>الاستخدام الإيجابي للتكنولوجيا</h3>
+      <p>
+        
+عندما تُستخدم التكنولوجيا لتحقيق أهداف واضحة، مثل التعلم، وتطوير المهارات، والوصول إلى المعرفة، فإنها تصبح عنصرًا داعمًا للنمو الشخصي والعقلي. يمكن للطالب مثلًا أن يستفيد من الهاتف في البحث، أو متابعة الدروس، أو تنظيم الوقت، بدلًا من استخدامه فقط في الترفيه.
+
+في هذه الحالة، تتحول التكنولوجيا إلى وسيلة تمكين، تساعد الطالب على الإنجاز بدلًا من أن تشتته أو تستهلك وقته دون فائدة.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>بمتى يصبح الاستخدام مشكلة؟</h3>
+      <p>
+        
+يبدأ الخلل عندما يتحول استخدام الهاتف من قرار واعٍ إلى سلوك تلقائي. فحين يشعر الفرد برغبة مستمرة في تفقد الهاتف دون سبب واضح، أو عندما يطغى استخدامه على الدراسة والنوم والعلاقات الاجتماعية، يصبح الاستخدام هنا أقرب إلى الإدمان منه إلى الاستفادة.
+
+في هذه المرحلة، لا تعود التكنولوجيا وسيلة مساعدة، بل تتحول إلى عامل ضغط يؤثر في جودة الحياة اليومية.
+      </p>
+    </div>
+
+  <!-- مقال 4 -->
+    <div class="article">
+      <h3>الفرق بين الاستخدام الواعي والاستخدام الإدماني</h3>
+      <p>
+        
+الاستخدام الواعي يعني أن يكون الإنسان هو المتحكم في التكنولوجيا، يحدد متى ولماذا يستخدمها، ويستطيع التوقف عنها عند الحاجة. أما الاستخدام الإدماني فيجعل الفرد منجذبًا للهاتف دون تخطيط، وغير قادر على تقليل الوقت الذي يقضيه أمام الشاشة.
+
+هذا الفرق الجوهري يوضح أن الحل لا يكمن في الابتعاد الكامل عن التكنولوجيا، بل في استعادة السيطرة عليها.
+      </p>
+    </div>
+
+  <!-- مقال 5 -->
+    <div class="article">
+      <h3>بناء علاقة متوازنة مع التكنولوجيا</h3>
+      <p>
+        
+العلاقة الصحية مع التكنولوجيا تقوم على التوازن، أي الاستفادة من مزاياها دون الانغماس فيها. يمكن تحقيق ذلك من خلال تنظيم الوقت، وتحديد أولويات واضحة، والوعي بتأثير الاستخدام على النفس والتركيز.
+
+عندما يتحقق هذا التوازن، تصبح التكنولوجيا جزءًا إيجابيًا من الحياة اليومية، لا عائقًا أمام التطور أو سببًا في الإدمان.
+      </p>
+    </div>
+
+  </div>
+<div class="slide-end"></div>
+</section>
+
+<!-- ===== SLIDE 9 ===== -->
+<section class="slide" id="slide-9">
+  <div class="slide-content">
+<div class="section-title">
+  <h2>حلول عملية</h2>
+</div>
+
+<!-- مقال 1 -->
+    <div class="article">
+      <h3>تنظيم الوقت واستعادة السيطرة</h3>
+      <p>
+        
+أولى الخطوات العملية لمواجهة الإدمان الرقمي هي تنظيم الوقت. عندما يحدد الفرد أوقاتًا واضحة لاستخدام الهاتف، وأوقاتًا أخرى خالية تمامًا من الشاشات، يبدأ تلقائيًا في استعادة السيطرة على يومه. هذا التنظيم لا يعني الحرمان، بل يعني الاستخدام بوعي وهدف.
+
+على سبيل المثال، تخصيص وقت محدد لاستخدام الهاتف بعد الانتهاء من المذاكرة يجعل العلاقة مع التكنولوجيا أكثر توازنًا وأقل عشوائية.
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>الوعي الذاتي كمفتاح للتغيير</h3>
+      <p>
+        
+الوعي بعدد الساعات التي يقضيها الإنسان على الهاتف وتأثير ذلك على تركيزه ونفسيته يُعد خطوة أساسية نحو التغيير. كثير من الأشخاص لا يدركون حجم المشكلة إلا عندما يتوقفون لحظة ويلاحظون كيف يضيع الوقت دون فائدة حقيقية.
+
+هذا الوعي يحوّل الاستخدام من عادة تلقائية إلى قرار واعٍ، وهو ما يُسهّل تقليل الاعتماد على الهاتف تدريجيًا.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>بناء عادات بديلة صحية</h3>
+      <p>
+        
+من أكثر الطرق فاعلية في تقليل الإدمان الرقمي هو استبدال الوقت الذي يُقضى على الهاتف بأنشطة أخرى مفيدة. ممارسة الرياضة، أو تنمية الهوايات، أو المشاركة في أنشطة اجتماعية، كلها مصادر بديلة للمتعة والإنجاز.
+
+عندما يجد الفرد متعة حقيقية خارج العالم الرقمي، تقل حاجته إلى الهاتف كمصدر وحيد للترفيه.
+      </p>
+    </div>
+
+<!-- مقال 4 -->
+    <div class="article">
+      <h3>التحكم في البيئة المحيطة</h3>
+      <p>
+        
+البيئة تلعب دورًا كبيرًا في تشكيل السلوك. إبعاد الهاتف أثناء المذاكرة أو قبل النوم، وتقليل الإشعارات غير الضرورية، خطوات بسيطة لكنها مؤثرة. فكلما قلّت المثيرات الرقمية حول الإنسان، أصبح من الأسهل التركيز والتحكم في الاستخدام.
+
+هذه التغييرات لا تحتاج إلى مجهود كبير، لكنها تُحدث فرقًا واضحًا على المدى الطويل.
+      </p>
+    </div>
+
+<!-- مقال 5 -->
+    <div class="article">
+      <h3>التوازن بدل المنع</h3>
+      <p>
+        
+الحل الحقيقي لا يكمن في المنع الكامل للتكنولوجيا، لأن ذلك غالبًا ما يؤدي إلى نتائج عكسية. الهدف هو بناء علاقة متوازنة مع الهاتف، تقوم على الاستفادة دون إفراط، وعلى الاستخدام الواعي دون اندفاع.
+
+بهذا الأسلوب، تصبح التكنولوجيا أداة في يد الإنسان، لا قوة تتحكم فيه.
+
+      </p>
+    </div>
+
+  </div>
+<div class="slide-end"></div>
+</section>
+
+<!-- ===== SLIDE 10 ===== -->
+<section class="slide" id="slide-10">
+  <div class="slide-content">
+<div class="section-title">
+  <h2>الخاتمة</h2>
+</div>
+
+<!-- مقال 1 -->
+    <div class="article">
+      <h3>ما وراء البحث</h3>
+      <p>
+        
+هذا البحث لم يكن مجرد محاولة لشرح ظاهرة حديثة، بل كان رحلة لفهم واقع نعيشه يوميًا دون أن نتوقف كثيرًا عند تأثيره. فالإدمان الرقمي ليس مشكلة بعيدة أو نادرة، بل سلوك يتسلل بهدوء إلى حياتنا من خلال عادات بسيطة تتكرر كل يوم.
+
+ومن خلال تناول هذا الموضوع، يتضح أن المشكلة لا تكمن في وجود التكنولوجيا نفسها، بل في الطريقة التي نتعامل بها معها دون وعي أو تنظيم.
+
+      </p>
+    </div>
+
+    <!-- مقال 2 -->
+    <div class="article">
+      <h3>وعي الفرد نقطة البداية</h3>
+      <p>
+        
+أهم ما يمكن الخروج به من هذا البحث هو أن الوعي هو الخطوة الأولى نحو أي تغيير حقيقي. عندما يدرك الإنسان كيف تؤثر التكنولوجيا على تفكيره، وتركيزه، ونفسيته، يصبح أكثر قدرة على ضبط سلوكه واتخاذ قرارات أفضل.
+
+هذا الوعي لا يعني التخلي عن الهاتف أو العيش بعيدًا عن العالم الرقمي، بل يعني استخدامه بذكاء وبما يخدم الحياة اليومية بدلًا من أن يسيطر عليها.
+      </p>
+    </div>
+
+    <!-- مقال 3 -->
+    <div class="article">
+      <h3>المسؤولية المشتركة</h3>
+      <p>
+        
+الإدمان الرقمي ليس مسؤولية فرد واحد فقط، بل هو قضية يشترك فيها الفرد، والأسرة، والمدرسة، والمجتمع ككل. فكل طرف له دور في التوعية، والتنظيم، وتقديم البدائل الصحية التي تساعد على تقليل الاعتماد المفرط على الشاشات.
+
+وعندما تتكامل هذه الأدوار، يصبح من الممكن بناء بيئة رقمية أكثر توازنًا وأقل ضررًا، خاصة للأجيال الصغيرة.
+      </p>
+    </div>
+
+  <!-- مقال 4 -->
+    <div class="article">
+      <h3>التكنولوجيا كأداة لا كبديل</h3>
+      <p>
+        
+في النهاية، تبقى التكنولوجيا أداة قوية يمكن أن تكون وسيلة للتعلم والتطور إذا أُحسن استخدامها، أو عبئًا يستهلك الوقت والانتباه إذا تُركت دون ضوابط. الفرق بين الحالتين لا تحدده التطبيقات أو الأجهزة، بل يحدده وعي المستخدم وطريقة تعامله معها.
+
+      </p>
+    </div>
+
+   <!-- مقال 5 -->
+    <div class="article">
+      <h3>رسالة أخيرة</h3>
+      <p>
+        
+يسعى هذا البحث إلى إيصال رسالة بسيطة لكنها مهمة:
+لسنا مطالبين بمحاربة التكنولوجيا، بل بتعلّم كيف نعيش معها دون أن نفقد أنفسنا. فالتوازن هو المفتاح، والوعي هو الطريق، والاختيار يبقى دائمًا في يد الإنسان.
+      </p>
+    </div>
+
+<div class="end-message">
+  👏 أحسنت، لقد أتممت قراءة البحث
+</div>
+  </div>
+<div class="slide-end"></div>
+</section>
+
+
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-text">
+      تم إعداد هذا المشروع بواسطة <strong>كريم</strong>
+    </p>
+
+    <a href="profile.html" class="footer-btn">
+      معرفة المزيد
+    </a>
+  </div>
+</footer>
+
+  
+  <a href="profile.html"></a>
+  
+<div id="tocBtn" class="toc-toggle">
+  ☰
+  <span class="tooltip">فتح قائمة العناوين</span>
+</div>
+
+
+<script>
+
+
+
+
+window.addEventListener("load", () => {
+  const savedScroll = localStorage.getItem("lastScroll");
+  const lastExitTime = localStorage.getItem("lastExitTime");
+
+  if (!savedScroll || !lastExitTime) return;
+
+  const now = Date.now();
+  const diff = now - parseInt(lastExitTime);
+
+  const ONE_HOUR = 60 * 60 * 1000; // ساعة بالمللي ثانية
+
+  if (diff < ONE_HOUR) {
+    // 👌 يرجع يكمل من مكانه
+    window.scrollTo({
+      top: parseInt(savedScroll),
+      behavior: "instant"
+    });
+  } else {
+    // ❌ يعدّي ساعة → يبدأ من الأول
+    localStorage.removeItem("lastScroll");
+    localStorage.removeItem("activeSlide");
+  }
+});
+
+
+
+
+
+
+
+
+const body = document.body;
+const switchBtn = document.getElementById("themeSwitch");
+const knob = document.getElementById("knob");
+
+
+// حفظ مكان القراءة + وقت الخروج
+window.addEventListener("beforeunload", () => {
+  localStorage.setItem("lastScroll", window.scrollY);
+  localStorage.setItem("lastExitTime", Date.now());
+});
+
+
+/* الوضع المحفوظ */
+const savedTheme = localStorage.getItem("theme") || "light";
+body.dataset.theme = savedTheme;
+knob.textContent = savedTheme === "dark" ? "🌙" : "☀️";
+
+
+
+
+/* زرار الدارك مود */
+switchBtn.onclick = () => {
+  // اقفل الأنيميشن مؤقتًا
+  body.classList.add("theme-lock");
+
+  const newTheme = body.dataset.theme === "dark" ? "light" : "dark";
+  body.dataset.theme = newTheme;
+  localStorage.setItem("theme", newTheme);
+  knob.textContent = newTheme === "dark" ? "🌙" : "☀️";
+
+  // افتح الأنيميشن تاني بعد فريم
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      body.classList.remove("theme-lock");
+    }, 60);
+  });
+};
+
+
+
+
+
+/* ===== جدول المحتويات ===== */
+
+
+
+
+
+// تفعيل العنوان الحالي في محتويات البحث
+
+
+
+
+
+
+
+
+// قفل قائمة المحتويات عند الضغط خارجها
+
+
+
+/* ===== زر قائمة العناوين (☰) ===== */
+const tocBtn = document.querySelector(".toc-toggle");
+const tocPanel = document.getElementById("toc");
+const tocClose = document.getElementById("tocClose");
+
+tocClose.addEventListener("click", () => {
+  tocPanel.classList.remove("open");
+  tocBtn.classList.remove("hidden");
+});
+
+// فتح / غلق القائمة
+tocBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  tocPanel.classList.toggle("open");
+  tocBtn.classList.toggle("hidden");
+});
+
+// إغلاق قائمة المحتويات عند الضغط خارجها
+document.addEventListener("click", (e) => {
+  if (
+    tocPanel.classList.contains("open") &&
+    !tocPanel.contains(e.target) &&
+    !tocBtn.contains(e.target)
+  ) {
+    tocPanel.classList.remove("open");
+    tocBtn.classList.remove("hidden");
+  }
+});
+
+
+
+// الضغط على عنصر
+document.querySelectorAll(".toc-panel li").forEach(item => {
+  item.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    const targetId = item.dataset.target;
+    const target = document.getElementById(targetId);
+
+    if (target) {
+      target.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    tocPanel.classList.remove("open");
+    tocBtn.classList.remove("hidden");
+  });
+});
+
+
+
+const mainTitle  = document.getElementById("topTitleMain");
+const mobileSub  = document.getElementById("mobileTitle");
+const BASE_TITLE = "الإدمان الرقمي";
+const slides     = document.querySelectorAll(".slide");
+
+
+
+  
+
+
+
+
+window.addEventListener("load", () => {
+  const savedActive = localStorage.getItem("activeSlide");
+  if (!savedActive) return;
+
+  const activeItem = document.querySelector(
+    `.toc-panel li[data-target="${savedActive}"]`
+  );
+
+  if (activeItem) {
+    document
+      .querySelectorAll(".toc-panel li")
+      .forEach(i => i.classList.remove("active"));
+
+    activeItem.classList.add("active");
+  }
+});
+
+
+const slidesAll = document.querySelectorAll(".slide");
+
+const readObserver = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("reading");
+    }else{
+      entry.target.classList.remove("reading");
+    }
+  });
+},{ threshold:0.6 });
+
+slidesAll.forEach(slide=>readObserver.observe(slide));
+
+
+const tocItems = document.querySelectorAll(".toc-panel li");
+const titles = document.querySelectorAll(".section-title h2");
+const topbar = document.querySelector(".topbar");
+
+function updateTopBarSmart() {
+  let visibleTitle = null;
+
+  titles.forEach(title => {
+    const rect = title.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.55 && rect.bottom > 140) {
+      visibleTitle = title;
+    }
+  });
+
+  // 1️⃣ لو العنوان ظاهر على الشاشة
+  if (visibleTitle) {
+    mainTitle.textContent = BASE_TITLE;
+    mobileSub.textContent = "";
+    mobileSub.style.display = "none";
+    return;
+  }
+
+  // 2️⃣ مفيش عنوان ظاهر → نجيب أقرب عنوان فوق
+  let closest = null;
+  let closestTop = -Infinity;
+
+  titles.forEach(title => {
+    const rect = title.getBoundingClientRect();
+    if (rect.top < 140 && rect.top > closestTop) {
+      closestTop = rect.top;
+      closest = title;
+    }
+  });
+
+  if (closest) {
+    mainTitle.textContent = BASE_TITLE;
+
+    if (closest) {
+  // الكمبيوتر
+  if (window.innerWidth > 600) {
+    mainTitle.textContent = `${BASE_TITLE} — ${closest.textContent}`;
+    mobileSub.textContent = "";
+    mobileSub.style.display = "none";
+  }
+  // الموبايل
+  else {
+    mainTitle.textContent = BASE_TITLE;
+    mobileSub.textContent = closest.textContent;
+    mobileSub.style.display = "block";
+  }
+}
+
+  } else {
+    mainTitle.textContent = BASE_TITLE;
+    mobileSub.textContent = "";
+    mobileSub.style.display = "none";
+  }
+}
+
+
+window.addEventListener("scroll", updateTopBarSmart);
+window.addEventListener("resize", updateTopBarSmart);
+window.addEventListener("load", updateTopBarSmart);
+
+
+function updateTOCActiveSmart() {
+  const viewportCenter = window.innerHeight / 2;
+  let activeSlide = null;
+  let closestDistance = Infinity;
+
+  slides.forEach(slide => {
+    const rect = slide.getBoundingClientRect();
+    const slideCenter = rect.top + rect.height / 2;
+    const distance = Math.abs(slideCenter - viewportCenter);
+
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      activeSlide = slide;
+    }
+  });
+
+  if (!activeSlide) return;
+
+  tocItems.forEach(item => item.classList.remove("active"));
+
+  const activeItem = document.querySelector(
+    `.toc-panel li[data-target="${activeSlide.id}"]`
+  );
+
+  if (activeItem) {
+  tocItems.forEach(item => item.classList.remove("active"));
+  activeItem.classList.add("active");
+  localStorage.setItem("activeSlide", activeSlide.id);
+
+  // ✅ Scroll تلقائي جوه قائمة المحتويات
+  activeItem.scrollIntoView({
+    behavior: "smooth",
+    block: "center"
+  });
+}
+}
+
+window.addEventListener("scroll", updateTOCActiveSmart);
+window.addEventListener("load", updateTOCActiveSmart);
+
+const articles = document.querySelectorAll(".article");
+
+
+const articleObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+      articleObserver.unobserve(entry.target); // 👈 المفتاح
+    }
+  });
+},{
+  threshold: 0.2
+});
+
+articles.forEach(article=>{
+  articleObserver.observe(article);
+});
+
+const progressBar = document.getElementById("reading-progress");
+
+function updateReadingProgress(){
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+
+  progressBar.style.width = `${progress}%`;
+}
+
+window.addEventListener("scroll", updateReadingProgress);
+window.addEventListener("load", updateReadingProgress);
+
+
+
+</script>
+</body>
+</html>
