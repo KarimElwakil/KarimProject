@@ -834,25 +834,27 @@ body{
 
 .tooltip-text{
   position: absolute;
-  bottom: -42px;
+  bottom: -34px;              /* أقرب للزر */
   right: 50%;
-  transform: translateX(50%) translateY(6px);
+  transform: translateX(50%) translateY(4px);
 
-  background: rgba(0,0,0,.8);
+  background: rgba(0,0,0,.75);
   color: #fff;
 
-  padding: 6px 14px;
+  padding: 4px 10px;          /* ⬅️ أصغر */
   border-radius: 999px;
 
-  font-size: clamp(13px, 2.4vw, 18px);
+  font-size: 11px;            /* ⬅️ أصغر */
   font-weight: 600;
+  line-height: 1.4;
+
   white-space: nowrap;
 
   opacity: 0;
   pointer-events: none;
-  transition: .25s ease;
+  transition: .2s ease;
 
-  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
 }
 
 /* سهم صغير */
@@ -1725,6 +1727,10 @@ body,
 
 
 
+
+
+
+
 /* =============================================================================== ===== */
 </style>
 </head>
@@ -1755,11 +1761,23 @@ body,
     </div>
   </div>
 
-    <!-- بروفايل -->
-   <div class="tooltip-wrap">
+  <!-- مجموعة أزرار اليمين -->
+<div class="top-actions">
+
+  <div class="tooltip-wrap">
   <a href="profile.html" class="profile-btn">👤</a>
   <div class="tooltip-text">الملف التعريفي لصاحب المشروع</div>
 </div>
+
+
+ <div class="tooltip-wrap">
+  <a href="profile.html" class="profile-btn">ℹ️</a>
+  <div class="tooltip-text">عن البحث</div>
+</div>
+
+
+</div>
+
 
   </div>
 </header>
@@ -2781,6 +2799,23 @@ function updateReadingProgress(){
 
 window.addEventListener("scroll", updateReadingProgress);
 window.addEventListener("load", updateReadingProgress);
+
+
+// Mobile hint لزر "عن البحث"
+const aboutBtn = document.getElementById("aboutBtn");
+
+if (aboutBtn && window.innerWidth <= 600) {
+  aboutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    aboutBtn.classList.add("pulse-title");
+
+    setTimeout(() => {
+      window.location.href = "about.html";
+    }, 300);
+  });
+}
+
+
 
 
 
