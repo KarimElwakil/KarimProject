@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإدمان الرقمي</title>
+
+<style>
+
+html, body{
+  overflow-x: hidden;
+}
+
+
+
+section.slide{
+  scroll-margin-top: 160px;
+}
+
+
+
+
+.topbar-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:16px 20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  position:relative;
+}
+.topbar-inner > *{
+  flex-shrink:0;
+}
+
+
+[data-theme="dark"] .topbar{
+  background:transparent;
+}
+
+[data-theme="dark"] .topbar-inner{
+  background:rgba(18,20,26,.9);
+  border-radius:24px;
+  padding:14px 24px;
+  box-shadow:0 10px 35px rgba(0,0,0,.7);
+}
+
+.profile-btn{
+  font-size: clamp(20px, 2.4vw, 18px);
+  text-decoration:none;
+  cursor:pointer;
+}
+
+:root{
+  --light-card-bg: #f1f5fb;      /* أزرق فاتح جدًا */
+  --light-card-border: rgba(37,99,235,.12);
+  --light-card-shadow:
+    inset 0 1px 2px rgba(255,255,255,.9),
+    0 18px 45px rgba(30,64,175,.18);
+}
+
+
+:root{
+  --bg:#f6f7fb;
+  --text:#111;
+  --bar:rgba(255,255,255,.92);
+  --border:rgba(0,0,0,.08);
+  --primary:#2563eb;
+}
+
+[data-theme="dark"]{
+ --bg:#0f1115;
+  --text:#fff;
+
+  /* 🔥 لون موحّد لكل البراويز */
+  --card-bg: rgba(28,30,38,.95);
+
+  /* ✨ Shadow ناعم وراقي */
+  --card-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 14px 40px rgba(0,0,0,.75);
+
+  --border:rgba(255,255,255,.12);
+  --primary:#3b82f6;
+}
+
+
+[data-theme="dark"] .title-frame{
+  background:rgba(18,20,26,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 10px 35px rgba(0,0,0,.8);
+}
+
+[data-theme="dark"] .topbar{
+  background:rgba(20,22,28,.85);
+  box-shadow:0 10px 35px rgba(0,0,0,.6);
+}
+
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:system-ui;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* ===== Global Reading Typography ===== */
+body{
+  font-size: 18px;
+  line-height: 1.95;
+  letter-spacing: .2px;
+}
+
+
+/* منع التحديد */
+.topbar, button, .lang, .lang-item, .switch, h1, h2{
+  user-select:none;
+}
+
+/* ===== TOP BAR ===== */
+.topbar{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:90%;
+  max-width:1200px;
+  background:var(--bar);
+  backdrop-filter:blur(14px);
+  border-radius:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
+  z-index:100;
+}
+
+.topbar{
+  padding-inline: clamp(12px, 4vw, 28px);
+}
+
+
+.topbar-inner{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title-slot{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+  max-width:70%;
+}
+
+
+
+
+[data-theme="dark"] .title-frame{
+  background:rgba(255,255,255,.08);
+}
+
+ .title-text{
+  font-weight:900;
+  font-size:22px;
+  line-height:1.4;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;  /* ← ذكي مش وحش */
+}
+
+
+
+
+
+
+  
+
+.profile-btn{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(0,0,0,.06);
+  text-decoration:none;
+}
+
+[data-theme="dark"] .profile-btn{
+  background:rgba(255,255,255,.12);
+}
+
+
+
+
+/* ===== CONTROLS ===== */
+.profile-btn{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(0,0,0,.06);
+  font-size: clamp(18px, 2.4vw, 18px);
+  text-decoration:none;
+  cursor:pointer;
+}
+
+[data-theme="dark"] .profile-btn{
+  background:rgba(255,255,255,.12);
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+/* ===== SWITCH ===== */
+.switch{
+  
+  width:54px;
+  height:28px;
+  background:rgba(0,0,0,.15);
+  border-radius:999px;
+  position:relative;
+  cursor:pointer;
+}
+
+.knob{
+  width:22px;
+  height:22px;
+  background:#fff;
+  border-radius:50%;
+  position:absolute;
+  top:3px;
+  left:3px;
+  transition:.3s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+[data-theme="dark"] .knob{
+  left:29px;
+  background:#000;
+  color:#fff;
+}
+[data-theme="dark"] .topbar{
+  box-shadow:0 14px 40px rgba(0,0,0,.6);
+}
+
+
+
+
+/* ===== SLIDES ===== */
+.slide{
+  min-height:100vh;
+  padding-top:60px;
+  padding-bottom:120px; /* مسافة كبيرة وواضحة */
+}
+
+
+.slide-content{
+  max-width:720px;
+   padding-inline: clamp(12px, 4vw, 20px);
+  margin-top:0;   /* مهم */
+  line-height:1.9;
+}
+
+
+
+.slide p{
+  font-size: clamp(18px, 2.4vw, 18px);
+  margin-bottom:22px;
+}
+/* ===== FOOTER ===== */
+.site-footer{
+  margin-top:-40px;
+  padding:50px 20px;
+  background:var(--bar);
+  border-top:1px solid var(--border);
+}
+
+.footer-inner{
+  max-width:900px;
+  margin:auto;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:24px;
+  text-align:unset;
+}
+
+.footer-text{
+  font-size: clamp(18px, 2.6vw, 22px);
+  font-weight: 700;
+  opacity: .9;
+  text-align: center;
+}
+
+
+.footer-btn{
+  text-decoration:none;
+  padding:12px 36px;
+  border-radius:999px;
+  background:var(--primary);
+  color:#fff;
+  font-size: clamp(15px, 2.4vw, 18px);
+  font-weight:700;
+  transition:.25s;
+}
+
+.footer-btn:hover{
+  transform:translateY(-2px);
+}
+
+.footer-split{
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-right{
+  font-size: clamp(16px, 2.4vw, 18px);
+  font-weight: 700;
+  opacity: .9;
+}
+
+.footer-left{
+  display: flex;
+}
+
+/* GRID الفوتر */
+.footer-grid{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:40px;
+}
+
+.footer-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;   /* 👈 أهم سطر */
+  text-align:center;
+  gap:12px;
+}
+
+/* يمين */
+.footer-col.right{
+  text-align:right;
+}
+
+/* شمال */
+.footer-col.left{
+  text-align:left;
+}
+
+/* تصغير الأزرار */
+.footer-btn.small{
+  padding:10px 26px;
+  font-size:16px;
+  width:auto;           /* ⬅️ مهم */
+  min-width:unset;      /* ⬅️ مهم */
+}
+
+/* موبايل */
+@media (max-width:600px){
+ .footer-text{
+    font-size:14px;
+  }
+
+  .footer-grid{
+    align-items:center;
+    text-align:center;
+  }
+
+  .footer-col{
+    align-items:center;
+  }
+
+  }
+
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+
+
+/* ===== Slide Animation ===== */
+
+.topbar{
+  animation: dropBar 1s ease forwards;
+  opacity:0;
+}
+
+@keyframes dropBar{
+  from{
+    transform:translate(-50%,-20px);
+    opacity:0;
+  }
+  to{
+    transform:translate(-50%,0);
+    opacity:1;
+  }
+}
+
+
+
+@keyframes fadeUp{
+  from{
+    transform:translateY(20px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+#progress-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  height:3px;
+  width:0%;
+  background:var(--primary);
+  z-index:9999;
+  transition:width .1s linear;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* الفقرات ترجع طبيعية */
+.slide-content{
+  text-align: right;
+}
+
+
+/* الكلام يرجع طبيعي تحت العنوان */
+.slide-content p{
+  text-align: right;
+}
+
+/* ===== Dark Mode ===== */
+[data-theme="dark"] .slide h2{
+  background: rgba(18,20,26,.9);
+  color: #fff;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 10px 35px rgba(0,0,0,.8);
+}
+
+/* حاوية العنوان */
+.section-title{
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+
+
+
+  
+
+/* دارك مود */
+[data-theme="dark"] .section-title h2{
+  background: rgba(18,20,26,.9);
+  color: #fff;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 10px 35px rgba(0,0,0,.8);
+}
+
+/* النص يرجع طبيعي */
+.slide-content{
+  text-align: right;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== أنيميشن عام لكل الأزرار ===== */
+button,
+.profile-btn,
+.switch,
+.footer-btn{
+  transition:.25s ease;
+}
+
+button:hover,
+.profile-btn:hover,
+.switch:hover,
+.footer-btn:hover{
+  transform:translateY(-2px) scale(1.04);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== عنوان السلايد (نسخة نهائية) ===== */
+.section-title{
+  text-align:center;
+  margin-bottom:80px;
+}
+
+
+
+/* دارك مود */
+[data-theme="dark"] .section-title h2{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 10px 35px rgba(0,0,0,.8);
+}
+
+/* === FIX نهائي لعناوين السلايد === */
+.section-title{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+
+
+
+
+/* === FIX نهائي لأول سلايد === */
+body{
+  padding-top:140px;
+}
+
+#slide-1{
+  min-height: calc(100vh - 140px);
+}
+
+/* ===== FIX نهائي للعناوين ===== */
+.section-title{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+.section-title h2{
+  margin:0;
+  padding:14px 40px;
+
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight:900;
+  line-height:1.6;
+
+  direction:rtl;
+  text-align:center;
+
+  white-space:normal;
+  max-width:90%;
+
+  border-radius:999px;
+  background:rgba(255,255,255,.9);
+  color:#111;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 10px 30px rgba(0,0,0,.18);
+}
+
+/* دارك مود */
+[data-theme="dark"] .section-title h2{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+/* ===== FORCE FIX للعناوين ===== */
+.section-title{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  margin-bottom:30px;
+}
+
+.section-title h2{
+  writing-mode: horizontal-tb !important;
+  direction: rtl !important;
+
+  display:block !important;
+  width:auto !important;
+  max-width:90% !important;
+
+  text-align:center !important;
+  white-space:normal !important;
+
+  font-size: clamp(26px, 2.4vw, 18px);
+  font-weight:900;
+  line-height:1.6;
+
+  padding:14px 40px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.9);
+  color:#111;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 10px 30px rgba(0,0,0,.18);
+}
+
+[data-theme="dark"] .section-title h2{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+.section-title h2{
+  position: relative;
+  overflow: hidden;
+}
+.section-title h2::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.35),
+      rgba(255,255,255,0) 60%
+    );
+  opacity:.25;
+  pointer-events:none;
+}
+[data-theme="dark"] .section-title h2::before{
+  background:
+    linear-gradient(
+      120deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,0) 60%
+    );
+}
+
+
+/* ===== Tooltip عام ===== */
+.tooltip-wrap{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tooltip-text{
+  position: absolute;
+  bottom: -34px;              /* أقرب للزر */
+  right: 50%;
+  transform: translateX(50%) translateY(4px);
+
+  background: rgba(0,0,0,.75);
+  color: #fff;
+
+  padding: 4px 10px;          /* ⬅️ أصغر */
+  border-radius: 999px;
+
+  font-size: 11px;            /* ⬅️ أصغر */
+  font-weight: 600;
+  line-height: 1.4;
+
+  white-space: nowrap;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: .2s ease;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+}
+
+/* سهم صغير */
+.tooltip-text::after{
+  content:"";
+  position:absolute;
+  top:-6px;
+  right:50%;
+  transform:translateX(50%);
+  border:6px solid transparent;
+  border-bottom-color:rgba(0,0,0,.8);
+}
+
+.tooltip-wrap:hover .tooltip-text{
+  opacity:1;
+  transform: translateX(50%) translateY(0);
+}
+
+/* دارك مود */
+[data-theme="dark"] .tooltip-text{
+  background: rgba(255,255,255,.15);
+  color:#fff;
+}
+[data-theme="dark"] .tooltip-text::after{
+  border-bottom-color: rgba(255,255,255,.15);
+}
+
+
+
+
+
+
+@keyframes pulseTitle{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+  100%{transform:scale(1)}
+}
+
+.pulse-title{
+  animation:pulseTitle .6s ease;
+}
+
+.current-section{
+  position:fixed;
+  top:110px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:8px 22px;
+  border-radius:999px;
+  background:var(--bar);
+  font-weight:700;
+  font-size: clamp(16px, 2.4vw, 18px);
+  opacity:0;
+  transition:.3s;
+  z-index:90;
+}
+
+
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  50%{transform:translateX(4px)}
+  75%{transform:translateX(-4px)}
+  100%{transform:translateX(0)}
+}
+
+
+.slide-content p{
+  max-width:680px;
+  margin-inline:auto;
+}
+
+.end-message{
+  text-align:center;
+  margin-top:40px;
+  font-weight:800;
+  opacity:.8;
+}
+
+.current-topic{
+  position:absolute;
+  left:20px;
+  top:50%;
+  transform:translateY(-50%) translateX(-10px);
+
+  padding:8px 22px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 24px rgba(0,0,0,.18);
+
+  font-weight:900;
+  font-size: clamp(16px, 2.4vw, 18px);
+  white-space:nowrap;
+
+  opacity:0;
+  pointer-events:none;
+  transition:.35s ease;
+}
+
+
+[data-theme="dark"] .current-topic{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+
+.slide{
+  padding-bottom:120px;
+}
+
+/* ===== نظام السلايد الجديد ===== */
+
+
+/* توسيط المحتوى */
+.slide-content{
+  max-width:720px;
+  margin-inline:auto;
+}
+
+
+ 
+@media (max-width:600px){
+  .title-text{
+    font-size:16px;
+  }
+.title-frame{
+    max-width: 55%;
+    padding:8px 18px;
+  }
+}
+ 
+
+
+@media (max-width:420px){
+  .title-text{
+    font-size:13px;
+  }
+
+  .title-frame{
+    max-width: 50%;
+    padding:6px 12px;
+  }
+}
+
+/* ===== TITLE FRAME (FINAL FIX) ===== */
+.title-frame{
+  display:inline-flex;
+  width:auto !important;
+  max-width:none !important;
+
+  padding:10px 22px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 24px rgba(0,0,0,.18);
+}
+
+
+[data-theme="dark"] .title-frame{
+  background:rgba(18,20,26,.9);
+}
+
+.profile-btn,
+.switch{
+  flex-shrink:0;   /* ❌ ممنوع ينكمش */
+}
+
+.title-slot{
+  flex:1;                /* ياخد المساحة المتاحة فقط */
+  display:flex;
+  justify-content:center;
+  min-width:0;           /* مهم جدًا */
+}
+
+@media (max-width: 600px){
+
+  /* ===== Mobile Subtitle – LIKE INDEX ===== */
+.mobile-subtitle{
+  display:none;
+
+  width:fit-content;
+  max-width:100%;
+
+  padding:8px 18px;
+  border-radius:999px;
+
+  font-size:13px;
+  font-weight:800;
+  line-height:1.4;
+
+  background:rgba(255,255,255,.9);
+  color:#111;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 22px rgba(0,0,0,.18);
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* دارك مود */
+[data-theme="dark"] .mobile-subtitle{
+  background:rgba(28,30,36,.95);
+  color:#fff;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 12px 30px rgba(0,0,0,.7);
+}
+
+.topbar{
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .topbar-inner{
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+}
+}
+
+
+@media (max-width:600px){
+  .title-frame{
+    padding: 8px 22px;
+      }
+
+  .title-text{
+    font-size:16px;
+  }
+}
+
+.title-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  max-width:100%;
+}
+
+.title-main{
+  font-weight:900;
+  font-size:20px;
+  line-height:1.5;
+
+  text-align:center;
+  white-space:normal;     /* ✅ يلف الكلام */
+  word-break:break-word; /* ✅ مفيش خنق */
+}
+
+[data-theme="dark"] .title-frame,
+[data-theme="dark"] .mobile-subtitle{
+  background:rgba(18,20,26,.85);
+  color:#fff;
+}
+
+@media (max-width:600px){
+  .title-main{
+    font-size:16px;
+  }
+
+  .title-slot{
+    margin-bottom:6px;
+  }
+
+  .mobile-subtitle{
+    display:inline-flex;
+    width:auto;
+    max-width:90%;
+
+    padding:8px 18px;
+    border-radius:999px;
+
+    font-size:13px;
+    font-weight:800;
+
+    background:rgba(255,255,255,.9);
+    box-shadow:
+      inset 0 1px 2px rgba(255,255,255,.8),
+      0 6px 18px rgba(0,0,0,.15);
+  }
+
+  [data-theme="dark"] .mobile-subtitle{
+    background:rgba(28,30,36,.95);
+    color:#fff;
+  }
+}
+
+
+
+.profile-btn,
+.switch{
+  flex-shrink:0;
+}
+
+.profile-btn{
+  order:1;
+}
+
+.title-slot{
+  order:2;
+}
+
+.switch{
+  order:3;
+}
+
+.profile-btn{
+  position: relative;
+  z-index: 2;
+}
+
+.switch{
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== DARK MODE – GLOBAL CARD STYLE ===== */
+[data-theme="dark"] .topbar,
+[data-theme="dark"] .title-frame,
+[data-theme="dark"] .section-title h2,
+[data-theme="dark"] .mobile-subtitle,
+[data-theme="dark"] .current-topic,
+[data-theme="dark"] .site-footer{
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+}
+
+[data-theme="dark"] .topbar,
+[data-theme="dark"] .section-title h2{
+  transition:
+    background .3s ease,
+    box-shadow .3s ease,
+    transform .3s ease;
+}
+
+/* ===== DARK MODE FIX – SWITCH VISIBILITY ===== */
+[data-theme="dark"] .switch{
+  background: rgba(255,255,255,.12);   /* أفتح من الخلفية */
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.15),
+    0 6px 18px rgba(0,0,0,.6);
+}
+
+/* الـ knob (القمر) */
+[data-theme="dark"] .knob{
+  background: #111;          /* يبان أكتر */
+  color: #fff;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.2),
+    0 4px 10px rgba(0,0,0,.6);
+}
+
+/* ===== Dark Mode Unified Frames ===== */
+[data-theme="dark"] .title-frame,
+[data-theme="dark"] .section-title h2,
+[data-theme="dark"] .site-footer,
+[data-theme="dark"] .mobile-subtitle {
+  background: rgba(28,30,36,.95);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 12px 30px rgba(0,0,0,.65);
+}
+
+
+/* ===== TITLE SOFT REVEAL ANIMATION ===== */
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    box-shadow:
+      inset 0 1px 2px rgba(255,255,255,.05),
+      0 0 0 rgba(0,0,0,0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    box-shadow:
+      inset 0 1px 2px rgba(255,255,255,.08),
+      0 14px 40px rgba(0,0,0,.35);
+  }
+}
+
+.section-title h2{
+  animation: titleReveal .7s ease forwards;
+}
+
+[data-theme="dark"] .section-title h2{
+  animation: titleReveal .7s ease forwards;
+}
+
+@keyframes lightBreath {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.03); }
+  100% { filter: brightness(1); }
+}
+
+
+@keyframes titleReveal {
+  from{
+    opacity:0;
+    transform: translateY(12px);
+  }
+  to{
+    opacity:1;
+    transform: translateY(0);
+  }
+}
+
+.section-title h2{
+  animation: titleReveal .8s ease both;
+}
+
+
+
+/* ===== SECTION TITLE – CLEAR ANIMATION ===== */
+.section-title h2{
+  opacity: 0;
+  transform: translateY(25px);
+  transition:
+    opacity .8s ease,
+    transform .8s ease,
+    box-shadow .8s ease;
+}
+
+/* لما يدخل الشاشة */
+.section-title h2.in-view{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== LIGHT MODE – READING FEEDBACK ===== */
+[data-theme="light"] .slide.reading{
+  background: rgba(255,255,255,.55);
+  border-radius: 24px;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.6),
+    0 20px 45px rgba(0,0,0,.12);
+  transition: background .6s ease, box-shadow .6s ease;
+}
+
+@keyframes darkShadowPulse {
+  0%   { box-shadow: var(--card-shadow); }
+  50%  { box-shadow: inset 0 1px 2px rgba(255,255,255,.08),
+                  0 22px 55px rgba(0,0,0,.85); }
+  100% { box-shadow: var(--card-shadow); }
+}
+
+[data-theme="dark"] .section-title h2.in-view{
+  animation: darkShadowPulse 4s ease-in-out infinite;
+}
+
+/* ===== SLIDE CLEAN BACKGROUND (NO BOOK EFFECT) ===== */
+.slide{
+  background: var(--bg);
+  box-shadow: none;
+  padding-bottom: 120px; /* مسافة مريحة بس مش مبالغ فيها */
+}
+
+.slide{
+  transition: background .4s ease;
+}
+
+/* ===== FORCE ONE COLOR BACKGROUND ===== */
+html,
+body,
+.slide,
+.slide-content {
+  background: var(--bg) !important;
+}
+
+/* ===== REMOVE BOOK / CARD FEEL COMPLETELY ===== */
+.slide,
+.slide-content,
+.slide-end {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+/* ===== ABSOLUTE COLOR LOCK ===== */
+[data-theme="light"] {
+  --bg: #f6f7fb;
+}
+
+[data-theme="dark"] {
+  --bg: #0f1115;
+}
+
+/* ===== PREVENT THEME FLASH ===== */
+.theme-lock,
+.theme-lock * {
+  transition: none !important;
+  animation: none !important;
+}
+
+
+  
+
+
+
+
+
+
+
+
+
+/* ===== ARTICLE – CLEAN FRAME ===== */
+/* ===== ARTICLE – TOPBAR STYLE FRAME ===== */
+.article{
+  position: relative;
+
+  margin-bottom: 48px;
+  padding: 36px 34px;
+
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(12px);
+
+  border-radius: 32px;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.7),
+    0 20px 48px rgba(0,0,0,.16);
+
+  opacity: 0;
+  transform: translateY(40px);
+
+  transition:
+    opacity .6s ease,
+    transform .6s ease,
+    box-shadow .6s ease;
+}
+
+/* ===============================
+   ARTICLE – FINAL CLEAN LIGHT MODE
+================================= */
+
+/* ===== ARTICLE – READING MODE ===== */
+[data-theme="light"] .article{
+  background: #ffffff; /* أبيض صافي للقراءة */
+  border: 1px solid rgba(0,0,0,.05);
+
+  border-radius: 26px;
+
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.08);
+
+  padding: 34px 32px;
+  margin-bottom: 28px;
+
+  transition:
+    box-shadow .35s ease,
+    transform .35s ease;
+}
+
+
+/* دارك مود */
+[data-theme="dark"] .article{
+  background: rgba(28,30,38,.95);
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 26px 60px rgba(0,0,0,.85);
+}
+
+
+
+/* Hover */
+.article:hover{
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.7),
+    0 34px 70px rgba(0,0,0,.22);
+  transform: translateY(-4px);
+}
+
+
+
+
+/* ===== ARTICLE TITLE ===== */
+/* ===== ARTICLE SUB TITLE (STRONG) ===== */
+.article h3{
+  display: inline-block;
+
+  padding: 12px 26px;
+  margin-bottom: 22px;
+
+  font-size: clamp(20px, 2.4vw, 24px);
+  font-weight: 900;
+  letter-spacing: .3px;
+
+  border-radius: 14px;
+
+  }
+
+[data-theme="light"] .article h3{
+  background: rgba(37,99,235,.12);
+  color:#0f172a;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.9),
+    0 12px 28px rgba(37,99,235,.25);
+}
+
+
+/* دارك مود */
+[data-theme="dark"] .article h3{
+  color:#eaf1ff;
+  background: rgba(96,165,250,.22);
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 14px 34px rgba(0,0,0,.7);
+}
+
+
+.article:hover{
+  transform: translateY(-6px);
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.18);
+}
+
+[data-theme="dark"] .article:hover{
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 28px 60px rgba(0,0,0,.9);
+}
+
+
+
+
+/* ===== ARTICLE REVEAL ANIMATION ===== */
+.article{
+  opacity: 1;
+  transform: none;
+}
+
+.article.show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.article:hover{
+  box-shadow:
+    0 26px 60px rgba(0,0,0,.2);
+  transform: translateY(-4px);
+}
+
+@media (max-width:600px){
+  .article{
+    padding: 26px 22px;
+    border-radius: 26px;
+  }
+
+  .article h3{
+    font-size: 18px;
+    padding: 10px 18px;
+  }
+}
+
+
+
+[data-theme="light"] .article::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(37,99,235,.12),
+      rgba(37,99,235,0) 40%,
+      rgba(37,99,235,.10)
+    );
+
+  opacity:.35;
+  pointer-events:none;
+}
+
+
+[data-theme="light"] .article:hover{
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.12);
+}
+
+/* ===== Article Text (Readable & Professional) ===== */
+.article p{
+  font-size: clamp(18px, 2.2vw, 20px);
+  line-height: 2;
+  letter-spacing: .25px;
+  color: #222;
+}
+
+/* ===== DARK MODE – ARTICLE TEXT FIX ===== */
+[data-theme="dark"] .article p{
+  color: #e5e7eb;   /* رمادي فاتح مريح للعين */
+}
+
+
+
+
+@media (max-width:600px){
+  .title-slot{
+    max-width:85%;
+  }
+
+  }
+
+.title-stack{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+
+.mobile-subtitle{
+  font-size:13px;
+  font-weight:700;
+  opacity:.75;
+  display:none;
+}
+
+@media (max-width:600px){
+  .title-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+max-width:100%;
+  }
+
+  .title-frame,
+  .mobile-subtitle{
+    flex-shrink:0;
+  }
+}
+
+@media (max-width:600px){
+  .mobile-subtitle{
+    display:none !important;
+  }
+}
+
+
+
+
+/* =============================================================================== ===== */
+</style>
+</head>
+
+<body data-theme="light">
+
+<header class="topbar">
+  <div class="topbar-inner">
+
+
+ <!-- شمال -->
+  <div class="switch" id="themeSwitch">
+    <div class="knob" id="knob">☀️</div>
+  </div>
+
+
+
+
+    <!-- النص (العنوان فقط) -->
+  <div class="title-slot">
+  <div class="title-frame">
+    <span id="topTitleMain" class="title-main">عن البحث</span>
+  </div>
+</div>
+
+<div class="mobile-subtitle" id="mobileTitle"></div>
+
+
+  <!-- مجموعة أزرار اليمين -->
+<div class="top-actions">
+
+  <div class="tooltip-wrap">
+  <a href="profile.html" class="profile-btn">👤</a>
+  <div class="tooltip-text">الملف التعريفي لصاحب المشروع</div>
+</div>
+
+
+ <div class="tooltip-wrap">
+ <a href="index.html" class="profile-btn">📄</a>
+  <div class="tooltip-text">العودة إلى البحث</div>
+</div>
+
+
+</div>
+
+
+  </div>
+</header>
+
+
+
+
+
+<!-- ===== SLIDE 1 ===== -->
+<section class="slide">
+  <div class="slide-content">
+
+    <div class="section-title">
+  <h2 id="aboutMainTitle">لماذا تم اختيار هذا البحث</h2>
+</div>
+
+
+<!-- مقال 1 -->
+  <div class="article">
+    <h3>سبب اختيار الموضوع</h3>
+    <p>
+      
+اخترت موضوع الإدمان الرقمي لأنه أصبح جزءًا واضحًا من حياتنا اليومية، خاصة بين الطلاب والمراهقين. فالتكنولوجيا لم تعد مجرد وسيلة مساعدة، بل تحولت في كثير من الأحيان إلى عنصر أساسي يرافقنا في كل وقت. هذا الانتشار الواسع دفعني للتساؤل: متى يكون الاستخدام مفيدًا؟ ومتى يتحول إلى مشكلة تؤثر على حياتنا دون أن نشعر؟
+
+كما أن هذا الموضوع يلامس واقعنا بشكل مباشر، فنحن نستخدم الهواتف ووسائل التواصل الاجتماعي يوميًا، أحيانًا دون وعي بآثارها على تركيزنا ونفسيتنا وعلاقاتنا الاجتماعية. لذلك شعرت أن من المهم التوقف عند هذه الظاهرة ومحاولة فهمها بشكل أعمق.
+    </p>
+  </div>
+
+  <!-- مقال 2 -->
+  <div class="article">
+    <h3>أهمية البحث</h3>
+    <p>
+      تنبع أهمية هذا البحث من كونه يسلط الضوء على مشكلة حديثة لكنها منتشرة بشكل كبير. الإدمان الرقمي قد لا يُلاحظ بسهولة، لأنه مرتبط بأدوات نعتبرها طبيعية وضرورية، مثل الهاتف والإنترنت. ومع ذلك، فإن آثاره قد تكون عميقة، خاصة على الطالب من حيث التركيز والتحصيل الدراسي والحالة النفسية.
+
+يساعد هذا البحث على زيادة الوعي بمخاطر الاستخدام المفرط للتكنولوجيا، ويشجع على التفكير في كيفية تحقيق توازن صحي بين الاستفادة من الوسائل الرقمية وعدم الوقوع في الاعتماد الزائد عليها.
+    </p>
+  </div>
+
+<!-- مقال 3 -->
+  <div class="article">
+    <h3>الهدف من البحث</h3>
+    <p>
+      يهدف هذا البحث إلى توضيح مفهوم الإدمان الرقمي، وشرح آثاره على الفرد، وخاصة الطالب، من الجوانب الدراسية والنفسية والاجتماعية. كما يسعى إلى مساعدة القارئ على التمييز بين الاستخدام الطبيعي والاستخدام الإدماني للتكنولوجيا.
+
+إضافة إلى ذلك، يهدف البحث إلى تقديم رؤية متوازنة، لا تقوم على رفض التكنولوجيا أو مهاجمتها، بل على فهمها وتنظيم استخدامها بطريقة صحيحة تخدم حياة الإنسان بدلًا من أن تسيطر عليها.
+    </p>
+  </div>
+
+
+  <!-- مقال 4 -->
+  <div class="article">
+    <h3>تجربتي أثناء كتابة البحث</h3>
+    <p>
+      أثناء كتابة هذا البحث، أدركت مدى تشابك التكنولوجيا مع تفاصيل حياتنا اليومية. لم يكن البحث مجرد جمع معلومات، بل كان فرصة للتأمل في عاداتنا الرقمية، وملاحظة كيف يؤثر الهاتف على وقتنا وتركيزنا دون أن ننتبه.
+
+كما ساعدتني هذه التجربة على النظر إلى الموضوع من زاوية أعمق، ليس فقط كمشكلة عامة، بل كواقع نعيشه جميعًا بدرجات مختلفة. وهذا جعلني أكثر وعيًا بأهمية التنظيم والاعتدال في استخدام التكنولوجيا.
+    </p>
+  </div>
+
+  <!-- مقال أخير -->
+  <div class="article">
+    <h3>كلمة أخيرة</h3>
+    <p>
+      في النهاية، يمكن القول إن الإدمان الرقمي ليس مشكلة مستحيلة الحل، بل ظاهرة يمكن التعامل معها بالوعي والتنظيم. فالتكنولوجيا بحد ذاتها ليست عدوًا، وإنما الطريقة التي نستخدمها بها هي العامل الحاسم.
+
+لقد استمتعت كثيرًا بكتابة هذا البحث، لأنه منحني فرصة لفهم موضوع معاصر يمس حياتنا جميعًا، وآمل أن يساهم هذا العمل في زيادة وعي القارئ وتشجيعه على بناء علاقة أكثر توازنًا مع العالم الرقمي.
+    </p>
+  </div>
+
+    
+<div class="slide-end"></div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-inner footer-grid">
+
+    <!-- يمين -->
+    <div class="footer-col right">
+      <p class="footer-text">
+        تم إعداد هذا المشروع بواسطة <strong>كريم</strong>
+      </p>
+      <a href="profile.html" class="footer-btn small">
+        معرفة المزيد
+      </a>
+    </div>
+
+    <!-- شمال -->
+    <div class="footer-col left">
+      <p class="footer-text">
+        للعودة إلى موضوع البحث كاملًا
+      </p>
+      <a href="index.html" class="footer-btn small">
+        الانتقال إلى البحث
+      </a>
+    </div>
+
+  </div>
+</footer>
+
+
+
+<script>
+
+
+
+
+window.addEventListener("load", () => {
+  const savedScroll = localStorage.getItem("lastScroll");
+  const lastExitTime = localStorage.getItem("lastExitTime");
+
+  if (!savedScroll || !lastExitTime) return;
+
+  const now = Date.now();
+  const diff = now - parseInt(lastExitTime);
+
+  const ONE_HOUR = 60 * 60 * 1000; // ساعة بالمللي ثانية
+
+  if (diff < ONE_HOUR) {
+    // 👌 يرجع يكمل من مكانه
+    window.scrollTo({
+      top: parseInt(savedScroll),
+      behavior: "instant"
+    });
+  } else {
+    // ❌ يعدّي ساعة → يبدأ من الأول
+    localStorage.removeItem("lastScroll");
+      }
+});
+
+
+
+
+
+
+
+
+const body = document.body;
+const switchBtn = document.getElementById("themeSwitch");
+const knob = document.getElementById("knob");
+
+
+// حفظ مكان القراءة + وقت الخروج
+window.addEventListener("beforeunload", () => {
+  localStorage.setItem("lastScroll", window.scrollY);
+  localStorage.setItem("lastExitTime", Date.now());
+});
+
+
+/* الوضع المحفوظ */
+const savedTheme = localStorage.getItem("theme") || "light";
+body.dataset.theme = savedTheme;
+knob.textContent = savedTheme === "dark" ? "🌙" : "☀️";
+
+
+
+
+/* زرار الدارك مود */
+switchBtn.onclick = () => {
+  // اقفل الأنيميشن مؤقتًا
+  body.classList.add("theme-lock");
+
+  const newTheme = body.dataset.theme === "dark" ? "light" : "dark";
+  body.dataset.theme = newTheme;
+  localStorage.setItem("theme", newTheme);
+  knob.textContent = newTheme === "dark" ? "🌙" : "☀️";
+
+  // افتح الأنيميشن تاني بعد فريم
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      body.classList.remove("theme-lock");
+    }, 60);
+  });
+};
+
+
+
+
+
+/* ===== جدول المحتويات ===== */
+
+
+
+
+
+// تفعيل العنوان الحالي في محتويات البحث
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+const titles = document.querySelectorAll(".section-title h2");
+const topbar = document.querySelector(".topbar");
+
+
+
+const articles = document.querySelectorAll(".article");
+
+
+const articleObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+      articleObserver.unobserve(entry.target); // 👈 المفتاح
+    }
+  });
+},{
+  threshold: 0.2
+});
+
+articles.forEach(article=>{
+  articleObserver.observe(article);
+});
+
+const topTitle = document.getElementById("topTitleMain");
+const mobileTitle = document.getElementById("mobileTitle");
+const mainAboutTitle = document.getElementById("aboutMainTitle");
+
+const BASE_TITLE = "عن البحث";
+const TOPBAR_OFFSET = 140; // نفس padding-top
+
+function updateAboutTitleSmart() {
+  const rect = mainAboutTitle.getBoundingClientRect();
+  const isFullyHidden = rect.bottom <= TOPBAR_OFFSET;
+
+  // دايمًا خلي العنوان الأساسي
+  topTitle.textContent = BASE_TITLE;
+
+  if (isFullyHidden) {
+    // كمبيوتر
+    if (window.innerWidth > 600) {
+      topTitle.textContent = `${BASE_TITLE} — ${mainAboutTitle.textContent}`;
+      mobileTitle.style.display = "none";
+    }
+    // موبايل
+    else {
+      mobileTitle.textContent = mainAboutTitle.textContent;
+      mobileTitle.style.display = "inline-flex";
+    }
+  } else {
+    mobileTitle.style.display = "none";
+  }
+}
+
+window.addEventListener("scroll", updateAboutTitleSmart);
+window.addEventListener("resize", updateAboutTitleSmart);
+window.addEventListener("load", updateAboutTitleSmart);
+
+
+
+
+</script>
+</body>
+</html>
