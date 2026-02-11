@@ -1875,47 +1875,40 @@ html[data-theme="dark"] .feature-box{
 
 
 
-const body = document.body;
+
+
+
+
+
+
+
+
+
+
+
+const html = document.documentElement;
 const switchBtn = document.getElementById("themeSwitch");
 const knob = document.getElementById("knob");
 
-
-
-
-
-/* الوضع المحفوظ */
+/* ===== تحميل الثيم المحفوظ ===== */
 const savedTheme = localStorage.getItem("theme") || "light";
-body.dataset.theme = savedTheme;
-knob.textContent = savedTheme === "dark" ? "🌙" : "☀️";
+html.dataset.theme = savedTheme;
+updateKnob(savedTheme);
 
-
-
-
+/* ===== تغيير الثيم ===== */
 switchBtn.onclick = () => {
-  const scrollY = window.scrollY;
-
-  // 🔒 اقفل التصحيح التلقائي
-  document.documentElement.classList.add("theme-switching");
-  document.body.classList.add("theme-lock");
-
-  const html = document.documentElement;
-  const newTheme = html.dataset.theme === "dark" ? "light" : "dark";
+  const newTheme =
+    html.dataset.theme === "dark" ? "light" : "dark";
 
   html.dataset.theme = newTheme;
   localStorage.setItem("theme", newTheme);
-  knob.textContent = newTheme === "dark" ? "🌙" : "☀️";
-
-  requestAnimationFrame(() => {
-    window.scrollTo(0, scrollY);
-
-    setTimeout(() => {
-      document.body.classList.remove("theme-lock");
-      document.documentElement.classList.remove("theme-switching");
-    }, 80);
-  });
+  updateKnob(newTheme);
 };
 
-
+/* ===== تحديث شكل الزر ===== */
+function updateKnob(theme){
+  knob.textContent = theme === "dark" ? "🌙" : "☀️";
+}
 
 
 const topbar = document.querySelector(".topbar");
