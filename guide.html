@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الإدمان الرقمي</title>
+
+<style>
+
+html, body{
+  overflow-x: hidden;
+}
+
+
+
+
+
+
+
+
+.topbar-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:16px 20px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  position:relative;
+}
+.topbar-inner > *{
+  flex-shrink:0;
+}
+
+
+html[data-theme="dark"] .topbar{
+  background:transparent;
+}
+
+html[data-theme="dark"] .topbar-inner{
+  background:rgba(18,20,26,.9);
+  border-radius:24px;
+  padding:14px 24px;
+  box-shadow:0 10px 35px rgba(0,0,0,.7);
+}
+
+.profile-btn{
+  font-size: clamp(20px, 2.4vw, 18px);
+  text-decoration:none;
+  cursor:pointer;
+}
+
+:root{
+  --light-card-bg: #f1f5fb;      /* أزرق فاتح جدًا */
+  --light-card-border: rgba(37,99,235,.12);
+  --light-card-shadow:
+    inset 0 1px 2px rgba(255,255,255,.9),
+    0 18px 45px rgba(30,64,175,.18);
+}
+
+
+:root{
+  --bg:#f6f7fb;
+  --text:#111;
+  --bar:rgba(255,255,255,.92);
+  --border:rgba(0,0,0,.08);
+  --primary:#2563eb;
+}
+
+html[data-theme="dark"]{
+ --bg:#0f1115;
+  --text:#fff;
+
+  /* 🔥 لون موحّد لكل البراويز */
+  --card-bg: rgba(28,30,38,.95);
+
+  /* ✨ Shadow ناعم وراقي */
+  --card-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 14px 40px rgba(0,0,0,.75);
+
+  --border:rgba(255,255,255,.12);
+  --primary:#3b82f6;
+}
+
+
+html[data-theme="dark"] .title-frame{
+  background:rgba(18,20,26,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 10px 35px rgba(0,0,0,.8);
+}
+
+html[data-theme="dark"] .topbar{
+  background:rgba(20,22,28,.85);
+  box-shadow:0 10px 35px rgba(0,0,0,.6);
+}
+
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:system-ui;
+}
+
+html,
+body{
+  background:var(--bg);
+  color:var(--text);
+}
+
+
+/* ===== Global Reading Typography ===== */
+body{
+  font-size: 18px;
+  line-height: 1.95;
+  letter-spacing: .2px;
+}
+
+
+/* منع التحديد */
+.topbar, button, .lang, .lang-item, .switch, h1, h2{
+  user-select:none;
+}
+
+/* ===== TOP BAR ===== */
+.topbar{
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  width:90%;
+  max-width:1200px;
+  background:var(--bar);
+  backdrop-filter:blur(14px);
+  border-radius:28px;
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
+  z-index:100;
+}
+
+.topbar{
+  padding-inline: clamp(12px, 4vw, 28px);
+}
+
+
+.topbar-inner{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title-slot{
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%, -50%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  pointer-events:none;
+  max-width:70%;
+}
+
+
+
+
+html[data-theme="dark"] .title-frame{
+  background:rgba(255,255,255,.08);
+}
+
+ .title-text{
+  font-weight:900;
+  font-size:22px;
+  line-height:1.4;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;  /* ← ذكي مش وحش */
+}
+
+
+
+
+
+
+  
+
+.profile-btn{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(0,0,0,.06);
+  text-decoration:none;
+}
+
+html[data-theme="dark"] .profile-btn{
+  background:rgba(255,255,255,.12);
+}
+
+
+
+
+/* ===== CONTROLS ===== */
+.profile-btn{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:rgba(0,0,0,.06);
+  font-size: clamp(18px, 2.4vw, 18px);
+  text-decoration:none;
+  cursor:pointer;
+}
+
+html[data-theme="dark"] .profile-btn{
+  background:rgba(255,255,255,.12);
+}
+
+.controls{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+/* ===== SWITCH ===== */
+.switch{
+  
+  width:54px;
+  height:28px;
+  background:rgba(0,0,0,.15);
+  border-radius:999px;
+  position:relative;
+  cursor:pointer;
+}
+
+.knob{
+  width:22px;
+  height:22px;
+  background:#fff;
+  border-radius:50%;
+  position:absolute;
+  top:3px;
+  left:3px;
+  transition:.3s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+html[data-theme="dark"] .knob{
+  left:29px;
+  background:#000;
+  color:#fff;
+}
+html[data-theme="dark"] .topbar{
+  box-shadow:0 14px 40px rgba(0,0,0,.6);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== FOOTER ===== */
+.site-footer{
+  margin-top:-40px;
+  padding:50px 20px;
+  background:var(--bar);
+  border-top:1px solid var(--border);
+}
+
+.footer-inner{
+  max-width:900px;
+  margin:auto;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:24px;
+  text-align:unset;
+}
+
+.footer-text{
+  font-size: clamp(18px, 2.6vw, 22px);
+  font-weight: 700;
+  opacity: .9;
+  text-align: center;
+}
+
+
+.footer-btn{
+  text-decoration:none;
+  padding:12px 36px;
+  border-radius:999px;
+  background:var(--primary);
+  color:#fff;
+  font-size: clamp(15px, 2.4vw, 18px);
+  font-weight:700;
+  transition:.25s;
+}
+
+.footer-btn:hover{
+  transform:translateY(-2px);
+}
+
+.footer-split{
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-right{
+  font-size: clamp(16px, 2.4vw, 18px);
+  font-weight: 700;
+  opacity: .9;
+}
+
+.footer-left{
+  display: flex;
+}
+
+/* GRID الفوتر */
+.footer-grid{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:40px;
+}
+
+.footer-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;   /* 👈 أهم سطر */
+  text-align:center;
+  gap:12px;
+}
+
+/* يمين */
+.footer-col.right{
+  text-align:right;
+}
+
+/* شمال */
+.footer-col.left{
+  text-align:left;
+}
+
+/* تصغير الأزرار */
+.footer-btn.small{
+  padding:10px 26px;
+  font-size:16px;
+  width:auto;           /* ⬅️ مهم */
+  min-width:unset;      /* ⬅️ مهم */
+}
+
+/* موبايل */
+@media (max-width:600px){
+ .footer-text{
+    font-size:14px;
+  }
+
+  .footer-grid{
+    align-items:center;
+    text-align:center;
+  }
+
+  .footer-col{
+    align-items:center;
+  }
+
+  }
+
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+
+
+/* ===== Slide Animation ===== */
+
+.topbar{
+  animation: dropBar 1s ease forwards;
+  opacity:0;
+}
+
+@keyframes dropBar{
+  from{
+    transform:translate(-50%,-20px);
+    opacity:0;
+  }
+  to{
+    transform:translate(-50%,0);
+    opacity:1;
+  }
+}
+
+
+
+@keyframes fadeUp{
+  from{
+    transform:translateY(20px);
+    opacity:0;
+  }
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+#progress-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  height:3px;
+  width:0%;
+  background:var(--primary);
+  z-index:9999;
+  transition:width .1s linear;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* الفقرات ترجع طبيعية */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== أنيميشن عام لكل الأزرار ===== */
+button,
+.profile-btn,
+.switch,
+.footer-btn{
+  transition:.25s ease;
+}
+
+button:hover,
+.profile-btn:hover,
+.switch:hover,
+.footer-btn:hover{
+  transform:translateY(-2px) scale(1.04);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* === FIX نهائي لأول سلايد === */
+body{
+  padding-top:140px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ===== Tooltip عام ===== */
+.tooltip-wrap{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tooltip-text{
+  position: absolute;
+  bottom: -34px;              /* أقرب للزر */
+  right: 50%;
+  transform: translateX(50%) translateY(4px);
+
+  background: rgba(0,0,0,.75);
+  color: #fff;
+
+  padding: 4px 10px;          /* ⬅️ أصغر */
+  border-radius: 999px;
+
+  font-size: 11px;            /* ⬅️ أصغر */
+  font-weight: 600;
+  line-height: 1.4;
+
+  white-space: nowrap;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: .2s ease;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+}
+
+/* سهم صغير */
+.tooltip-text::after{
+  content:"";
+  position:absolute;
+  top:-6px;
+  right:50%;
+  transform:translateX(50%);
+  border:6px solid transparent;
+  border-bottom-color:rgba(0,0,0,.8);
+}
+
+.tooltip-wrap:hover .tooltip-text{
+  opacity:1;
+  transform: translateX(50%) translateY(0);
+}
+
+/* دارك مود */
+html[data-theme="dark"] .tooltip-text{
+  background: rgba(255,255,255,.15);
+  color:#fff;
+}
+html[data-theme="dark"] .tooltip-text::after{
+  border-bottom-color: rgba(255,255,255,.15);
+}
+
+
+
+
+
+
+@keyframes pulseTitle{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.05)}
+  100%{transform:scale(1)}
+}
+
+.pulse-title{
+  animation:pulseTitle .6s ease;
+}
+
+.current-section{
+  position:fixed;
+  top:110px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:8px 22px;
+  border-radius:999px;
+  background:var(--bar);
+  font-weight:700;
+  font-size: clamp(16px, 2.4vw, 18px);
+  opacity:0;
+  transition:.3s;
+  z-index:90;
+}
+
+
+@keyframes shake{
+  0%{transform:translateX(0)}
+  25%{transform:translateX(-4px)}
+  50%{transform:translateX(4px)}
+  75%{transform:translateX(-4px)}
+  100%{transform:translateX(0)}
+}
+
+
+
+
+.end-message{
+  text-align:center;
+  margin-top:40px;
+  font-weight:800;
+  opacity:.8;
+}
+
+.current-topic{
+  position:absolute;
+  left:20px;
+  top:50%;
+  transform:translateY(-50%) translateX(-10px);
+
+  padding:8px 22px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 24px rgba(0,0,0,.18);
+
+  font-weight:900;
+  font-size: clamp(16px, 2.4vw, 18px);
+  white-space:nowrap;
+
+  opacity:0;
+  pointer-events:none;
+  transition:.35s ease;
+}
+
+
+html[data-theme="dark"] .current-topic{
+  background:rgba(18,20,26,.9);
+  color:#fff;
+}
+
+
+
+
+
+
+ 
+@media (max-width:600px){
+  .title-text{
+    font-size:16px;
+  }
+.title-frame{
+    max-width: 55%;
+    padding:8px 18px;
+  }
+}
+ 
+
+
+@media (max-width:420px){
+  .title-text{
+    font-size:13px;
+  }
+
+  .title-frame{
+    max-width: 50%;
+    padding:6px 12px;
+  }
+}
+
+/* ===== TITLE FRAME (FINAL FIX) ===== */
+.title-frame{
+  display:inline-flex;
+  width:auto !important;
+  max-width:none !important;
+
+  padding:10px 22px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,.9);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 24px rgba(0,0,0,.18);
+}
+
+
+html[data-theme="dark"] .title-frame{
+  background:rgba(18,20,26,.9);
+}
+
+.profile-btn,
+.switch{
+  flex-shrink:0;   /* ❌ ممنوع ينكمش */
+}
+
+.title-slot{
+  flex:1;                /* ياخد المساحة المتاحة فقط */
+  display:flex;
+  justify-content:center;
+  min-width:0;           /* مهم جدًا */
+}
+
+@media (max-width: 600px){
+
+  /* ===== Mobile Subtitle – LIKE INDEX ===== */
+.mobile-subtitle{
+  display:none;
+
+  width:fit-content;
+  max-width:100%;
+
+  padding:8px 18px;
+  border-radius:999px;
+
+  font-size:13px;
+  font-weight:800;
+  line-height:1.4;
+
+  background:rgba(255,255,255,.9);
+  color:#111;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 8px 22px rgba(0,0,0,.18);
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* دارك مود */
+html[data-theme="dark"] .mobile-subtitle{
+  background:rgba(28,30,36,.95);
+  color:#fff;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 12px 30px rgba(0,0,0,.7);
+}
+
+.topbar{
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .topbar-inner{
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+}
+}
+
+
+@media (max-width:600px){
+  .title-frame{
+    padding: 8px 22px;
+      }
+
+  .title-text{
+    font-size:16px;
+  }
+}
+
+.title-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  max-width:100%;
+}
+
+.title-main{
+  font-weight:900;
+  font-size:20px;
+  line-height:1.5;
+
+  text-align:center;
+  white-space:normal;     /* ✅ يلف الكلام */
+  word-break:break-word; /* ✅ مفيش خنق */
+}
+
+html[data-theme="dark"] .title-frame,
+html[data-theme="dark"] .mobile-subtitle{
+  background:rgba(18,20,26,.85);
+  color:#fff;
+}
+
+@media (max-width:600px){
+  .title-main{
+    font-size:16px;
+  }
+
+  .title-slot{
+    margin-bottom:6px;
+  }
+
+  .mobile-subtitle{
+    display:inline-flex;
+    width:auto;
+    max-width:90%;
+
+    padding:8px 18px;
+    border-radius:999px;
+
+    font-size:13px;
+    font-weight:800;
+
+    background:rgba(255,255,255,.9);
+    box-shadow:
+      inset 0 1px 2px rgba(255,255,255,.8),
+      0 6px 18px rgba(0,0,0,.15);
+  }
+
+  html[data-theme="dark"] .mobile-subtitle{
+    background:rgba(28,30,36,.95);
+    color:#fff;
+  }
+}
+
+
+
+.profile-btn,
+.switch{
+  flex-shrink:0;
+}
+
+.profile-btn{
+  order:1;
+}
+
+.title-slot{
+  order:2;
+}
+
+.switch{
+  order:3;
+}
+
+.profile-btn{
+  position: relative;
+  z-index: 2;
+}
+
+.switch{
+  position: relative;
+  z-index: 2;
+}
+
+/* ===== DARK MODE – GLOBAL CARD STYLE ===== */
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .title-frame,
+html[data-theme="dark"] .mobile-subtitle,
+html[data-theme="dark"] .current-topic,
+html[data-theme="dark"] .site-footer{
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+}
+
+html[data-theme="dark"] .topbar,
+
+/* ===== DARK MODE FIX – SWITCH VISIBILITY ===== */
+html[data-theme="dark"] .switch{
+  background: rgba(255,255,255,.12);   /* أفتح من الخلفية */
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.15),
+    0 6px 18px rgba(0,0,0,.6);
+}
+
+/* الـ knob (القمر) */
+html[data-theme="dark"] .knob{
+  background: #111;          /* يبان أكتر */
+  color: #fff;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.2),
+    0 4px 10px rgba(0,0,0,.6);
+}
+
+/* ===== Dark Mode Unified Frames ===== */
+html[data-theme="dark"] .title-frame,
+html[data-theme="dark"] .site-footer,
+html[data-theme="dark"] .mobile-subtitle {
+  background: rgba(28,30,36,.95);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 12px 30px rgba(0,0,0,.65);
+}
+
+
+/* ===== TITLE SOFT REVEAL ANIMATION ===== */
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    box-shadow:
+      inset 0 1px 2px rgba(255,255,255,.05),
+      0 0 0 rgba(0,0,0,0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    box-shadow:
+      inset 0 1px 2px rgba(255,255,255,.08),
+      0 14px 40px rgba(0,0,0,.35);
+  }
+}
+
+
+
+
+
+@keyframes lightBreath {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.03); }
+  100% { filter: brightness(1); }
+}
+
+
+@keyframes titleReveal {
+  from{
+    opacity:0;
+    transform: translateY(12px);
+  }
+  to{
+    opacity:1;
+    transform: translateY(0);
+  }
+}
+
+
+
+
+
+/* ===== LIGHT MODE – READING FEEDBACK ===== */
+
+
+@keyframes darkShadowPulse {
+  0%   { box-shadow: var(--card-shadow); }
+  50%  { box-shadow: inset 0 1px 2px rgba(255,255,255,.08),
+                  0 22px 55px rgba(0,0,0,.85); }
+  100% { box-shadow: var(--card-shadow); }
+}
+
+
+
+
+/* ===== ABSOLUTE COLOR LOCK ===== */
+html[data-theme="light"] {
+  --bg: #f6f7fb;
+}
+
+html[data-theme="dark"] {
+  --bg: #0f1115;
+}
+
+/* ===== PREVENT THEME FLASH ===== */
+.theme-lock,
+.theme-lock * {
+  transition: none !important;
+  animation: none !important;
+}
+
+
+
+@media (max-width:600px){
+  .title-slot{
+    max-width:85%;
+  }
+
+  }
+
+.title-stack{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:4px;
+}
+
+.mobile-subtitle{
+  font-size:13px;
+  font-weight:700;
+  opacity:.75;
+  display:none;
+}
+
+@media (max-width:600px){
+  .title-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+max-width:100%;
+  }
+
+  .title-frame,
+  .mobile-subtitle{
+    flex-shrink:0;
+  }
+}
+
+@media (max-width:600px){
+  .mobile-subtitle{
+    display:none !important;
+  }
+}
+
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .card{
+  box-sizing: border-box;
+}
+
+/* ===== PREVENT SCROLL JUMP ON THEME CHANGE ===== */
+html.theme-switching,
+html.theme-switching body {
+  overflow-anchor: none !important;
+}
+
+/* ===== GUIDE PAGE STRUCTURE ===== */
+
+.slide{
+  padding:60px 20px;
+}
+
+.slide-content{
+  max-width:900px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:40px;
+}
+
+.article{
+  background:var(--bar);
+  padding:35px 40px;
+  border-radius:24px;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.7),
+    0 18px 40px rgba(0,0,0,.15);
+  animation:fadeUp .8s ease both;
+}
+
+html[data-theme="dark"] .article{
+  background:var(--card-bg);
+  box-shadow:var(--card-shadow);
+}
+
+.article h3{
+  font-size:26px;
+  margin-bottom:18px;
+  font-weight:900;
+}
+
+.article p{
+  margin-bottom:14px;
+  line-height:2;
+  font-size:18px;
+}
+
+/* أيقونات داخل الشرح */
+.guide-item{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.guide-icon{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(37,99,235,.1);
+  font-size:20px;
+}
+
+html[data-theme="dark"] .guide-icon{
+  background:rgba(96,165,250,.15);
+}
+
+/* ===== GUIDE TITLE FRAME (BLUE LIKE INDEX) ===== */
+
+.article h3{
+  display:inline-block;
+  padding:12px 28px;
+  margin-bottom:22px;
+
+  font-size:24px;
+  font-weight:900;
+
+  border-radius:14px;
+
+  background:rgba(37,99,235,.12);
+  color:#0f172a;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.9),
+    0 12px 28px rgba(37,99,235,.25);
+
+  transition:.3s ease;
+}
+
+html[data-theme="dark"] .article h3{
+  background:rgba(96,165,250,.22);
+  color:#eaf1ff;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.08),
+    0 14px 34px rgba(0,0,0,.7);
+}
+
+.article:hover h3{
+  transform:translateY(-2px);
+}
+
+/* ===== GUIDE BUTTON SIMULATION ===== */
+
+.fake-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+
+  padding:10px 18px;
+  border-radius:999px;
+
+  background:var(--bar);
+  border:1px solid var(--border);
+
+  font-size:16px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 6px 16px rgba(0,0,0,.15);
+
+  transition:.25s ease;
+}
+
+html[data-theme="dark"] .fake-btn{
+  background:var(--card-bg);
+  box-shadow:var(--card-shadow);
+}
+
+.fake-btn:hover{
+  transform:translateY(-3px) scale(1.05);
+}
+
+.fake-btn:active{
+  transform:scale(.96);
+}
+
+/* أيقونة جوا الزرار */
+.fake-icon{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(37,99,235,.12);
+  font-size:15px;
+}
+
+html[data-theme="dark"] .fake-icon{
+  background:rgba(96,165,250,.22);
+}
+
+/* ===== GUIDE ICONS LIKE REAL TOPBAR ===== */
+
+.guide-icons{
+  display:flex;
+  gap:26px;
+  justify-content:center;
+  margin-top:28px;
+  flex-wrap:wrap;
+}
+
+.guide-icon-wrap{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.guide-icon{
+  width:42px;
+  height:42px;
+
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:18px;
+  cursor:pointer;
+
+  background:rgba(0,0,0,.06);
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 6px 16px rgba(0,0,0,.18);
+
+  transition:.25s ease;
+}
+
+html[data-theme="dark"] .guide-icon{
+  background:rgba(255,255,255,.12);
+  box-shadow:var(--card-shadow);
+}
+
+.guide-icon:hover{
+  transform:translateY(-3px) scale(1.08);
+}
+
+.guide-icon:active{
+  transform:scale(.95);
+}
+
+/* ===== GUIDE TOOLTIP ===== */
+
+.guide-icon-wrap{
+  position:relative;
+  display:inline-flex;
+}
+
+.guide-tooltip{
+  position:absolute;
+  bottom:-40px;
+  right:50%;
+  transform:translateX(50%) translateY(6px);
+
+  background:rgba(0,0,0,.8);
+  color:#fff;
+
+  padding:2px 10px;
+  border-radius:999px;
+
+  font-size:12px;
+  font-weight:600;
+
+  white-space:nowrap;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:.25s ease;
+}
+
+.guide-tooltip::after{
+  content:"";
+  position:absolute;
+  top:-6px;
+  right:50%;
+  transform:translateX(50%);
+  border:6px solid transparent;
+  border-bottom-color:rgba(0,0,0,.8);
+}
+
+.guide-icon-wrap:hover .guide-tooltip{
+  opacity:1;
+  transform:translateX(50%) translateY(0);
+}
+
+/* ===== REALISTIC FAKE SWITCH ===== */
+
+.fake-switch{
+  position:relative;
+  display:inline-block;
+  cursor:pointer;
+  user-select:none;
+}
+
+.fake-toggle{
+  display:none;
+}
+
+.fake-track{
+  width:54px;
+  height:28px;
+  background:rgba(0,0,0,.15);
+  border-radius:999px;
+  position:relative;
+  transition:.3s ease;
+}
+
+.fake-knob{
+  width:22px;
+  height:22px;
+  background:#fff;
+  border-radius:50%;
+  position:absolute;
+  top:3px;
+  left:3px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  transition:.3s ease;
+}
+
+/* الوضع عند التفعيل */
+.fake-toggle:checked + .fake-track{
+  background:#333;
+}
+
+.fake-toggle:checked + .fake-track .fake-knob{
+  left:29px;
+}
+
+.fake-toggle:not(:checked) + .fake-track .fake-knob::before{
+  content:"☀️";
+}
+
+.fake-toggle:checked + .fake-track .fake-knob::before{
+  content:"🌙";
+}
+
+
+
+
+
+/* ===== GUIDE HIGHLIGHT BOX ===== */
+
+.guide-highlight{
+  margin-top:40px;
+  padding:18px 28px;
+
+  border-radius:18px;
+
+  background:rgba(37,99,235,.12);
+
+  font-weight:700;
+  line-height:1.8;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 10px 30px rgba(37,99,235,.25);
+
+  animation:highlightPulse 3s ease-in-out infinite;
+}
+
+@keyframes highlightPulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.03)}
+  100%{transform:scale(1)}
+}
+
+html[data-theme="dark"] .guide-highlight{
+  background:rgba(96,165,250,.15);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.05),
+    0 15px 40px rgba(0,0,0,.7);
+}
+
+.guide-icon,
+.fake-switch,
+.fake-track,
+.fake-knob,
+.guide-icon-wrap{
+  user-select:none;
+  -webkit-user-select:none;
+  -ms-user-select:none;
+}
+
+.guide-item{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  margin-bottom:26px;
+}
+
+
+/* ===== BLUE MENU BUTTON – SAME AS INDEX ===== */
+
+.blue-menu-btn{
+  width:56px;
+  height:56px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+
+  box-shadow:
+    0 12px 30px rgba(37,99,235,.45),
+    inset 0 1px 2px rgba(255,255,255,.6);
+
+  cursor:pointer;
+  transition:.25s ease;
+
+  user-select:none;
+}
+
+.blue-menu-btn:hover{
+  transform:translateY(-4px) scale(1.08);
+  box-shadow:
+    0 18px 40px rgba(37,99,235,.6),
+    inset 0 1px 2px rgba(255,255,255,.7);
+}
+
+.blue-menu-btn:active{
+  transform:scale(.95);
+}
+
+/* الخطوط */
+.menu-lines{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.menu-lines span{
+  width:22px;
+  height:3px;
+  background:#fff;
+  border-radius:4px;
+}
+
+/* ===== FORCE BLUE INDEX MENU BUTTON ===== */
+
+.blue-menu-btn{
+  all: unset;
+
+  width:60px;
+  height:60px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50% !important;
+
+  background:#2563eb !important;
+
+  cursor:pointer;
+  transition:.25s ease;
+
+   flex-shrink:0;          /* يمنع الانكماش */
+   aspect-ratio:1/1;       /* يقفلها دايرة مهما حصل */
+
+  user-select:none;
+}
+
+.blue-menu-btn:hover{
+  transform:translateY(-4px) scale(1.08);
+  box-shadow:
+    0 18px 45px rgba(37,99,235,.65),
+    inset 0 1px 2px rgba(255,255,255,.8);
+}
+
+.blue-menu-btn:active{
+  transform:scale(.95);
+}
+
+/* الخطوط */
+.blue-menu-btn span{
+  display:block;
+  width:24px;
+  height:3px;
+  background:#fff;
+  border-radius:4px;
+  margin:4px 0;
+}
+
+.blue-menu-btn{
+  color:#fff;                 /* لو أيقونة font */
+}
+
+.blue-menu-btn i,
+.blue-menu-btn svg{
+  color:#fff;
+  fill:#fff;                  /* لو SVG */
+}
+
+/* ===== Stagger Card Animation ===== */
+
+.article{
+  opacity:0;
+  transform:translateY(40px);
+  transition:all .7s ease;
+}
+
+.article.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* ===== Important Guide Note Box ===== */
+
+.guide-note{
+  margin-top:35px;
+  padding:18px 26px;
+
+  border-radius:18px;
+
+  background:linear-gradient(
+    135deg,
+    rgba(37,99,235,.15),
+    rgba(37,99,235,.08)
+  );
+
+  font-weight:700;
+  line-height:1.9;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 10px 30px rgba(37,99,235,.25);
+
+  animation:softPulse 4s ease-in-out infinite;
+}
+
+@keyframes softPulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.02)}
+  100%{transform:scale(1)}
+}
+
+html[data-theme="dark"] .guide-note{
+  background:rgba(96,165,250,.18);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.05),
+    0 18px 40px rgba(0,0,0,.7);
+}
+
+/* ===== Feature Boxes ===== */
+
+.feature-list{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  margin-top:25px;
+}
+
+.feature-box{
+  padding:16px 22px;
+  border-radius:16px;
+
+  background:rgba(37,99,235,.12);
+
+  font-weight:700;
+  line-height:1.8;
+
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.8),
+    0 10px 28px rgba(37,99,235,.25);
+
+  transition:.3s ease;
+}
+
+.feature-box:hover{
+  transform:translateY(-3px);
+}
+
+html[data-theme="dark"] .feature-box{
+  background:rgba(96,165,250,.2);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 14px 40px rgba(0,0,0,.7);
+}
+
+
+
+/* =============================================================================== ===== */
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+
+
+ <!-- شمال -->
+  <div class="switch" id="themeSwitch">
+    <div class="knob" id="knob">☀️</div>
+  </div>
+
+
+
+
+    <!-- النص (العنوان فقط) -->
+  <div class="title-slot">
+  <div class="title-frame">
+    <span id="topTitleMain" class="title-main">دليل المستخدم</span>
+  </div>
+</div>
+
+
+
+
+  <!-- مجموعة أزرار اليمين -->
+<div class="top-actions">
+
+  <div class="tooltip-wrap">
+  <a href="profile.html" class="profile-btn">👤</a>
+  <div class="tooltip-text">الملف التعريفي لصاحب المشروع</div>
+</div>
+
+
+ <div class="tooltip-wrap">
+ <a href="index.html" class="profile-btn">📄</a>
+  <div class="tooltip-text">العودة إلى البحث</div>
+</div>
+
+<div class="tooltip-wrap">
+  <a href="about.html" class="profile-btn">ℹ️</a>
+  <div class="tooltip-text">عن البحث</div>
+</div>
+
+
+
+</div>
+
+
+  </div>
+</header>
+
+
+
+
+
+<!-- ===== SLIDE 1 ===== -->
+<section class="slide">
+  <div class="slide-content">
+
+
+<div class="article">
+      <h3>ما هو هذا الموقع؟</h3>
+      <p>
+        هذا الموقع عبارة عن مشروع بحثي تفاعلي يهدف إلى توضيح
+        موضوع الإدمان الرقمي بأسلوب مبسط وحديث،
+        مع الاعتماد على التصميم التفاعلي والأنيميشن
+        لتسهيل القراءة وجعل التجربة أكثر سلاسة.
+      </p>
+    </div>
+
+ <div class="article">
+      <h3>شرح أزرار شريط التنقل العلوي</h3>
+
+      <div class="guide-list">
+
+<div class="guide-item">
+ <div class="guide-icon-wrap">
+    <div class="guide-icon">👤</div>
+<div class="guide-tooltip">الملف التعريفي لصاحب المشروع</div>
+</div>
+    <div class="guide-text">
+      <h4>زر الملف التعريفي</h4>
+      <p>
+        ينقلك إلى صفحة الملف التعريفي الخاصة بصاحب المشروع،
+        والتي تحتوي على البيانات الأساسية بشكل منظم وواضح.
+      </p>
+    </div>
+  </div>
+
+  <div class="guide-item">
+ <div class="guide-icon-wrap">
+    <div class="guide-icon">📄</div>
+<div class="guide-tooltip">العوده الي البحث</div>
+</div>
+    <div class="guide-text">
+      <h4>زر البحث</h4>
+      <p>
+        يعيدك إلى صفحة البحث الرئيسية التي تتضمن الموضوع كاملاً
+        بالعناوين والمحتوى التفصيلي.
+      </p>
+    </div>
+  </div>
+
+  <div class="guide-item">
+
+ <div class="guide-icon-wrap">
+    <div class="guide-icon">ℹ️</div>
+<div class="guide-tooltip">عن البحث</div>
+</div>
+    <div class="guide-text">
+      <h4>زر عن البحث</h4>
+      <p>
+        يفتح صفحة توضح سبب اختيار موضوع البحث،
+        وأهميته والأهداف التي يسعى المشروع لتحقيقها.
+      </p>
+    </div>
+  </div>
+
+<div class="guide-item">
+
+  <div class="guide-icon-wrap">
+    <div class="guide-icon">❓</div>
+    <div class="guide-tooltip">دليل الاستخدام</div>
+  </div>
+
+  <div class="guide-text">
+    <h4>زر دليل الاستخدام</h4>
+    <p>
+      يفتح صفحة دليل المستخدم التي تشرح كيفية التنقل
+      داخل الموقع وطريقة استخدام جميع العناصر التفاعلية.
+    </p>
+  </div>
+
+</div>
+
+<div class="guide-item">
+ <div class="guide-icon-wrap">
+  <div class="blue-menu-btn">
+    <div class="menu-lines">
+    ☰
+  </div>
+<div class="guide-tooltip">محتويات البحث</div>
+  </div>
+</div>
+
+  <div class="guide-text">
+    <h4>زر قائمة العناوين</h4>
+    <p>
+      يظهر هذا الزر داخل صفحة البحث فقط، ويعرض قائمة بالعناوين الرئيسية
+      للموضوع. يساعد المستخدم على التنقل السريع بين أجزاء البحث
+      دون الحاجة إلى التمرير الطويل، مما يجعل تجربة القراءة
+      أكثر تنظيمًا واحترافية.
+    </p>
+  </div>
+
+</div>
+
+
+
+
+ <div class="guide-item">
+
+  <label class="fake-switch">
+    <input type="checkbox" class="fake-toggle">
+    <div class="fake-track">
+      <div class="fake-knob"></div>
+    </div>
+  </label>
+
+  <div class="guide-tooltip">تبديل الوضع الداكن والفاتح</div>
+
+  <div class="guide-text">
+    <h4>زر تغيير الوضع</h4>
+    <p>
+      يسمح بالتبديل بين الوضع الداكن والفاتح،
+      ويتم حفظ الاختيار تلقائيًا لتحسين تجربة القراءة.
+    </p>
+  </div>
+
+</div>
+<div class="guide-note">
+  يمكن تجربة حركة الأزرار بالوقوف أو الضغط عليها.
+  هذه العناصر تعمل كمحاكاة شكلية لشرح طريقة الاستخدام فقط.
+</div>
+
+</div>
+</div>
+  
+
+<div class="article">
+  <h3>التقنيات المستخدمة في بناء الموقع</h3>
+
+  <p>
+    تم تطوير هذا الموقع باستخدام مجموعة من تقنيات تصميم الواجهات الحديثة
+    التي تركز على تجربة المستخدم وسهولة التفاعل.
+    الهدف لم يكن مجرد عرض معلومات، بل تقديم تجربة قراءة ديناميكية
+    تشبه التطبيقات التفاعلية.
+  </p>
+
+  <p>
+    يعتمد الموقع على:
+  </p>
+<div class="feature-list">
+
+  <div class="feature-box">
+    أنيميشن ظهور تدريجي للعناصر لخلق إحساس بالحيوية
+  </div>
+
+  <div class="feature-box">
+    تصميم متجاوب يعمل بكفاءة على جميع الأجهزة
+  </div>
+
+  <div class="feature-box">
+    دعم كامل للوضع الداكن والفاتح
+  </div>
+
+  <div class="feature-box">
+    حفظ مكان القراءة تلقائيًا لضمان الاستمرارية
+  </div>
+
+</div>
+</div>
+
+
+<div class="article">
+  <h3>فلسفة التصميم وتجربة المستخدم</h3>
+
+  <p>
+    تم بناء الموقع وفق مبدأ البساطة المدروسة،
+    حيث تم تقليل العناصر غير الضرورية والتركيز
+    على إبراز المحتوى بأسلوب أنيق ومريح للعين.
+  </p>
+
+  <p>
+    التوازن بين الحركة والسكون،
+    بين الظلال الخفيفة والمساحات البيضاء،
+    يمنح المستخدم تجربة قراءة هادئة
+    دون تشتيت أو ازدحام بصري.
+  </p>
+
+  <p>
+    الهدف النهائي هو أن يشعر القارئ
+    بأنه يتصفح مشروعًا احترافيًا
+    وليس مجرد صفحة بحث تقليدية.
+  </p>
+</div>
+
+
+
+
+
+<script>
+
+
+
+
+
+
+
+
+
+
+
+
+const body = document.body;
+const switchBtn = document.getElementById("themeSwitch");
+const knob = document.getElementById("knob");
+
+
+
+
+
+/* الوضع المحفوظ */
+const savedTheme = localStorage.getItem("theme") || "light";
+body.dataset.theme = savedTheme;
+knob.textContent = savedTheme === "dark" ? "🌙" : "☀️";
+
+
+
+
+switchBtn.onclick = () => {
+  const scrollY = window.scrollY;
+
+  // 🔒 اقفل التصحيح التلقائي
+  document.documentElement.classList.add("theme-switching");
+  document.body.classList.add("theme-lock");
+
+  const html = document.documentElement;
+  const newTheme = html.dataset.theme === "dark" ? "light" : "dark";
+
+  html.dataset.theme = newTheme;
+  localStorage.setItem("theme", newTheme);
+  knob.textContent = newTheme === "dark" ? "🌙" : "☀️";
+
+  requestAnimationFrame(() => {
+    window.scrollTo(0, scrollY);
+
+    setTimeout(() => {
+      document.body.classList.remove("theme-lock");
+      document.documentElement.classList.remove("theme-switching");
+    }, 80);
+  });
+};
+
+
+
+
+const topbar = document.querySelector(".topbar");
+
+const topTitle = document.getElementById("topTitleMain");
+
+
+
+const BASE_TITLE = "عن البحث";
+const TOPBAR_OFFSET = 140; // نفس padding-top
+
+
+
+window.addEventListener("scroll", updateAboutTitleSmart);
+window.addEventListener("resize", updateAboutTitleSmart);
+window.addEventListener("load", updateAboutTitleSmart);
+
+(function () {
+  const html = document.documentElement;
+  const savedTheme = localStorage.getItem("theme") || "light";
+
+  // طبّق الثيم فورًا
+  html.dataset.theme = savedTheme;
+
+  // لو فيه زرار سوتش
+  const switchBtn = document.getElementById("themeSwitch");
+  const knob = document.getElementById("knob");
+
+  function syncKnob(theme){
+    if (!knob) return;
+    knob.textContent = theme === "dark" ? "🌙" : "☀️";
+  }
+
+  syncKnob(savedTheme);
+
+  if (switchBtn) {
+    switchBtn.onclick = () => {
+      const newTheme =
+        html.dataset.theme === "dark" ? "light" : "dark";
+
+      html.dataset.theme = newTheme;
+      localStorage.setItem("theme", newTheme);
+      syncKnob(newTheme);
+    };
+  }
+})();
+
+/* ===== Stagger ظهور الكروت ===== */
+
+const cards = document.querySelectorAll(".article");
+
+function revealCards(){
+  cards.forEach((card, index) => {
+    setTimeout(() => {
+      card.classList.add("show");
+    }, index * 250); // فرق 250ms بين كل كارت
+  });
+}
+
+window.addEventListener("load", revealCards);
+
+/* ===== حفظ مكان القراءة لمدة ساعة ===== */
+
+const PAGE_KEY = "guideScrollPosition";
+const TIME_KEY = "guideScrollTime";
+const ONE_HOUR = 60 * 60 * 1000;
+
+// عند الدخول
+window.addEventListener("load", () => {
+
+  const savedTime = localStorage.getItem(TIME_KEY);
+  const savedScroll = localStorage.getItem(PAGE_KEY);
+
+  if(savedTime && savedScroll){
+    const now = Date.now();
+    const diff = now - parseInt(savedTime);
+
+    if(diff < ONE_HOUR){
+      window.scrollTo(0, parseInt(savedScroll));
+    } else {
+      localStorage.removeItem(PAGE_KEY);
+      localStorage.removeItem(TIME_KEY);
+    }
+  }
+
+});
+
+// أثناء التمرير
+window.addEventListener("scroll", () => {
+  localStorage.setItem(PAGE_KEY, window.scrollY);
+  localStorage.setItem(TIME_KEY, Date.now());
+});
+
+
+
+</script>
+</body>
+</html>
