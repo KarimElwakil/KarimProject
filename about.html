@@ -1831,8 +1831,11 @@ window.addEventListener("resize", updateAboutTitleSmart);
 window.addEventListener("load", updateAboutTitleSmart);
 
 
+localStorage.setItem("lastPage", location.pathname);
+localStorage.setItem("lastVisitTime", Date.now());
 
 
 </script>
 </body>
 </html>
+
