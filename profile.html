@@ -332,15 +332,35 @@ if (from === "Kkk") {
   backBtn.onclick = () => window.location.href = "he.html";
 } else {
   backBtn.textContent = "العودة إلى البحث";
-  backBtn.onclick = () => window.location.href = "index.html";
+  backBtn.onclick = () => window.location.href = "search.html";
 }
 
-  localStorage.setItem("lastPage", location.pathname);
-localStorage.setItem("lastVisitTime", Date.now());
+/* ===== SAVE PAGE + SCROLL ===== */
+
+window.addEventListener("beforeunload", () => {
+
+  localStorage.setItem("lastPage", window.location.pathname);
+
+  localStorage.setItem("lastVisitTime", Date.now());
+
+  localStorage.setItem("scrollPos_" + window.location.pathname, window.scrollY);
+
+});
+
+/* استرجاع مكان الوقوف */
+
+window.addEventListener("load", () => {
+
+  const pos = localStorage.getItem("scrollPos_" + window.location.pathname);
+
+  if(pos){
+    window.scrollTo(0, parseInt(pos));
+  }
+
+});
 
 
 </script>
 
 </body>
 </html>
-
