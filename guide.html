@@ -1988,8 +1988,11 @@ window.addEventListener("scroll", () => {
   localStorage.setItem(TIME_KEY, Date.now());
 });
 
+localStorage.setItem("lastPage", location.pathname);
+localStorage.setItem("lastVisitTime", Date.now());
 
 
 </script>
 </body>
 </html>
+
