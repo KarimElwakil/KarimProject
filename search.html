@@ -2821,14 +2821,34 @@ if (aboutBtn && window.innerWidth <= 600) {
 }
 
 
-localStorage.setItem("lastPage", location.pathname);
-localStorage.setItem("lastVisitTime", Date.now());
+/* ===== SAVE PAGE + SCROLL ===== */
+
+window.addEventListener("beforeunload", () => {
+
+  localStorage.setItem("lastPage", window.location.pathname);
+
+  localStorage.setItem("lastVisitTime", Date.now());
+
+  localStorage.setItem("scrollPos_" + window.location.pathname, window.scrollY);
+
+});
+
+/* استرجاع مكان الوقوف */
+
+window.addEventListener("load", () => {
+
+  const pos = localStorage.getItem("scrollPos_" + window.location.pathname);
+
+  if(pos){
+    window.scrollTo(0, parseInt(pos));
+  }
+
+});
 
 
 
 </script>
 </body>
 </html>
-
 
 
