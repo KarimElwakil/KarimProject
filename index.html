@@ -863,17 +863,18 @@ html[data-theme="dark"] .mobile-subtitle{
   flex-shrink:0;
 }
 
-.profile-btn{
-  order:1;
+.switch{
+  order:3;
 }
 
 .title-slot{
   order:2;
 }
 
-.switch{
-  order:3;
+.top-actions{
+  order:1;
 }
+
 
 .profile-btn{
   position: relative;
@@ -1113,6 +1114,11 @@ html.theme-switching body {
   transform:scale(.96);
 }
 
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
 
 
 /* =============================================================================== ===== */
@@ -1141,7 +1147,29 @@ html.theme-switching body {
 </div>
 
 
+<div class="top-actions">
 
+  <div class="tooltip-wrap">
+    <a href="profile.html" class="profile-btn">👤</a>
+    <div class="tooltip-text">الملف التعريفي لصاحب المشروع</div>
+  </div>
+
+  <div class="tooltip-wrap">
+    <a href="search.html" class="profile-btn">📄</a>
+    <div class="tooltip-text">العوده الي البحث</div>
+  </div>
+
+  <div class="tooltip-wrap">
+    <a href="about.html" class="profile-btn">ℹ️</a>
+    <div class="tooltip-text">عن البحث</div>
+  </div>
+
+  <div class="tooltip-wrap">
+    <a href="guide.html" class="profile-btn">❓</a>
+    <div class="tooltip-text">دليل الاستخدام</div>
+  </div>
+
+</div>
 
   
 
@@ -1160,10 +1188,11 @@ html.theme-switching body {
       مشروع بحثي تفاعلي يشرح الإدمان الرقمي
       بأسلوب حديث وتجربة قراءة مختلفة
     </h1>
+<a href="search.html" class="start-btn">
+  ابدأ القراءة
+</a>
 
-    <button class="start-btn" id="startBtn">
-      ابدأ القراءة
-    </button>
+
 
   </div>
 </section>
@@ -1324,52 +1353,32 @@ window.addEventListener("load", updateAboutTitleSmart);
   }
 })();
 
-
 /* ===== HOME SMART ENTRY ===== */
-
-const startBtn = document.getElementById("startBtn");
-
-startBtn.onclick = () => {
-
-  const lastTime = localStorage.getItem("lastVisitTime");
-  const lastPage = localStorage.getItem("lastPage");
-
-  const now = Date.now();
-  const oneHour = 60 * 60 * 1000;
-
-  if(lastTime && (now - lastTime < oneHour) && lastPage){
-    window.location.href = lastPage;
-  }else{
-    window.location.href = "index.html";
-  }
-};
-
-/* ===== Smart Entry System ===== */
-
-
-
-
 
 window.addEventListener("load", () => {
 
-  const lastTime = localStorage.getItem("lastVisitTime");
-  const lastPage = localStorage.getItem("lastPage");
   const now = Date.now();
   const oneHour = 60 * 60 * 1000;
 
-  if(lastTime && lastPage){
+  const lastPage = localStorage.getItem("lastPage");
+  const lastTime = localStorage.getItem("lastVisitTime");
 
-    if(now - lastTime < oneHour){
-      // رجع لنفس الصفحة
+  // لو رجع قبل ساعة
+  if(lastPage && lastTime && (now - lastTime < oneHour)){
+
+    // لو مش الهوم
+    if(!lastPage.includes("index.html")){
       window.location.href = lastPage;
-    }else{
-      // فاتت ساعة → امسح البيانات
-      localStorage.removeItem("lastPage");
-      localStorage.removeItem("lastVisitTime");
     }
+
+  }else{
+    // عدت ساعة → امسح
+    localStorage.removeItem("lastPage");
+    localStorage.removeItem("lastVisitTime");
   }
 
 });
+
 
 
 
