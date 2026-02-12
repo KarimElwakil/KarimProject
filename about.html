@@ -1505,6 +1505,11 @@ html.theme-switching body {
   overflow-anchor: none !important;
 }
 
+/* ===== Disable transitions during theme switch ===== */
+.theme-switching *,
+.theme-switching {
+  transition: none !important;
+}
 
 
 /* =============================================================================== ===== */
@@ -1694,51 +1699,38 @@ window.addEventListener("load", () => {
 
 
 
-const body = document.body;
+const html = document.documentElement;
 const switchBtn = document.getElementById("themeSwitch");
 const knob = document.getElementById("knob");
 
-
-// حفظ مكان القراءة + وقت الخروج
-window.addEventListener("beforeunload", () => {
-  localStorage.setItem("lastScroll", window.scrollY);
-  localStorage.setItem("lastExitTime", Date.now());
-});
-
-
-/* الوضع المحفوظ */
+/* تحميل الثيم */
 const savedTheme = localStorage.getItem("theme") || "light";
-body.dataset.theme = savedTheme;
-knob.textContent = savedTheme === "dark" ? "🌙" : "☀️";
-
-
-
+html.dataset.theme = savedTheme;
+updateKnob(savedTheme);
 
 switchBtn.onclick = () => {
-  const scrollY = window.scrollY;
 
-  // 🔒 اقفل التصحيح التلقائي
-  document.documentElement.classList.add("theme-switching");
-  document.body.classList.add("theme-lock");
+  /* 1️⃣ وقف الترانزيشن مؤقتًا */
+  html.classList.add("theme-switching");
 
-  const html = document.documentElement;
-  const newTheme = html.dataset.theme === "dark" ? "light" : "dark";
+  const newTheme =
+    html.dataset.theme === "dark" ? "light" : "dark";
 
   html.dataset.theme = newTheme;
   localStorage.setItem("theme", newTheme);
-  knob.textContent = newTheme === "dark" ? "🌙" : "☀️";
+  updateKnob(newTheme);
 
+  /* 2️⃣ رجّع الترانزيشن بعد فريم */
   requestAnimationFrame(() => {
-    window.scrollTo(0, scrollY);
-
     setTimeout(() => {
-      document.body.classList.remove("theme-lock");
-      document.documentElement.classList.remove("theme-switching");
-    }, 80);
+      html.classList.remove("theme-switching");
+    }, 50);
   });
 };
 
-
+function updateKnob(theme){
+  knob.textContent = theme === "dark" ? "🌙" : "☀️";
+}
 
 
 
@@ -1838,35 +1830,7 @@ window.addEventListener("scroll", updateAboutTitleSmart);
 window.addEventListener("resize", updateAboutTitleSmart);
 window.addEventListener("load", updateAboutTitleSmart);
 
-(function () {
-  const html = document.documentElement;
-  const savedTheme = localStorage.getItem("theme") || "light";
 
-  // طبّق الثيم فورًا
-  html.dataset.theme = savedTheme;
-
-  // لو فيه زرار سوتش
-  const switchBtn = document.getElementById("themeSwitch");
-  const knob = document.getElementById("knob");
-
-  function syncKnob(theme){
-    if (!knob) return;
-    knob.textContent = theme === "dark" ? "🌙" : "☀️";
-  }
-
-  syncKnob(savedTheme);
-
-  if (switchBtn) {
-    switchBtn.onclick = () => {
-      const newTheme =
-        html.dataset.theme === "dark" ? "light" : "dark";
-
-      html.dataset.theme = newTheme;
-      localStorage.setItem("theme", newTheme);
-      syncKnob(newTheme);
-    };
-  }
-})();
 
 
 </script>
