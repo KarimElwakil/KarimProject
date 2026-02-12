@@ -335,8 +335,12 @@ if (from === "Kkk") {
   backBtn.onclick = () => window.location.href = "index.html";
 }
 
+  localStorage.setItem("lastPage", location.pathname);
+localStorage.setItem("lastVisitTime", Date.now());
+
 
 </script>
 
 </body>
 </html>
+
