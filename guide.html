@@ -1651,7 +1651,7 @@ html[data-theme="dark"] .feature-box{
 
 
  <div class="tooltip-wrap">
- <a href="index.html" class="profile-btn">📄</a>
+ <a href="search.html" class="profile-btn">📄</a>
   <div class="tooltip-text">العودة إلى البحث</div>
 </div>
 
@@ -1988,11 +1988,33 @@ window.addEventListener("scroll", () => {
   localStorage.setItem(TIME_KEY, Date.now());
 });
 
-localStorage.setItem("lastPage", location.pathname);
-localStorage.setItem("lastVisitTime", Date.now());
+/* ===== SAVE PAGE + SCROLL ===== */
+
+window.addEventListener("beforeunload", () => {
+
+  localStorage.setItem("lastPage", window.location.pathname);
+
+  localStorage.setItem("lastVisitTime", Date.now());
+
+  localStorage.setItem("scrollPos_" + window.location.pathname, window.scrollY);
+
+});
+
+/* استرجاع مكان الوقوف */
+
+window.addEventListener("load", () => {
+
+  const pos = localStorage.getItem("scrollPos_" + window.location.pathname);
+
+  if(pos){
+    window.scrollTo(0, parseInt(pos));
+  }
+
+});
+
+
 
 
 </script>
 </body>
 </html>
-
