@@ -1605,6 +1605,12 @@ html[data-theme="dark"] .feature-box{
     0 14px 40px rgba(0,0,0,.7);
 }
 
+/* ===== Disable transitions during theme switch ===== */
+.theme-switching *,
+.theme-switching {
+  transition: none !important;
+}
+
 
 
 /* =============================================================================== ===== */
@@ -1890,26 +1896,34 @@ const html = document.documentElement;
 const switchBtn = document.getElementById("themeSwitch");
 const knob = document.getElementById("knob");
 
-/* ===== تحميل الثيم المحفوظ ===== */
+/* تحميل الثيم */
 const savedTheme = localStorage.getItem("theme") || "light";
 html.dataset.theme = savedTheme;
 updateKnob(savedTheme);
 
-/* ===== تغيير الثيم ===== */
 switchBtn.onclick = () => {
+
+  /* 1️⃣ وقف الترانزيشن مؤقتًا */
+  html.classList.add("theme-switching");
+
   const newTheme =
     html.dataset.theme === "dark" ? "light" : "dark";
 
   html.dataset.theme = newTheme;
   localStorage.setItem("theme", newTheme);
   updateKnob(newTheme);
+
+  /* 2️⃣ رجّع الترانزيشن بعد فريم */
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      html.classList.remove("theme-switching");
+    }, 50);
+  });
 };
 
-/* ===== تحديث شكل الزر ===== */
 function updateKnob(theme){
   knob.textContent = theme === "dark" ? "🌙" : "☀️";
 }
-
 
 const topbar = document.querySelector(".topbar");
 
@@ -1926,35 +1940,7 @@ window.addEventListener("scroll", updateAboutTitleSmart);
 window.addEventListener("resize", updateAboutTitleSmart);
 window.addEventListener("load", updateAboutTitleSmart);
 
-(function () {
-  const html = document.documentElement;
-  const savedTheme = localStorage.getItem("theme") || "light";
 
-  // طبّق الثيم فورًا
-  html.dataset.theme = savedTheme;
-
-  // لو فيه زرار سوتش
-  const switchBtn = document.getElementById("themeSwitch");
-  const knob = document.getElementById("knob");
-
-  function syncKnob(theme){
-    if (!knob) return;
-    knob.textContent = theme === "dark" ? "🌙" : "☀️";
-  }
-
-  syncKnob(savedTheme);
-
-  if (switchBtn) {
-    switchBtn.onclick = () => {
-      const newTheme =
-        html.dataset.theme === "dark" ? "light" : "dark";
-
-      html.dataset.theme = newTheme;
-      localStorage.setItem("theme", newTheme);
-      syncKnob(newTheme);
-    };
-  }
-})();
 
 /* ===== Stagger ظهور الكروت ===== */
 
