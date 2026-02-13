@@ -58,11 +58,27 @@ document.addEventListener("DOMContentLoaded", function () {
   const sessionRef = deviceRef.child("sessions").push();
 
   sessionRef.set({
-    device: detectDevice(),
-    browser: detectBrowser(),
-    startTime: formatDateTime(sessionStart),
-    startTimestamp: sessionStart
+  device: detectDevice(),
+  browser: detectBrowser(),
+  theme: document.documentElement.dataset.theme || "light",
+  startTime: formatDateTime(sessionStart),
+  startTimestamp: sessionStart
+});
+
+  // تحديث الثيم لو اتغير
+const observer = new MutationObserver(function () {
+
+  sessionRef.update({
+    theme: document.documentElement.dataset.theme || "light"
   });
+
+});
+
+observer.observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ["data-theme"]
+});
+
 
   /* ==============================
      PAGE
@@ -156,6 +172,22 @@ setInterval(function () {
         Math.floor((endTime - sessionStart) / 1000)
     });
 
+    document.addEventListener("visibilitychange", function () {
+
+  if (document.visibilityState === "hidden") {
+
+    const endTime = Date.now();
+
+    pageRef.update({
+      durationOnPageSec:
+        Math.floor((endTime - pageStart) / 1000)
+    });
+
+  }
+
+});
+
+
     pageRef.update({
       exitedAt: formatDateTime(endTime),
       durationOnPageSec:
@@ -176,5 +208,6 @@ setInterval(function () {
     .transaction(v => (v || 0) + 1);
 
 });
+
 
 
