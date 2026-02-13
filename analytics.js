@@ -99,33 +99,47 @@ const pageName = getPageName();
      SCROLL
   ============================== */
 
-  let maxScroll = 0;
+  /* ========= SCROLL TRACKING FIXED ========= */
 
-  window.addEventListener("scroll", function () {
+let maxScroll = 0;
 
-    const scrollTop = window.scrollY;
-    const docHeight =
-      document.documentElement.scrollHeight - window.innerHeight;
+function updateScroll() {
 
-    if (docHeight <= 0) return;
+  const scrollTop =
+    window.pageYOffset || document.documentElement.scrollTop;
 
-    const percent =
-      Math.round((scrollTop / docHeight) * 100);
+  const docHeight =
+    Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    ) - window.innerHeight;
 
-    if (percent > maxScroll) {
-      maxScroll = percent;
-    }
+  if (docHeight <= 0) {
+    maxScroll = 100;
+    return;
+  }
 
-  });
+  const percent = Math.round((scrollTop / docHeight) * 100);
 
-  // حفظ الاسكرول كل 5 ثواني
+  if (percent > maxScroll) {
+    maxScroll = percent;
+  }
+
+}
+
+window.addEventListener("scroll", updateScroll);
+
+// تأكد إنه يتحسب أول ما الصفحة تفتح
+updateScroll();
+
+
+  // تحديث القيمة في فايربيز كل 3 ثواني
 setInterval(function () {
-
   pageRef.update({
     maxScroll: maxScroll
   });
+}, 1000);
 
-}, 5000);
 
 
   /* ==============================
@@ -162,4 +176,5 @@ setInterval(function () {
     .transaction(v => (v || 0) + 1);
 
 });
+
 
