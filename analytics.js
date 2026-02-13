@@ -91,9 +91,32 @@ pageRef.set({
   maxScroll: 0
 });
 
-   let maxScroll = 0;
+   
+
+
+const sessionStartTimestamp = Date.now();
+sessionRef.child("startTime").set(new Date().toLocaleString());
+
+  const pageName = window.location.pathname
+  .split("/")
+  .pop()
+  .replace(".html","") || "home";
+
+const pageEnterTimestamp = Date.now();
+
+const pageRef = sessionRef.child("pages").child(pageName);
+
+pageRef.set({
+  enteredAt: new Date().toLocaleString(),
+  enterTimestamp: pageEnterTimestamp,
+  maxScroll: 0,
+  theme: document.documentElement.dataset.theme || "light"
+});
+
+  let maxScroll = 0;
 
 window.addEventListener("scroll", function () {
+
   const scrollTop = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
 
@@ -104,10 +127,9 @@ window.addEventListener("scroll", function () {
   if (percent > maxScroll) {
     maxScroll = percent;
   }
+
 });
 
-
-const sessionStartTimestamp = Date.now();
 
 sessionRef.set({
   device: detectDevice(),
@@ -189,21 +211,23 @@ pageRef.transaction(current => (current || 0) + 1);
 
 window.addEventListener("beforeunload", function () {
 
-  const endTime = Date.now();
-  const durationSec = Math.floor((endTime - sessionStartTimestamp) / 1000);
+  const endTimestamp = Date.now();
+  const sessionDuration = Math.floor((endTimestamp - sessionStartTimestamp) / 1000);
+  const pageDuration = Math.floor((endTimestamp - pageEnterTimestamp) / 1000);
 
   sessionRef.update({
     endTime: new Date().toLocaleString(),
-    durationSeconds: durationSec
+    durationSeconds: sessionDuration
   });
 
   pageRef.update({
     exitedAt: new Date().toLocaleString(),
-    durationOnPageSec: Math.floor((endTime - pageEnterTime) / 1000),
+    durationOnPageSec: pageDuration,
     maxScroll: maxScroll
   });
 
 });
+
 
 
   pageSessionRef.update({
@@ -214,6 +238,7 @@ window.addEventListener("beforeunload", function () {
   });
 
 });
+
 
 
 
