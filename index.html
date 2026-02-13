@@ -1421,6 +1421,29 @@ window.addEventListener("load", () => {
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
+   /* ===== REALTIME USERS SYSTEM ===== */
+
+const connectedRef = db.ref(".info/connected");
+const presenceRef = db.ref("analytics/realtime/users");
+
+connectedRef.on("value", function (snap) {
+
+  if (snap.val() === true) {
+
+    const userRef = presenceRef.push();
+
+    userRef.set({
+      online: true,
+      page: window.location.pathname,
+      time: Date.now()
+    });
+
+    userRef.onDisconnect().remove();
+
+  }
+
+});
+
   /* =============================
      1️⃣ إجمالي الزيارات
   ============================= */
@@ -1440,19 +1463,7 @@ window.addEventListener("load", () => {
   const singlePageRef = db.ref("analytics/pages/" + pagePath + "/views");
   singlePageRef.transaction(current => (current || 0) + 1);
 
-  /* =============================
-     4️⃣ Presence System (الموجودين الآن)
-  ============================= */
-  const connectedRef = db.ref(".info/connected");
-  const presenceRef = db.ref("analytics/realtime/users");
-
-  connectedRef.on("value", (snap) => {
-    if (snap.val() === true) {
-      const userRef = presenceRef.push();
-      userRef.set(true);
-      userRef.onDisconnect().remove();
-    }
-  });
+  
 
 </script>
 
@@ -1461,6 +1472,7 @@ window.addEventListener("load", () => {
   
 </body>
 </html>
+
 
 
 
