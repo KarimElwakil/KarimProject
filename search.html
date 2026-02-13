@@ -2915,7 +2915,20 @@ connectedRef.on("value", function(snapshot){
 
     // لما يخرج
     userRef.onDisconnect().remove();
-    currentRef.onDisconnect().transaction(v => Math.max((v || 1) - 1, 0));
+   
+connectedRef.on("value", (snap) => {
+  if (snap.val() === true) {
+
+    // نزود 1 عند الدخول
+    currentRef.transaction((current) => (current || 0) + 1);
+
+    // نقلل 1 تلقائي عند الخروج
+    currentRef.onDisconnect().set(
+      firebase.database.ServerValue.increment(-1)
+    );
+  }
+});
+ 
 
   }
 
@@ -2991,6 +3004,7 @@ window.addEventListener("scroll", function() {
   
 </body>
 </html>
+
 
 
 
