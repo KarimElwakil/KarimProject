@@ -116,6 +116,16 @@ const pageName = getPageName();
 
   const pageRef = sessionRef.child("pages").child(pageName);
 
+  // تحديث الثيم للصفحة كل 3 ثواني
+setInterval(function () {
+
+  pageRef.update({
+    theme: document.documentElement.dataset.theme || "light"
+  });
+
+}, 3000);
+
+
   pageRef.set({
     enteredAt: formatDateTime(pageStart),
     enterTimestamp: pageStart,
@@ -187,7 +197,28 @@ setInterval(function () {
 }
 
   // عند الخروج
-window.addEventListener("beforeunload", saveTimeSpent);
+function savePageExit() {
+
+  const endTime = Date.now();
+
+  const durationSec =
+    Math.floor((endTime - pageStart) / 1000);
+
+  pageRef.update({
+    exitedAt: formatDateTime(endTime),
+    exitTimestamp: endTime,
+    durationMinutes: (durationSec / 60).toFixed(2)
+  });
+
+}
+
+// لما تسيب الصفحة أو تنتقل
+document.addEventListener("visibilitychange", function () {
+  if (document.visibilityState === "hidden") {
+    savePageExit();
+  }
+});
+
 
 // عند الانتقال لتبويب تاني
 document.addEventListener("visibilitychange", function () {
@@ -213,6 +244,7 @@ db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
