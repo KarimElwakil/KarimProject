@@ -37,6 +37,19 @@ document.addEventListener("DOMContentLoaded", function () {
     return "Unknown Browser";
   }
 
+  function getDeviceFingerprint() {
+
+  return (
+    navigator.userAgent +
+    navigator.language +
+    screen.width +
+    screen.height +
+    Intl.DateTimeFormat().resolvedOptions().timeZone
+  );
+
+}
+
+
   /* ==============================
      Device ID
   ============================== */
@@ -60,10 +73,12 @@ document.addEventListener("DOMContentLoaded", function () {
   sessionRef.set({
   device: detectDevice(),
   browser: detectBrowser(),
+  fingerprint: getDeviceFingerprint(),
   theme: document.documentElement.dataset.theme || "light",
   startTime: formatDateTime(sessionStart),
   startTimestamp: sessionStart
 });
+
 
 
   // تحديث الثيم كل 3 ثواني
@@ -126,11 +141,12 @@ setInterval(function () {
 }, 3000);
 
 
-  pageRef.set({
-    enteredAt: formatDateTime(pageStart),
-    enterTimestamp: pageStart,
-    maxScroll: 0
-  });
+ pageRef.update({
+  enteredAt: formatDateTime(pageStart),
+  enterTimestamp: pageStart,
+  maxScroll: 0
+});
+
 
   /* ==============================
      SCROLL
@@ -214,18 +230,25 @@ function savePageExit() {
 
 // لما تسيب الصفحة أو تنتقل
 document.addEventListener("visibilitychange", function () {
+
   if (document.visibilityState === "hidden") {
-    savePageExit();
+
+    const endTime = Date.now();
+    const durationSec =
+      Math.floor((endTime - pageStart) / 1000);
+
+    pageRef.update({
+      exitedAt: formatDateTime(endTime),
+      exitTimestamp: endTime,
+      durationMinutes: (durationSec / 60).toFixed(2),
+      maxScroll: maxScroll,
+      theme: document.documentElement.dataset.theme || "light"
+    });
+
   }
+
 });
 
-
-// عند الانتقال لتبويب تاني
-document.addEventListener("visibilitychange", function () {
-  if (document.visibilityState === "hidden") {
-    saveTimeSpent();
-  }
-});
 
 
   }
@@ -244,6 +267,7 @@ db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
