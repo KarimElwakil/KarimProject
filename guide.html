@@ -2052,9 +2052,28 @@ window.addEventListener("load", revealCards);
   });
 </script>
 
+    <script>
+  const connectedRef = db.ref(".info/connected");
+  const onlineRef = db.ref("analytics/realtime/current");
+
+  connectedRef.on("value", (snap) => {
+    if (snap.val() === true) {
+
+      // نزود العدد
+      onlineRef.transaction(current => (current || 0) + 1);
+
+      // لما الاتصال يقطع ينقص تلقائي
+      onlineRef.onDisconnect().transaction(current => 
+        Math.max((current || 1) - 1, 0)
+      );
+    }
+  });
+</script>
+
     
 </body>
 </html>
+
 
 
 
