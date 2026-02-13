@@ -1881,117 +1881,92 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-/* ===============================
-   1️⃣ SESSION SYSTEM
-================================= */
+/* =========================================
+   PROFESSIONAL SESSION TRACKING SYSTEM
+========================================= */
 
+const db = firebase.database();
+const sessionsRef = db.ref("analytics/sessions");
+
+/* ===== 1️⃣ إنشاء Session ID ===== */
 let sessionId = sessionStorage.getItem("sessionId");
 
 if (!sessionId) {
-  sessionId = "sess_" + Date.now() + "_" + Math.random().toString(36).substring(2);
+  sessionId = sessionsRef.push().key;
   sessionStorage.setItem("sessionId", sessionId);
-
-  db.ref("analytics/overview/totalVisits")
-    .transaction(current => (current || 0) + 1);
 }
 
-const sessionRef = db.ref("analytics/sessions/" + sessionId);
+const sessionRef = sessionsRef.child(sessionId);
 
-/* ===============================
-   2️⃣ DEVICE TYPE
-================================= */
+/* ===== 2️⃣ معلومات الجهاز ===== */
+const userAgent = navigator.userAgent;
 
-function getDeviceType() {
-  const ua = navigator.userAgent;
-  if (/mobile/i.test(ua)) return "Mobile";
-  if (/tablet/i.test(ua)) return "Tablet";
-  return "Desktop";
-}
+let deviceType = /mobile/i.test(userAgent) ? "Mobile" : "Desktop";
 
-sessionRef.update({
-  startTime: Date.now(),
-  deviceType: getDeviceType()
+let browser = "Unknown";
+if (userAgent.includes("Chrome")) browser = "Chrome";
+if (userAgent.includes("Firefox")) browser = "Firefox";
+if (userAgent.includes("Edg")) browser = "Edge";
+if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) browser = "Safari";
+
+/* ===== 3️⃣ وقت البداية ===== */
+const startTime = Date.now();
+const startReadable = new Date().toLocaleString();
+
+/* نحفظ البداية مرة واحدة */
+sessionRef.child("info").update({
+  startTime,
+  startReadable,
+  deviceType,
+  browser
 });
 
-/* ===============================
-   3️⃣ PAGE TRACKING
-================================= */
+/* ===== 4️⃣ تتبع الصفحات ===== */
 
 const rawPage = window.location.pathname;
+
 const pageName = rawPage
   .replace(/\//g, "_")
   .replace(".html", "")
-  .replace(".", "")
+  .replace(/\./g, "")
   || "home";
 
-
-const pageRef = sessionRef.child("pages/" + pageName);
+const pageRef = sessionRef.child("pages").child(pageName);
 
 const enterTime = Date.now();
+const enterReadable = new Date().toLocaleString();
 
 pageRef.update({
-  enterTime: enterTime
+  enterTime,
+  enterReadable
 });
 
-db.ref("analytics/overview/pageViews")
-  .transaction(current => (current || 0) + 1);
+/* ===== 5️⃣ حساب مدة البقاء ===== */
 
-db.ref("analytics/pages/" + pageName + "/views")
-  .transaction(current => (current || 0) + 1);
+function endPageSession() {
 
-/* ===============================
-   4️⃣ REALTIME USERS
-================================= */
-
-const connectedRef = db.ref(".info/connected");
-const onlineRef = db.ref("analytics/realtime/current");
-
-connectedRef.on("value", (snap) => {
-  if (snap.val() === true) {
-
-    onlineRef.transaction(current => (current || 0) + 1);
-
-    onlineRef.onDisconnect().transaction(current =>
-      Math.max((current || 1) - 1, 0)
-    );
-  }
-});
-
-/* ===============================
-   ⏱ LIVE TIME TRACKING
-================================= */
-
-let lastUpdate = Date.now();
-
-setInterval(() => {
-  const now = Date.now();
-  const duration = now - enterTime;
+  const exitTime = Date.now();
+  const duration = exitTime - enterTime;
 
   pageRef.update({
-    lastActive: now,
-    duration: duration
+    exitTime,
+    duration
   });
 
-}, 5000);
+  sessionRef.child("info").update({
+    lastActive: new Date().toLocaleString()
+  });
+}
 
-/* ===============================
-   6️⃣ SCROLL TRACKING
-================================= */
+/* عند مغادرة الصفحة */
+window.addEventListener("beforeunload", endPageSession);
 
-let maxScroll = 0;
-
-window.addEventListener("scroll", () => {
-  const scrollPercent = Math.round(
-    (window.scrollY + window.innerHeight) /
-    document.body.scrollHeight * 100
-  );
-
-  if (scrollPercent > maxScroll) {
-    maxScroll = scrollPercent;
-    pageRef.child("maxScroll").set(maxScroll);
+/* عند الانتقال لصفحة تانية */
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") {
+    endPageSession();
   }
 });
-
 </script>
 
 
@@ -1999,6 +1974,7 @@ window.addEventListener("scroll", () => {
   
 </body>
 </html>
+
 
 
 
