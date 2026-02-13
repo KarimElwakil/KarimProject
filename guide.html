@@ -2008,5 +2008,39 @@ window.addEventListener("load", revealCards);
 
 
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import { getDatabase, ref, runTransaction, set, get, child } 
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCs6OJNRdad5jwpaWOmEzs-Z_71QJcA-4M",
+  authDomain: "searchanalytics-4bbbf.firebaseapp.com",
+  databaseURL: "https://searchanalytics-4bbbf-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "searchanalytics-4bbbf",
+  storageBucket: "searchanalytics-4bbbf.firebasestorage.app",
+  messagingSenderId: "555407096660",
+  appId: "1:555407096660:web:3a3865df93d90d4147e6c1"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+/* 🔥 عداد إجمالي الزيارات */
+const totalVisitsRef = ref(db, "analytics/overview/totalVisits");
+runTransaction(totalVisitsRef, (current) => (current || 0) + 1);
+
+/* 🔥 عداد مشاهدات الصفحات */
+const pageViewsRef = ref(db, "analytics/overview/pageViews");
+runTransaction(pageViewsRef, (current) => (current || 0) + 1);
+
+/* 🔥 تسجيل الصفحة الحالية */
+const pagePath = window.location.pathname.replace(/\//g,"_") || "home";
+const pageRef = ref(db, "analytics/pages/" + pagePath + "/views");
+runTransaction(pageRef, (current) => (current || 0) + 1);
+</script>
+    
 </body>
 </html>
+
