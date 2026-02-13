@@ -37,6 +37,19 @@ document.addEventListener("DOMContentLoaded", function () {
     return "Unknown Browser";
   }
 
+  function detectOS() {
+  const ua = navigator.userAgent;
+
+  if (ua.includes("Win")) return "Windows";
+  if (ua.includes("Mac")) return "macOS";
+  if (ua.includes("Android")) return "Android";
+  if (ua.includes("iPhone") || ua.includes("iPad")) return "iOS";
+  if (ua.includes("Linux")) return "Linux";
+
+  return "Unknown";
+}
+
+
   function getDeviceFingerprint() {
 
   return (
@@ -70,8 +83,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const sessionStart = Date.now();
   const sessionRef = deviceRef.child("sessions").push();
 
+// حالة الاتصال
+sessionRef.child("isOnline").set(true);
+
+// لما يقفل الصفحة أو يفصل النت
+sessionRef.child("isOnline").onDisconnect().set(false);
+
+  
   sessionRef.set({
   device: detectDevice(),
+    os: detectOS(),
   browser: detectBrowser(),
   fingerprint: getDeviceFingerprint(),
   startTime: formatDateTime(sessionStart),
@@ -418,6 +439,7 @@ db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
