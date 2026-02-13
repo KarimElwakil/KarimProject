@@ -530,11 +530,73 @@ window.addEventListener("scroll", function(){
 });
 </script>
 
+<script>
+/* ===============================
+   ADVANCED SESSION TRACKING
+================================ */
+
+const db = firebase.database();
+
+/* 🔹 إنشاء session جديدة */
+const sessionRef = db.ref("analytics/sessions").push();
+
+function getDeviceType() {
+  const ua = navigator.userAgent;
+  if (/mobile/i.test(ua)) return "Mobile";
+  if (/tablet/i.test(ua)) return "Tablet";
+  return "Desktop";
+}
+
+/* 🔹 تسجيل بداية الجلسة */
+const startTime = Date.now();
+
+sessionRef.set({
+  device: getDeviceType(),
+  userAgent: navigator.userAgent,
+  page: window.location.pathname,
+  startTime: startTime
+});
+
+/* 🔹 عند الخروج نحسب المدة */
+window.addEventListener("beforeunload", function() {
+  const duration = Date.now() - startTime;
+
+  sessionRef.update({
+    endTime: Date.now(),
+    duration: duration
+  });
+});
+
+/* 🔹 تتبع الكليكات */
+document.addEventListener("click", function(e) {
+  sessionRef.child("actions").push().set({
+    type: "click",
+    element: e.target.tagName,
+    time: Date.now()
+  });
+});
+
+/* 🔹 تتبع السكرول (مش كل ثانية عشان مايبقاش سبام) */
+let scrollTimer;
+
+window.addEventListener("scroll", function() {
+  clearTimeout(scrollTimer);
+
+  scrollTimer = setTimeout(function() {
+    sessionRef.child("actions").push().set({
+      type: "scroll",
+      position: window.scrollY,
+      time: Date.now()
+    });
+  }, 800);
+});
+</script>
 
 
   
 </body>
 </html>
+
 
 
 
