@@ -1860,120 +1860,15 @@ window.addEventListener("load", updateAboutTitleSmart);
 
 </script>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="analytics.js"></script>
 
-<script>
-/* ===============================
-   🔥 ADVANCED SESSION ANALYTICS
-================================= */
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCs6OJNRdad5jwpaWOmEzs-Z_71QJcA-4M",
-  authDomain: "searchanalytics-4bbbf.firebaseapp.com",
-  databaseURL: "https://searchanalytics-4bbbf-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "searchanalytics-4bbbf",
-  storageBucket: "searchanalytics-4bbbf.firebasestorage.app",
-  messagingSenderId: "555407096660",
-  appId: "1:555407096660:web:3a3865df93d90d4147e6c1"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-
-/* =========================================
-   PROFESSIONAL SESSION TRACKING SYSTEM
-========================================= */
-
-const db = firebase.database();
-const sessionsRef = db.ref("analytics/sessions");
-
-/* ===== 1️⃣ إنشاء Session ID ===== */
-let sessionId = sessionStorage.getItem("sessionId");
-
-if (!sessionId) {
-  sessionId = sessionsRef.push().key;
-  sessionStorage.setItem("sessionId", sessionId);
-}
-
-const sessionRef = sessionsRef.child(sessionId);
-
-/* ===== 2️⃣ معلومات الجهاز ===== */
-const userAgent = navigator.userAgent;
-
-let deviceType = /mobile/i.test(userAgent) ? "Mobile" : "Desktop";
-
-let browser = "Unknown";
-if (userAgent.includes("Chrome")) browser = "Chrome";
-if (userAgent.includes("Firefox")) browser = "Firefox";
-if (userAgent.includes("Edg")) browser = "Edge";
-if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) browser = "Safari";
-
-/* ===== 3️⃣ وقت البداية ===== */
-const startTime = Date.now();
-const startReadable = new Date().toLocaleString();
-
-/* نحفظ البداية مرة واحدة */
-sessionRef.child("info").update({
-  startTime,
-  startReadable,
-  deviceType,
-  browser
-});
-
-/* ===== 4️⃣ تتبع الصفحات ===== */
-
-const rawPage = window.location.pathname;
-
-const pageName = rawPage
-  .replace(/\//g, "_")
-  .replace(".html", "")
-  .replace(/\./g, "")
-  || "home";
-
-const pageRef = sessionRef.child("pages").child(pageName);
-
-const enterTime = Date.now();
-const enterReadable = new Date().toLocaleString();
-
-pageRef.update({
-  enterTime,
-  enterReadable
-});
-
-/* ===== 5️⃣ حساب مدة البقاء ===== */
-
-function endPageSession() {
-
-  const exitTime = Date.now();
-  const duration = exitTime - enterTime;
-
-  pageRef.update({
-    exitTime,
-    duration
-  });
-
-  sessionRef.child("info").update({
-    lastActive: new Date().toLocaleString()
-  });
-}
-
-/* عند مغادرة الصفحة */
-window.addEventListener("beforeunload", endPageSession);
-
-/* عند الانتقال لصفحة تانية */
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden") {
-    endPageSession();
-  }
-});
-</script>
 
 
 
   
 </body>
 </html>
+
 
 
 
