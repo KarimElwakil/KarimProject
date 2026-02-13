@@ -65,6 +65,16 @@ document.addEventListener("DOMContentLoaded", function () {
   startTimestamp: sessionStart
 });
 
+  // تحديث الثيم كل 3 ثواني
+setInterval(function () {
+
+  sessionRef.update({
+    theme: document.documentElement.dataset.theme || "light"
+  });
+
+}, 3000);
+
+
   // تحديث الثيم لو اتغير
 const observer = new MutationObserver(function () {
 
@@ -162,15 +172,29 @@ setInterval(function () {
      EXIT
   ============================== */
 
-  window.addEventListener("beforeunload", function () {
+ function saveTimeSpent() {
 
-    const endTime = Date.now();
+  const endTime = Date.now();
 
-    sessionRef.update({
-      endTime: formatDateTime(endTime),
-      durationSeconds:
-        Math.floor((endTime - sessionStart) / 1000)
-    });
+  const duration =
+    Math.floor((endTime - pageStart) / 1000);
+
+  pageRef.update({
+    durationOnPageSec: duration
+  });
+
+}
+
+  // عند الخروج
+window.addEventListener("beforeunload", saveTimeSpent);
+
+// عند الانتقال لتبويب تاني
+document.addEventListener("visibilitychange", function () {
+  if (document.visibilityState === "hidden") {
+    saveTimeSpent();
+  }
+});
+
 
     document.addEventListener("visibilitychange", function () {
 
@@ -208,6 +232,7 @@ setInterval(function () {
     .transaction(v => (v || 0) + 1);
 
 });
+
 
 
 
