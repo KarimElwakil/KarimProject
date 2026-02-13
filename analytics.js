@@ -98,15 +98,14 @@ sessionRef.child("isOnline").set(true);
 sessionRef.child("isOnline").onDisconnect().set(false);
 
   
-  sessionRef.set({
+  sessionRef.update({
   device: detectDevice(),
-    os: detectOS(),
+  os: detectOS(),
   browser: detectBrowser(),
   fingerprint: getDeviceFingerprint(),
   startTime: formatDateTime(sessionStart),
   startTimestamp: sessionStart
 });
-
 /* ==============================
    DEVICE GLOBAL STATS
 ============================== */
@@ -464,6 +463,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
