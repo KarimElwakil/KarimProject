@@ -2851,85 +2851,85 @@ if (aboutBtn && window.innerWidth <= 600) {
 
 </script>
 
-<!-- Firebase CDN -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-  /* =============================
-     Firebase Config
-  ============================= */
-  const firebaseConfig = {
-    apiKey: "AIzaSyCs6OJNRdad5jwpaWOmEzs-Z_71QJcA-4M",
-    authDomain: "searchanalytics-4bbbf.firebaseapp.com",
-    databaseURL: "https://searchanalytics-4bbbf-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "searchanalytics-4bbbf",
-    storageBucket: "searchanalytics-4bbbf.firebasestorage.app",
-    messagingSenderId: "555407096660",
-    appId: "1:555407096660:web:3a3865df93d90d4147e6c1"
-  };
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "searchanalytics-4bbbf.firebaseapp.com",
+  databaseURL: "https://searchanalytics-4bbbf-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "searchanalytics-4bbbf",
+  storageBucket: "searchanalytics-4bbbf.firebasestorage.app",
+  messagingSenderId: "555407096660",
+  appId: "1:555407096660:web:3a3865df93d90d4147e6c1"
+};
 
-  /* =============================
-     Initialize
-  ============================= */
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
- /* ===== REALTIME USERS SYSTEM ===== */
+/* =========================
+   1️⃣ OVERVIEW COUNTERS
+========================= */
+
+// total visits
+db.ref("analytics/overview/totalVisits")
+.transaction(v => (v || 0) + 1);
+
+// total page views
+db.ref("analytics/overview/pageViews")
+.transaction(v => (v || 0) + 1);
+
+// page specific views
+const pageKey = window.location.pathname
+.replace(/\//g,"_")
+.replace(".html","") || "home";
+
+db.ref("analytics/pages/" + pageKey + "/views")
+.transaction(v => (v || 0) + 1);
+
+
+/* =========================
+   2️⃣ REALTIME USERS SYSTEM
+========================= */
 
 const connectedRef = db.ref(".info/connected");
-const presenceRef = db.ref("analytics/realtime/users");
+const usersRef = db.ref("analytics/realtime/users");
+const currentRef = db.ref("analytics/realtime/current");
 
-connectedRef.on("value", function (snap) {
+connectedRef.on("value", function(snapshot){
 
-  if (snap.val() === true) {
+  if(snapshot.val() === true){
 
-    const userRef = presenceRef.push();
+    const userRef = usersRef.push();
 
+    // تسجيل المستخدم
     userRef.set({
-      online: true,
-      page: window.location.pathname,
-      time: Date.now()
+      page: pageKey,
+      joined: Date.now()
     });
 
+    // زيادة العداد
+    currentRef.transaction(v => (v || 0) + 1);
+
+    // لما يخرج
     userRef.onDisconnect().remove();
+    currentRef.onDisconnect().transaction(v => Math.max((v || 1) - 1, 0));
 
   }
 
 });
 
-  /* =============================
-     1️⃣ إجمالي الزيارات
-  ============================= */
-  const totalRef = db.ref("analytics/overview/totalVisits");
-  totalRef.transaction(current => (current || 0) + 1);
-
-  /* =============================
-     2️⃣ مشاهدات الصفحات
-  ============================= */
-  const pageViewsRef = db.ref("analytics/overview/pageViews");
-  pageViewsRef.transaction(current => (current || 0) + 1);
-
-  /* =============================
-     3️⃣ تسجيل الصفحة الحالية
-  ============================= */
-  const pagePath = window.location.pathname.replace(/\//g,"_") || "home";
-  const singlePageRef = db.ref("analytics/pages/" + pagePath + "/views");
-  singlePageRef.transaction(current => (current || 0) + 1);
-
- 
-  
-
- 
-
-
 </script>
+
 
 
 
   
 </body>
 </html>
+
 
 
 
