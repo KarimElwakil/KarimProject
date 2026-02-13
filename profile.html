@@ -422,8 +422,21 @@ if (from === "Kkk") {
   pageViewsRef.transaction(current => (current || 0) + 1);
 </script>
 
+  <script>
+  const onlineRef = db.ref("analytics/realtime/current");
+
+  // لما المستخدم يدخل
+  onlineRef.transaction(current => (current || 0) + 1);
+
+  // لما يخرج من الصفحة
+  window.addEventListener("beforeunload", () => {
+    onlineRef.transaction(current => Math.max((current || 1) - 1, 0));
+  });
+</script>
+
   
 </body>
 </html>
+
 
 
