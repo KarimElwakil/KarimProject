@@ -1,96 +1,112 @@
+console.log("Analytics system starting...");
 
+document.addEventListener("DOMContentLoaded", function () {
 
-/* =========================
-   UTIL FUNCTIONS
-========================= */
+  if (typeof firebase === "undefined") {
+    console.error("Firebase not loaded");
+    return;
+  }
 
-function getFormattedDateTime() {
-  const now = new Date();
-  return now.getFullYear() + "-" +
-         String(now.getMonth()+1).padStart(2,'0') + "-" +
-         String(now.getDate()).padStart(2,'0') + " " +
-         String(now.getHours()).padStart(2,'0') + ":" +
-         String(now.getMinutes()).padStart(2,'0') + ":" +
-         String(now.getSeconds()).padStart(2,'0');
-}
+  const db = firebase.database();
 
-function getTodayKey() {
-  const now = new Date();
-  return now.getFullYear() + "-" +
-         String(now.getMonth()+1).padStart(2,'0') + "-" +
-         String(now.getDate()).padStart(2,'0');
-}
+  /* ==============================
+     Helper Functions
+  ============================== */
 
-function getDeviceName() {
-  const ua = navigator.userAgent;
+  function getDateTime() {
+    const now = new Date();
+    return now.getFullYear() + "-" +
+      String(now.getMonth() + 1).padStart(2, '0') + "-" +
+      String(now.getDate()).padStart(2, '0') + " " +
+      String(now.getHours()).padStart(2, '0') + ":" +
+      String(now.getMinutes()).padStart(2, '0') + ":" +
+      String(now.getSeconds()).padStart(2, '0');
+  }
 
-  if (/iPhone/i.test(ua)) return "iPhone";
-  if (/iPad/i.test(ua)) return "iPad";
-  if (/Android/i.test(ua)) return "Android";
-  if (/Windows/i.test(ua)) return "Windows PC";
-  if (/Macintosh/i.test(ua)) return "Mac";
-  return "Unknown Device";
-}
+  function getTodayKey() {
+    const now = new Date();
+    return now.getFullYear() + "-" +
+      String(now.getMonth() + 1).padStart(2, '0') + "-" +
+      String(now.getDate()).padStart(2, '0');
+  }
 
-/* =========================
-   DEVICE IDENTIFICATION
-========================= */
+  function detectDevice() {
+    const ua = navigator.userAgent;
 
-let deviceId = localStorage.getItem("deviceId");
-if (!deviceId) {
-  deviceId = "device_" + Math.random().toString(36).substring(2,10);
-  localStorage.setItem("deviceId", deviceId);
-}
+    if (/iPhone/i.test(ua)) return "iPhone";
+    if (/iPad/i.test(ua)) return "iPad";
+    if (/Android/i.test(ua)) return "Android";
+    if (/Windows/i.test(ua)) return "Windows PC";
+    if (/Macintosh/i.test(ua)) return "Mac";
+    return "Unknown Device";
+  }
 
-const deviceRef = db.ref("analytics/devices/" + deviceId);
+  /* ==============================
+     Device ID
+  ============================== */
 
-deviceRef.child("deviceName").set(getDeviceName());
-deviceRef.child("firstSeen").set(getFormattedDateTime());
+  let deviceId = localStorage.getItem("deviceId");
 
-/* =========================
-   SESSION START
-========================= */
+  if (!deviceId) {
+    deviceId = "device_" + Math.random().toString(36).substring(2, 10);
+    localStorage.setItem("deviceId", deviceId);
+  }
 
-const todayKey = getTodayKey();
-const sessionId = "session_" + Math.random().toString(36).substring(2,10);
-const sessionRef = deviceRef.child("sessions/" + todayKey + "/" + sessionId);
+  const deviceRef = db.ref("analytics/devices/" + deviceId);
 
-const sessionStartTime = new Date();
+  deviceRef.child("deviceName").set(detectDevice());
+  deviceRef.child("lastSeen").set(getDateTime());
 
-sessionRef.child("enterTime").set(getFormattedDateTime());
+  /* ==============================
+     Session Start
+  ============================== */
 
-/* =========================
-   PAGE TRACKING
-========================= */
+  const today = getTodayKey();
+  const sessionId = "session_" + Date.now();
 
-let currentPage = window.location.pathname.replace(/\//g,'').replace('.html','') || "home";
-const pageRef = sessionRef.child("pages/" + currentPage);
+  const sessionRef = deviceRef.child("sessions/" + today + "/" + sessionId);
 
-pageRef.child("enter").set(getFormattedDateTime());
+  const sessionStart = new Date();
 
-/* =========================
-   PAGE VIEWS COUNTER
-========================= */
+  sessionRef.child("startTime").set(getDateTime());
 
-const overviewRef = db.ref("analytics/overview/pageViews");
-overviewRef.transaction(current => (current || 0) + 1);
+  /* ==============================
+     Page Tracking
+  ============================== */
 
-const totalRef = db.ref("analytics/overview/totalVisits");
-totalRef.transaction(current => (current || 0) + 1);
+  let pageName = window.location.pathname
+    .replace(/\//g, '')
+    .replace('.html', '') || "home";
 
-/* =========================
-   SESSION END
-========================= */
+  const pageRef = sessionRef.child("pages/" + pageName);
 
-window.addEventListener("beforeunload", () => {
+  pageRef.child("enterTime").set(getDateTime());
 
-  const exitTime = new Date();
-  const duration = Math.floor((exitTime - sessionStartTime) / 1000);
+  /* ==============================
+     Global Counters
+  ============================== */
 
-  sessionRef.child("exitTime").set(getFormattedDateTime());
-  sessionRef.child("durationSeconds").set(duration);
+  db.ref("analytics/overview/pageViews")
+    .transaction(v => (v || 0) + 1);
 
-  pageRef.child("leave").set(getFormattedDateTime());
+  db.ref("analytics/overview/totalVisits")
+    .transaction(v => (v || 0) + 1);
+
+  /* ==============================
+     Session End
+  ============================== */
+
+  window.addEventListener("beforeunload", function () {
+
+    const exitTime = new Date();
+    const duration = Math.floor((exitTime - sessionStart) / 1000);
+
+    sessionRef.child("endTime").set(getDateTime());
+    sessionRef.child("durationSeconds").set(duration);
+
+    pageRef.child("leaveTime").set(getDateTime());
+  });
+
+  console.log("Analytics tracking active");
+
 });
-</script>
-
