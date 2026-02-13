@@ -65,8 +65,6 @@ document.addEventListener("DOMContentLoaded", function () {
   startTimestamp: sessionStart
 });
 
-  console.log("Current theme:", document.documentElement.dataset.theme);
-
 
   // تحديث الثيم كل 3 ثواني
 setInterval(function () {
@@ -235,6 +233,7 @@ document.addEventListener("visibilitychange", function () {
     .transaction(v => (v || 0) + 1);
 
 });
+
 
 
 
