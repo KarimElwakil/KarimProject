@@ -23,12 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
       String(now.getSeconds()).padStart(2, '0');
   }
 
-  function getTodayKey() {
-    const now = new Date();
-    return now.getFullYear() + "-" +
-      String(now.getMonth() + 1).padStart(2, '0') + "-" +
-      String(now.getDate()).padStart(2, '0');
-  }
+  
 
   function detectDevice() {
     const ua = navigator.userAgent;
@@ -80,6 +75,37 @@ function getThemeMode() {
 
 const sessionKey = deviceRef.child("sessions").push().key;
 const sessionRef = deviceRef.child("sessions/" + sessionKey);
+
+  const pageName = window.location.pathname
+  .split("/")
+  .pop()
+  .replace(".html","") || "home";
+
+const pageEnterTime = Date.now();
+
+const pageRef = sessionRef.child("pages").child(pageName);
+
+pageRef.set({
+  enteredAt: new Date().toLocaleString(),
+  enterTimestamp: pageEnterTime,
+  maxScroll: 0
+});
+
+   let maxScroll = 0;
+
+window.addEventListener("scroll", function () {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+  if (docHeight <= 0) return;
+
+  const percent = Math.round((scrollTop / docHeight) * 100);
+
+  if (percent > maxScroll) {
+    maxScroll = percent;
+  }
+});
+
 
 const sessionStartTimestamp = Date.now();
 
@@ -140,20 +166,7 @@ pageSessionRef.set({
   maxScroll: 0
 });
 
-  let maxScroll = 0;
-
-window.addEventListener("scroll", function () {
-  const scrollTop = window.scrollY;
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-  if (docHeight <= 0) return;
-
-  const percent = Math.round((scrollTop / docHeight) * 100);
-
-  if (percent > maxScroll) {
-    maxScroll = percent;
-  }
-});
+ 
 
 
  const pageRef = db.ref("analytics/pages/" + pageName + "/views");
@@ -176,15 +189,22 @@ pageRef.transaction(current => (current || 0) + 1);
 
 window.addEventListener("beforeunload", function () {
 
-  const endTimestamp = Date.now();
-  const durationSec = Math.floor((endTimestamp - sessionStartTimestamp) / 1000);
+  const endTime = Date.now();
+  const durationSec = Math.floor((endTime - sessionStartTimestamp) / 1000);
 
   sessionRef.update({
-    endTime: formatDateTime(endTimestamp),
-    endTimestamp: endTimestamp,
-    durationSeconds: durationSec,
+    endTime: new Date().toLocaleString(),
+    durationSeconds: durationSec
+  });
+
+  pageRef.update({
+    exitedAt: new Date().toLocaleString(),
+    durationOnPageSec: Math.floor((endTime - pageEnterTime) / 1000),
     maxScroll: maxScroll
   });
+
+});
+
 
   pageSessionRef.update({
     exitedAt: formatDateTime(endTimestamp),
@@ -194,6 +214,7 @@ window.addEventListener("beforeunload", function () {
   });
 
 });
+
 
 
 
