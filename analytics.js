@@ -140,21 +140,77 @@ observer.observe(document.documentElement, {
      PAGE
   ============================== */
 
-  function getPageName() {
+function getPageName() {
 
   let path = window.location.pathname;
 
   if (!path || path === "/") return "home";
 
-  path = path.split("/").pop();
+  path = path.split("/").pop() || "home";
 
-  if (!path) return "home";
+  // حذف أي حروف غير مسموح بيها
+  path = path.replace(/\.html$/, "");
+  path = path.replace(/[.#$\[\]]/g, "");
+  path = path.replace(/\//g, "_");
 
-  return path.replace(".html","");
-
+  return path || "home";
 }
 
+
 const pageName = getPageName();
+
+  /* ==============================
+   GLOBAL PAGE COUNTER
+============================== */
+
+const globalPageRef = db
+  .ref("analytics/pages/" + pageName + "/views");
+
+globalPageRef.transaction(v => (v || 0) + 1);
+
+
+/* ==============================
+   DEVICE PAGE COUNTER
+============================== */
+
+const devicePageRef = deviceRef
+  .child("pageStats")
+  .child(pageName)
+  .child("visits");
+
+  /* ==============================
+   DEVICE PAGE LAST VISIT
+============================== */
+
+const devicePageBaseRef = deviceRef
+  .child("pageStats")
+  .child(pageName);
+
+/* ==============================
+   DEVICE PAGE STATS (ADVANCED)
+============================== */
+
+// عداد الزيارات
+devicePageRef.child("visits")
+  .transaction(v => (v || 0) + 1);
+
+// أول زيارة (تتحط مرة واحدة بس)
+devicePageRef.child("firstVisited")
+  .transaction(v => v || formatDateTime(Date.now()));
+
+devicePageRef.child("firstVisitTimestamp")
+  .transaction(v => v || Date.now());
+
+// آخر زيارة
+devicePageRef.update({
+  lastVisited: formatDateTime(Date.now()),
+  lastVisitTimestamp: Date.now()
+});
+
+
+
+
+
 
   /* ==============================
    PAGE TRANSITION TRACKING
@@ -304,6 +360,14 @@ pageRef.update({
   const sessionDurationSec =
   Math.floor((Date.now() - sessionStart) / 1000);
 
+  /* ==============================
+   TOTAL TIME ON PAGE (DEVICE)
+============================== */
+
+devicePageRef.child("totalTimeOnPageSec")
+  .transaction(v => (v || 0) + durationSec);
+
+
 deviceStatsRef.child("totalTimeSpent")
   .transaction(v => (v || 0) + sessionDurationSec);
 
@@ -354,6 +418,7 @@ db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
