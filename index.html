@@ -7,26 +7,29 @@
 
 
 <script>
-(function(){
+const ONE_HOUR = 60 * 60 * 1000;
+const lastPage = localStorage.getItem("lastPage");
+const lastTime = localStorage.getItem("lastVisitTime");
+const now = Date.now();
 
-  const lastPage = localStorage.getItem("lastPage");
-  const lastTime = localStorage.getItem("lastVisitTime");
-  const oneHour = 60 * 60 * 1000;
-  const now = Date.now();
+// نخفي الصفحة مؤقتاً
+document.documentElement.style.visibility = "hidden";
 
-  if(lastPage && lastTime){
+if (lastPage && lastTime && (now - parseInt(lastTime) < ONE_HOUR)) {
 
-    if(now - lastTime < oneHour){
-
-      if(!lastPage.includes("index.html")){
-        window.location.replace(lastPage);
-      }
-
-    }
-
+  if (!window.location.pathname.includes(lastPage)) {
+    window.location.href = lastPage;
+  } else {
+    document.documentElement.style.visibility = "visible";
   }
 
-})();
+} else {
+
+  // لو أول زيارة أو عدى ساعة → نظهر الهوم فوراً
+  document.documentElement.style.visibility = "visible";
+
+}
+
 </script>
 
 
@@ -1413,3 +1416,4 @@ window.addEventListener("load", () => {
 </script>
 </body>
 </html>
+
