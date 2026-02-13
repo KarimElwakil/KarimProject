@@ -1216,12 +1216,16 @@ html.theme-switching body {
 <script>
 
 
+/* ================================
+   INDEX AUTO REDIRECT SYSTEM
+================================ */
+
 const ONE_HOUR = 60 * 60 * 1000;
 const lastPage = localStorage.getItem("lastPage");
 const lastTime = localStorage.getItem("lastVisitTime");
 const now = Date.now();
 
-// نخفي الصفحة مؤقتاً
+// نخفي الصفحة مؤقتًا لمنع الفلاش
 document.documentElement.style.visibility = "hidden";
 
 if (lastPage && lastTime && (now - parseInt(lastTime) < ONE_HOUR)) {
@@ -1234,10 +1238,11 @@ if (lastPage && lastTime && (now - parseInt(lastTime) < ONE_HOUR)) {
 
 } else {
 
-  // لو أول زيارة أو عدى ساعة → نظهر الهوم فوراً
+  // أول مرة أو عدى ساعة
   document.documentElement.style.visibility = "visible";
 
 }
+
 
 
 
@@ -1395,7 +1400,6 @@ window.addEventListener("load", () => {
 </script>
 </body>
 </html>
-
 
 
 
