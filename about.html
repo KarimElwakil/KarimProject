@@ -1892,20 +1892,27 @@ window.addEventListener("load", updateAboutTitleSmart);
 </script>
 
 <script>
+  const connectedRef = db.ref(".info/connected");
   const onlineRef = db.ref("analytics/realtime/current");
 
-  // لما المستخدم يدخل
-  onlineRef.transaction(current => (current || 0) + 1);
+  connectedRef.on("value", (snap) => {
+    if (snap.val() === true) {
 
-  // لما يخرج من الصفحة
-  window.addEventListener("beforeunload", () => {
-    onlineRef.transaction(current => Math.max((current || 1) - 1, 0));
+      // نزود العدد
+      onlineRef.transaction(current => (current || 0) + 1);
+
+      // لما الاتصال يقطع ينقص تلقائي
+      onlineRef.onDisconnect().transaction(current => 
+        Math.max((current || 1) - 1, 0)
+      );
+    }
   });
 </script>
 
   
 </body>
 </html>
+
 
 
 
