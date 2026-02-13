@@ -484,18 +484,22 @@ connectedRef.on("value", (snap) => {
 });
 
 /* ===============================
-   5️⃣ TIME ON PAGE
+   ⏱ LIVE TIME TRACKING
 ================================= */
 
-window.addEventListener("beforeunload", () => {
-  const leaveTime = Date.now();
-  const duration = leaveTime - enterTime;
+let lastUpdate = Date.now();
+
+setInterval(() => {
+  const now = Date.now();
+  const duration = now - enterTime;
 
   pageRef.update({
-    leaveTime: leaveTime,
+    lastActive: now,
     duration: duration
   });
-});
+
+}, 5000);
+
 
 /* ===============================
    6️⃣ SCROLL TRACKING
@@ -522,6 +526,7 @@ window.addEventListener("scroll", () => {
   
 </body>
 </html>
+
 
 
 
