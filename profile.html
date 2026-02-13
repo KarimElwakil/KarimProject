@@ -436,25 +436,25 @@ if (from === "Kkk") {
 
   <script>
   const connectedRef = db.ref(".info/connected");
-  const onlineRef = db.ref("analytics/realtime/current");
+  const presenceRef = db.ref("analytics/realtime/users");
 
   connectedRef.on("value", (snap) => {
     if (snap.val() === true) {
 
-      // نزود العدد
-      onlineRef.transaction(current => (current || 0) + 1);
+      const userRef = presenceRef.push();
 
-      // لما الاتصال يقطع ينقص تلقائي
-      onlineRef.onDisconnect().transaction(current => 
-        Math.max((current || 1) - 1, 0)
-      );
+      userRef.set(true);
+
+      userRef.onDisconnect().remove();
     }
   });
 </script>
 
+
   
 </body>
 </html>
+
 
 
 
