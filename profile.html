@@ -318,6 +318,58 @@ h1{
   </div>
 </div>
 <script>
+
+/* ================================
+   GLOBAL PAGE MEMORY SYSTEM
+================================ */
+
+const ONE_HOUR = 60 * 60 * 1000;
+const currentPage = window.location.pathname;
+const now = Date.now();
+
+/* ---------- 1️⃣ حفظ الحالة ---------- */
+
+function savePageState() {
+  localStorage.setItem("lastPage", currentPage);
+  localStorage.setItem("lastVisitTime", now);
+  localStorage.setItem("scroll_" + currentPage, window.scrollY);
+}
+
+window.addEventListener("scroll", () => {
+  localStorage.setItem("scroll_" + currentPage, window.scrollY);
+});
+
+window.addEventListener("beforeunload", savePageState);
+
+
+/* ---------- 2️⃣ استرجاع المكان ---------- */
+
+window.addEventListener("DOMContentLoaded", () => {
+
+  const lastTime = localStorage.getItem("lastVisitTime");
+
+  if (!lastTime) return;
+
+  if (Date.now() - parseInt(lastTime) > ONE_HOUR) {
+    return; // عدى ساعة → نبدأ من الأول
+  }
+
+  const savedScroll =
+    localStorage.getItem("scroll_" + currentPage);
+
+  if (!savedScroll) return;
+
+  const scrollValue = parseInt(savedScroll);
+
+  if (scrollValue > 0) {
+    setTimeout(() => {
+      window.scrollTo(0, scrollValue);
+    }, 100);
+  }
+
+});
+
+
 const savedTheme = localStorage.getItem("theme");
 
 if (savedTheme) {
@@ -335,53 +387,6 @@ if (from === "Kkk") {
   backBtn.onclick = () => window.location.href = "search.html";
 }
 
-/* ===== SAVE PAGE + SCROLL ===== */
-
-window.addEventListener("scroll", () => {
-  localStorage.setItem("scrollPosition", window.scrollY);
-});
-
-window.addEventListener("beforeunload", () => {
-
-  localStorage.setItem("lastPage", window.location.pathname);
-
-  localStorage.setItem("lastVisitTime", Date.now());
-
-  localStorage.setItem("scrollPos_" + window.location.pathname, window.scrollY);
-
-});
-
-/* استرجاع مكان الوقوف */
-
-window.addEventListener("load", () => {
-
-  const pos = localStorage.getItem("scrollPos_" + window.location.pathname);
-
-  if(pos){
-    window.scrollTo(0, parseInt(pos));
-  }
-
-});
-
-/* ===== Restore Scroll Position ===== */
-
-window.addEventListener("load", () => {
-
-  const lastTime = localStorage.getItem("lastVisitTime");
-  const oneHour = 60 * 60 * 1000;
-  const now = Date.now();
-
-  if(lastTime && (now - lastTime < oneHour)){
-
-    const savedScroll = localStorage.getItem("scrollPosition");
-
-    if(savedScroll){
-      window.scrollTo(0, parseInt(savedScroll));
-    }
-
-  }
-
-});
 
 
 </script>
