@@ -5,6 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الإدمان الرقمي</title>
 
+
+<script>
+(function(){
+
+  const lastPage = localStorage.getItem("lastPage");
+  const lastTime = localStorage.getItem("lastVisitTime");
+  const oneHour = 60 * 60 * 1000;
+  const now = Date.now();
+
+  if(lastPage && lastTime){
+
+    if(now - lastTime < oneHour){
+
+      if(!lastPage.includes("index.html")){
+        window.location.replace(lastPage);
+      }
+
+    }
+
+  }
+
+})();
+</script>
+
+
 <style>
 
 html, body{
@@ -1092,7 +1117,6 @@ html.theme-switching body {
 .start-btn{
   padding:16px 55px;
   border-radius:999px;
-  border:none;
   cursor:pointer;
 
   font-size:18px;
@@ -1101,9 +1125,13 @@ html.theme-switching body {
   background:var(--primary);
   color:#fff;
 
+  text-decoration:none;   /* ✅ دي أهم سطر */
+  display:inline-block;   /* مهم عشان يتعامل كزر */
+
   box-shadow:0 14px 35px rgba(37,99,235,.4);
   transition:.3s ease;
 }
+
 
 .start-btn:hover{
   transform:translateY(-4px) scale(1.05);
@@ -1125,7 +1153,8 @@ html.theme-switching body {
 </style>
 </head>
 
-<body>
+<body style="visibility:hidden;">
+
 
 <header class="topbar">
   <div class="topbar-inner">
@@ -1185,9 +1214,12 @@ html.theme-switching body {
   <div class="hero-content">
 
     <h1 class="hero-title">
-      مشروع بحثي تفاعلي يشرح الإدمان الرقمي
-      بأسلوب حديث وتجربة قراءة مختلفة
+    بحث في سلوك أصبح مألوفًا…   
     </h1>
+<h1 class="hero-title">
+     وتأثيره أعمق مما نتصور
+    </h1>
+
 <a href="search.html" class="start-btn">
   ابدأ القراءة
 </a>
@@ -1205,6 +1237,25 @@ html.theme-switching body {
 <script>
 
 
+const ONE_HOUR = 60 * 60 * 1000;
+const lastTime = localStorage.getItem("lastVisitTime");
+const lastPage = localStorage.getItem("lastPage");
+const now = Date.now();
+
+if (lastTime && lastPage) {
+
+  if (now - parseInt(lastTime) < ONE_HOUR) {
+
+    if (!lastPage.includes("index")) {
+      window.location.replace(lastPage);
+    }
+
+  } else {
+    localStorage.removeItem("lastPage");
+    localStorage.removeItem("lastVisitTime");
+  }
+
+}
 
 
 
@@ -1225,7 +1276,7 @@ const knob = document.getElementById("knob");
 
 /* الوضع المحفوظ */
 const savedTheme = localStorage.getItem("theme") || "light";
-body.dataset.theme = savedTheme;
+document.documentElement.dataset.theme = savedTheme;
 knob.textContent = savedTheme === "dark" ? "🌙" : "☀️";
 
 
@@ -1353,32 +1404,9 @@ window.addEventListener("load", updateAboutTitleSmart);
   }
 })();
 
-/* ===== HOME SMART ENTRY ===== */
-
 window.addEventListener("load", () => {
-
-  const now = Date.now();
-  const oneHour = 60 * 60 * 1000;
-
-  const lastPage = localStorage.getItem("lastPage");
-  const lastTime = localStorage.getItem("lastVisitTime");
-
-  // لو رجع قبل ساعة
-  if(lastPage && lastTime && (now - lastTime < oneHour)){
-
-    // لو مش الهوم
-    if(!lastPage.includes("index.html")){
-      window.location.href = lastPage;
-    }
-
-  }else{
-    // عدت ساعة → امسح
-    localStorage.removeItem("lastPage");
-    localStorage.removeItem("lastVisitTime");
-  }
-
+  document.body.style.visibility = "visible";
 });
-
 
 
 
