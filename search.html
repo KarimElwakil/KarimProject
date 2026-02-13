@@ -2851,13 +2851,18 @@ if (aboutBtn && window.innerWidth <= 600) {
 
 </script>
 
-<!-- Firebase -->
+
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
+/* ===============================
+   🔥 ADVANCED SESSION ANALYTICS
+================================= */
+
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
+  apiKey: "AIzaSyCs6OJNRdad5jwpaWOmEzs-Z_71QJcA-4M",
   authDomain: "searchanalytics-4bbbf.firebaseapp.com",
   databaseURL: "https://searchanalytics-4bbbf-default-rtdb.europe-west1.firebasedatabase.app",
   projectId: "searchanalytics-4bbbf",
@@ -2869,82 +2874,25 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-/* =========================
-   1️⃣ OVERVIEW COUNTERS
-========================= */
-
-// total visits
-db.ref("analytics/overview/totalVisits")
-.transaction(v => (v || 0) + 1);
-
-// total page views
-db.ref("analytics/overview/pageViews")
-.transaction(v => (v || 0) + 1);
-
-// page specific views
-const pageKey = window.location.pathname
-.replace(/\//g,"_")
-.replace(".html","") || "home";
-
-db.ref("analytics/pages/" + pageKey + "/views")
-.transaction(v => (v || 0) + 1);
-
-
-/* =========================
-   2️⃣ REALTIME USERS SYSTEM
-========================= */
-
-const connectedRef = db.ref(".info/connected");
-const usersRef = db.ref("analytics/realtime/users");
-const currentRef = db.ref("analytics/realtime/current");
-
-connectedRef.on("value", function(snapshot){
-
-  if(snapshot.val() === true){
-
-    const userRef = usersRef.push();
-
-    // تسجيل المستخدم
-    userRef.set({
-      page: pageKey,
-      joined: Date.now()
-    });
-
-    // زيادة العداد
-    currentRef.transaction(v => (v || 0) + 1);
-
-    // لما يخرج
-    userRef.onDisconnect().remove();
-   
-connectedRef.on("value", (snap) => {
-  if (snap.val() === true) {
-
-    // نزود 1 عند الدخول
-    currentRef.transaction((current) => (current || 0) + 1);
-
-    // نقلل 1 تلقائي عند الخروج
-    currentRef.onDisconnect().set(
-      firebase.database.ServerValue.increment(-1)
-    );
-  }
-});
- 
-
-  }
-
-});
-
-</script>
-
- <script>
 /* ===============================
-   ADVANCED SESSION TRACKING
-================================ */
+   1️⃣ SESSION SYSTEM
+================================= */
 
+let sessionId = sessionStorage.getItem("sessionId");
 
+if (!sessionId) {
+  sessionId = "sess_" + Date.now() + "_" + Math.random().toString(36).substring(2);
+  sessionStorage.setItem("sessionId", sessionId);
 
-/* 🔹 إنشاء session جديدة */
-const sessionRef = db.ref("analytics/sessions").push();
+  db.ref("analytics/overview/totalVisits")
+    .transaction(current => (current || 0) + 1);
+}
+
+const sessionRef = db.ref("analytics/sessions/" + sessionId);
+
+/* ===============================
+   2️⃣ DEVICE TYPE
+================================= */
 
 function getDeviceType() {
   const ua = navigator.userAgent;
@@ -2953,50 +2901,84 @@ function getDeviceType() {
   return "Desktop";
 }
 
-/* 🔹 تسجيل بداية الجلسة */
-const startTime = Date.now();
-
-sessionRef.set({
-  device: getDeviceType(),
-  userAgent: navigator.userAgent,
-  page: window.location.pathname,
-  startTime: startTime
+sessionRef.update({
+  startTime: Date.now(),
+  deviceType: getDeviceType()
 });
 
-/* 🔹 عند الخروج نحسب المدة */
-window.addEventListener("beforeunload", function() {
-  const duration = Date.now() - startTime;
+/* ===============================
+   3️⃣ PAGE TRACKING
+================================= */
 
-  sessionRef.update({
-    endTime: Date.now(),
+const pageName =
+  window.location.pathname.replace(/\//g, "_") || "home";
+
+const pageRef = sessionRef.child("pages/" + pageName);
+
+const enterTime = Date.now();
+
+pageRef.update({
+  enterTime: enterTime
+});
+
+db.ref("analytics/overview/pageViews")
+  .transaction(current => (current || 0) + 1);
+
+db.ref("analytics/pages/" + pageName + "/views")
+  .transaction(current => (current || 0) + 1);
+
+/* ===============================
+   4️⃣ REALTIME USERS
+================================= */
+
+const connectedRef = db.ref(".info/connected");
+const onlineRef = db.ref("analytics/realtime/current");
+
+connectedRef.on("value", (snap) => {
+  if (snap.val() === true) {
+
+    onlineRef.transaction(current => (current || 0) + 1);
+
+    onlineRef.onDisconnect().transaction(current =>
+      Math.max((current || 1) - 1, 0)
+    );
+  }
+});
+
+/* ===============================
+   5️⃣ TIME ON PAGE
+================================= */
+
+window.addEventListener("beforeunload", () => {
+  const leaveTime = Date.now();
+  const duration = leaveTime - enterTime;
+
+  pageRef.update({
+    leaveTime: leaveTime,
     duration: duration
   });
 });
 
-/* 🔹 تتبع الكليكات */
-document.addEventListener("click", function(e) {
-  sessionRef.child("actions").push().set({
-    type: "click",
-    element: e.target.tagName,
-    time: Date.now()
-  });
+/* ===============================
+   6️⃣ SCROLL TRACKING
+================================= */
+
+let maxScroll = 0;
+
+window.addEventListener("scroll", () => {
+  const scrollPercent = Math.round(
+    (window.scrollY + window.innerHeight) /
+    document.body.scrollHeight * 100
+  );
+
+  if (scrollPercent > maxScroll) {
+    maxScroll = scrollPercent;
+    pageRef.child("maxScroll").set(maxScroll);
+  }
 });
 
-/* 🔹 تتبع السكرول (مش كل ثانية عشان مايبقاش سبام) */
-let scrollTimer;
-
-window.addEventListener("scroll", function() {
-  clearTimeout(scrollTimer);
-
-  scrollTimer = setTimeout(function() {
-    sessionRef.child("actions").push().set({
-      type: "scroll",
-      position: window.scrollY,
-      time: Date.now()
-    });
-  }, 800);
-});
 </script>
+
 
 
 
@@ -3004,6 +2986,7 @@ window.addEventListener("scroll", function() {
   
 </body>
 </html>
+
 
 
 
