@@ -2923,17 +2923,16 @@ connectedRef.on("value", function(snapshot){
 
 </script>
 
-  <script>
+ <script>
 /* ===============================
    ADVANCED SESSION TRACKING
 ================================ */
 
 const db = firebase.database();
-const sessionId = db.ref("analytics/sessions").push().key;
 
-const sessionRef = db.ref("analytics/sessions/" + sessionId);
+/* 🔹 إنشاء session جديدة */
+const sessionRef = db.ref("analytics/sessions").push();
 
-/* ===== Device Detection ===== */
 function getDeviceType() {
   const ua = navigator.userAgent;
   if (/mobile/i.test(ua)) return "Mobile";
@@ -2941,19 +2940,18 @@ function getDeviceType() {
   return "Desktop";
 }
 
-/* ===== Session Start ===== */
-sessionRef.set({
-  device: getDeviceType(),
-  browser: navigator.userAgent,
-  startTime: Date.now(),
-  page: window.location.pathname,
-  actions: {}
-});
-
-/* ===== Track Page Time ===== */
+/* 🔹 تسجيل بداية الجلسة */
 const startTime = Date.now();
 
-window.addEventListener("beforeunload", () => {
+sessionRef.set({
+  device: getDeviceType(),
+  userAgent: navigator.userAgent,
+  page: window.location.pathname,
+  startTime: startTime
+});
+
+/* 🔹 عند الخروج نحسب المدة */
+window.addEventListener("beforeunload", function() {
   const duration = Date.now() - startTime;
 
   sessionRef.update({
@@ -2962,26 +2960,23 @@ window.addEventListener("beforeunload", () => {
   });
 });
 
-/* ===== Track Clicks ===== */
-document.addEventListener("click", function(e){
-  const actionId = sessionRef.child("actions").push().key;
-
-  sessionRef.child("actions/" + actionId).set({
+/* 🔹 تتبع الكليكات */
+document.addEventListener("click", function(e) {
+  sessionRef.child("actions").push().set({
     type: "click",
-    target: e.target.tagName,
+    element: e.target.tagName,
     time: Date.now()
   });
 });
 
-/* ===== Track Scroll ===== */
-let scrollTimeout;
+/* 🔹 تتبع السكرول (مش كل ثانية عشان مايبقاش سبام) */
+let scrollTimer;
 
-window.addEventListener("scroll", function(){
-  clearTimeout(scrollTimeout);
-  scrollTimeout = setTimeout(() => {
-    const actionId = sessionRef.child("actions").push().key;
+window.addEventListener("scroll", function() {
+  clearTimeout(scrollTimer);
 
-    sessionRef.child("actions/" + actionId).set({
+  scrollTimer = setTimeout(function() {
+    sessionRef.child("actions").push().set({
       type: "scroll",
       position: window.scrollY,
       time: Date.now()
@@ -2996,6 +2991,7 @@ window.addEventListener("scroll", function(){
   
 </body>
 </html>
+
 
 
 
