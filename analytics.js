@@ -81,7 +81,15 @@ document.addEventListener("DOMContentLoaded", function () {
   ============================== */
 
   const sessionStart = Date.now();
-  const sessionRef = deviceRef.child("sessions").push();
+  let sessionId = sessionStorage.getItem("sessionId");
+
+if (!sessionId) {
+  sessionId = deviceRef.child("sessions").push().key;
+  sessionStorage.setItem("sessionId", sessionId);
+}
+
+const sessionRef = deviceRef.child("sessions").child(sessionId);
+
 
 // حالة الاتصال
 sessionRef.child("isOnline").set(true);
@@ -438,7 +446,25 @@ db.ref("analytics/overview/pageViews")
 db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
+  fetch("https://ipapi.co/json/")
+  .then(res => res.json())
+  .then(data => {
+
+    sessionRef.update({
+      country: data.country_name || "Unknown",
+      countryCode: data.country || "UN"
+    });
+
+  })
+  .catch(() => {
+    sessionRef.update({
+      country: "Unknown"
+    });
+  });
+
+
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
