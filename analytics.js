@@ -68,10 +68,22 @@ document.addEventListener("DOMContentLoaded", function () {
      PAGE
   ============================== */
 
-  const pageName = window.location.pathname
-    .split("/")
-    .pop()
-    .replace(".html","") || "home";
+  function getPageName() {
+
+  let path = window.location.pathname;
+
+  if (!path || path === "/") return "home";
+
+  path = path.split("/").pop();
+
+  if (!path) return "home";
+
+  return path.replace(".html","");
+
+}
+
+const pageName = getPageName();
+
 
   const pageStart = Date.now();
 
@@ -105,6 +117,16 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
   });
+
+  // حفظ الاسكرول كل 5 ثواني
+setInterval(function () {
+
+  pageRef.update({
+    maxScroll: maxScroll
+  });
+
+}, 5000);
+
 
   /* ==============================
      EXIT
@@ -140,3 +162,4 @@ document.addEventListener("DOMContentLoaded", function () {
     .transaction(v => (v || 0) + 1);
 
 });
+
