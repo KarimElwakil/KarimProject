@@ -197,8 +197,9 @@ document.addEventListener("visibilitychange", function () {
 });
 
 
+  }
     
-  
+   
 
   /* ==============================
      Global Counters
