@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const deviceRef = db.ref("analytics/devices/" + deviceId);
 
   /* ===============================
-   ADVANCED SESSION SYSTEM
+   CLEAN ADVANCED SESSION SYSTEM
 ================================= */
 
 function formatDateTime(ts) {
@@ -61,10 +61,10 @@ function formatDateTime(ts) {
 function detectBrowser() {
   const ua = navigator.userAgent;
 
+  if (ua.includes("Edg")) return "Edge";
   if (ua.includes("Chrome")) return "Chrome";
   if (ua.includes("Firefox")) return "Firefox";
   if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
-  if (ua.includes("Edg")) return "Edge";
 
   return "Unknown Browser";
 }
@@ -73,47 +73,43 @@ function getThemeMode() {
   return document.documentElement.dataset.theme || "light";
 }
 
+/* ========= SESSION START ========= */
+
+const sessionStartTimestamp = Date.now();
+
 const sessionKey = deviceRef.child("sessions").push().key;
 const sessionRef = deviceRef.child("sessions/" + sessionKey);
 
-  const pageName = window.location.pathname
-  .split("/")
-  .pop()
-  .replace(".html","") || "home";
-
-const pageEnterTime = Date.now();
-
-const pageRef = sessionRef.child("pages").child(pageName);
-
-pageRef.set({
-  enteredAt: new Date().toLocaleString(),
-  enterTimestamp: pageEnterTime,
-  maxScroll: 0
+sessionRef.set({
+  device: detectDevice(),
+  browser: detectBrowser(),
+  theme: getThemeMode(),
+  startTime: formatDateTime(sessionStartTimestamp),
+  startTimestamp: sessionStartTimestamp
 });
 
-   
+/* ========= PAGE TRACKING INSIDE SESSION ========= */
 
-
-const sessionStartTimestamp = Date.now();
-sessionRef.child("startTime").set(new Date().toLocaleString());
-
-  const pageName = window.location.pathname
+const cleanPageName = window.location.pathname
   .split("/")
   .pop()
   .replace(".html","") || "home";
 
 const pageEnterTimestamp = Date.now();
 
-const pageRef = sessionRef.child("pages").child(pageName);
+const pageSessionRef = sessionRef
+  .child("pages")
+  .child(cleanPageName);
 
-pageRef.set({
-  enteredAt: new Date().toLocaleString(),
+pageSessionRef.set({
+  enteredAt: formatDateTime(pageEnterTimestamp),
   enterTimestamp: pageEnterTimestamp,
-  maxScroll: 0,
-  theme: document.documentElement.dataset.theme || "light"
+  maxScroll: 0
 });
 
-  let maxScroll = 0;
+/* ========= SCROLL TRACKING ========= */
+
+let maxScroll = 0;
 
 window.addEventListener("scroll", function () {
 
@@ -130,116 +126,28 @@ window.addEventListener("scroll", function () {
 
 });
 
-
-sessionRef.set({
-  device: detectDevice(),
-  browser: detectBrowser(),
-  theme: getThemeMode(),
-  startTime: formatDateTime(sessionStartTimestamp),
-  startTimestamp: sessionStartTimestamp,
-  pages: {},
-  maxScroll: 0
-});
-
-
-  deviceRef.child("deviceName").set(detectDevice());
-  deviceRef.child("lastSeen").set(getDateTime());
-
-  
-
-  /* ==============================
-     Page Tracking
-  ============================== */
-
- function getCleanPageName() {
-  let path = window.location.pathname;
-
-  // لو الصفحة الرئيسية
-  if (path === "/" || path === "") {
-    return "home";
-  }
-
-  // شيل أول /
-  path = path.substring(1);
-
-  // شيل .html
-  path = path.replace(".html", "");
-
-  // شيل اسم الفولدر لو موجود
-  if (path.includes("/")) {
-    path = path.split("/").pop();
-  }
-
-  return path;
-}
-
-const pageName = getCleanPageName();
-
-  /* ===============================
-   PAGE INSIDE SESSION
-================================= */
-
-const pageEnterTime = Date.now();
-const pageSessionRef = sessionRef.child("pages").child(pageName);
-
-pageSessionRef.set({
-  enteredAt: formatDateTime(pageEnterTime),
-  enterTimestamp: pageEnterTime,
-  maxScroll: 0
-});
-
- 
-
-
- const pageRef = db.ref("analytics/pages/" + pageName + "/views");
-pageRef.transaction(current => (current || 0) + 1);
-
-
-  /* ==============================
-     Global Counters
-  ============================== */
-
-  db.ref("analytics/overview/pageViews")
-    .transaction(v => (v || 0) + 1);
-
-  db.ref("analytics/overview/totalVisits")
-    .transaction(v => (v || 0) + 1);
-
- /* ===============================
-   SESSION END (Advanced)
-================================= */
+/* ========= SESSION END ========= */
 
 window.addEventListener("beforeunload", function () {
 
   const endTimestamp = Date.now();
-  const sessionDuration = Math.floor((endTimestamp - sessionStartTimestamp) / 1000);
-  const pageDuration = Math.floor((endTimestamp - pageEnterTimestamp) / 1000);
+
+  const sessionDuration =
+    Math.floor((endTimestamp - sessionStartTimestamp) / 1000);
+
+  const pageDuration =
+    Math.floor((endTimestamp - pageEnterTimestamp) / 1000);
 
   sessionRef.update({
-    endTime: new Date().toLocaleString(),
+    endTime: formatDateTime(endTimestamp),
     durationSeconds: sessionDuration
   });
 
-  pageRef.update({
-    exitedAt: new Date().toLocaleString(),
+  pageSessionRef.update({
+    exitedAt: formatDateTime(endTimestamp),
+    exitTimestamp: endTimestamp,
     durationOnPageSec: pageDuration,
     maxScroll: maxScroll
   });
 
 });
-
-
-
-  pageSessionRef.update({
-    exitedAt: formatDateTime(endTimestamp),
-    exitTimestamp: endTimestamp,
-    durationOnPageSec: Math.floor((endTimestamp - pageEnterTime) / 1000),
-    maxScroll: maxScroll
-  });
-
-});
-
-
-
-
-
