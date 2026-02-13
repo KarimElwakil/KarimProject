@@ -2479,28 +2479,44 @@ body,
 
 
 
-window.addEventListener("load", () => {
-  const savedScroll = localStorage.getItem("lastScroll");
-  const lastExitTime = localStorage.getItem("lastExitTime");
+const ONE_HOUR = 60 * 60 * 1000;
+const currentPage = window.location.pathname;
 
-  if (!savedScroll || !lastExitTime) return;
+function saveState() {
+  localStorage.setItem("lastPage", currentPage);
+  localStorage.setItem("lastVisitTime", Date.now());
+  localStorage.setItem("scroll_" + currentPage, window.scrollY);
+}
 
+window.addEventListener("scroll", saveState);
+window.addEventListener("beforeunload", saveState);
+
+window.addEventListener("pageshow", () => {
+
+  const lastTime = localStorage.getItem("lastVisitTime");
+  const lastPage = localStorage.getItem("lastPage");
   const now = Date.now();
-  const diff = now - parseInt(lastExitTime);
 
-  const ONE_HOUR = 60 * 60 * 1000; // ساعة بالمللي ثانية
+  if (!lastTime || !lastPage) return;
 
-  if (diff < ONE_HOUR) {
-    // 👌 يرجع يكمل من مكانه
-    window.scrollTo({
-      top: parseInt(savedScroll),
-      behavior: "instant"
-    });
-  } else {
-    // ❌ يعدّي ساعة → يبدأ من الأول
-    localStorage.removeItem("lastScroll");
-    localStorage.removeItem("activeSlide");
+  if (now - parseInt(lastTime) > ONE_HOUR) {
+    localStorage.removeItem("scroll_" + currentPage);
+    return;
   }
+
+  if (lastPage === currentPage) {
+
+    const savedScroll =
+      localStorage.getItem("scroll_" + currentPage);
+
+    if (savedScroll) {
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(savedScroll));
+      }, 150);
+    }
+
+  }
+
 });
 
 
@@ -2823,6 +2839,10 @@ if (aboutBtn && window.innerWidth <= 600) {
 
 /* ===== SAVE PAGE + SCROLL ===== */
 
+window.addEventListener("scroll", () => {
+  localStorage.setItem("scrollPosition", window.scrollY);
+});
+
 window.addEventListener("beforeunload", () => {
 
   localStorage.setItem("lastPage", window.location.pathname);
@@ -2841,6 +2861,26 @@ window.addEventListener("load", () => {
 
   if(pos){
     window.scrollTo(0, parseInt(pos));
+  }
+
+});
+
+/* ===== Restore Scroll Position ===== */
+
+window.addEventListener("load", () => {
+
+  const lastTime = localStorage.getItem("lastVisitTime");
+  const oneHour = 60 * 60 * 1000;
+  const now = Date.now();
+
+  if(lastTime && (now - lastTime < oneHour)){
+
+    const savedScroll = localStorage.getItem("scrollPosition");
+
+    if(savedScroll){
+      window.scrollTo(0, parseInt(savedScroll));
+    }
+
   }
 
 });
