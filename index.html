@@ -1240,25 +1240,7 @@ html.theme-switching body {
 <script>
 
 
-const ONE_HOUR = 60 * 60 * 1000;
-const lastTime = localStorage.getItem("lastVisitTime");
-const lastPage = localStorage.getItem("lastPage");
-const now = Date.now();
 
-if (lastTime && lastPage) {
-
-  if (now - parseInt(lastTime) < ONE_HOUR) {
-
-    if (!lastPage.includes("index")) {
-      window.location.replace(lastPage);
-    }
-
-  } else {
-    localStorage.removeItem("lastPage");
-    localStorage.removeItem("lastVisitTime");
-  }
-
-}
 
 
 
@@ -1416,5 +1398,6 @@ window.addEventListener("load", () => {
 </script>
 </body>
 </html>
+
 
 
