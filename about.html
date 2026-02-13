@@ -1860,10 +1860,14 @@ window.addEventListener("load", updateAboutTitleSmart);
 
 </script>
 
+<!-- Firebase CDN -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
+  /* =============================
+     Firebase Config
+  ============================= */
   const firebaseConfig = {
     apiKey: "AIzaSyCs6OJNRdad5jwpaWOmEzs-Z_71QJcA-4M",
     authDomain: "searchanalytics-4bbbf.firebaseapp.com",
@@ -1874,44 +1878,52 @@ window.addEventListener("load", updateAboutTitleSmart);
     appId: "1:555407096660:web:3a3865df93d90d4147e6c1"
   };
 
+  /* =============================
+     Initialize
+  ============================= */
   firebase.initializeApp(firebaseConfig);
   const db = firebase.database();
 
-  // إجمالي الزيارات
+  /* =============================
+     1️⃣ إجمالي الزيارات
+  ============================= */
   const totalRef = db.ref("analytics/overview/totalVisits");
   totalRef.transaction(current => (current || 0) + 1);
 
-  // مشاهدات الصفحات
-  const pageRef = db.ref("analytics/overview/pageViews");
-  pageRef.transaction(current => (current || 0) + 1);
-
-  // تسجيل الصفحة
-  const pagePath = window.location.pathname.replace(/\//g,"_") || "home";
-  const pageViewsRef = db.ref("analytics/pages/" + pagePath + "/views");
+  /* =============================
+     2️⃣ مشاهدات الصفحات
+  ============================= */
+  const pageViewsRef = db.ref("analytics/overview/pageViews");
   pageViewsRef.transaction(current => (current || 0) + 1);
-</script>
 
-<script>
+  /* =============================
+     3️⃣ تسجيل الصفحة الحالية
+  ============================= */
+  const pagePath = window.location.pathname.replace(/\//g,"_") || "home";
+  const singlePageRef = db.ref("analytics/pages/" + pagePath + "/views");
+  singlePageRef.transaction(current => (current || 0) + 1);
+
+  /* =============================
+     4️⃣ Presence System (الموجودين الآن)
+  ============================= */
   const connectedRef = db.ref(".info/connected");
-  const onlineRef = db.ref("analytics/realtime/current");
+  const presenceRef = db.ref("analytics/realtime/users");
 
   connectedRef.on("value", (snap) => {
     if (snap.val() === true) {
-
-      // نزود العدد
-      onlineRef.transaction(current => (current || 0) + 1);
-
-      // لما الاتصال يقطع ينقص تلقائي
-      onlineRef.onDisconnect().transaction(current => 
-        Math.max((current || 1) - 1, 0)
-      );
+      const userRef = presenceRef.push();
+      userRef.set(true);
+      userRef.onDisconnect().remove();
     }
   });
+
 </script>
+
 
   
 </body>
 </html>
+
 
 
 
