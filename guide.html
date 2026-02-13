@@ -1870,11 +1870,28 @@ html[data-theme="dark"] .feature-box{
 
 <script>
 
+window.addEventListener("load", () => {
+  const savedScroll = localStorage.getItem("lastScroll");
+  const lastExitTime = localStorage.getItem("lastExitTime");
 
+  if (!savedScroll || !lastExitTime) return;
 
+  const now = Date.now();
+  const diff = now - parseInt(lastExitTime);
 
+  const ONE_HOUR = 60 * 60 * 1000; // ساعة بالمللي ثانية
 
-
+  if (diff < ONE_HOUR) {
+    // 👌 يرجع يكمل من مكانه
+    window.scrollTo({
+      top: parseInt(savedScroll),
+      behavior: "instant"
+    });
+  } else {
+    // ❌ يعدّي ساعة → يبدأ من الأول
+    localStorage.removeItem("lastScroll");
+      }
+});
 
 
 
@@ -1936,9 +1953,8 @@ const TOPBAR_OFFSET = 140; // نفس padding-top
 
 
 
-window.addEventListener("scroll", updateAboutTitleSmart);
-window.addEventListener("resize", updateAboutTitleSmart);
-window.addEventListener("load", updateAboutTitleSmart);
+
+
 
 
 
@@ -1956,39 +1972,14 @@ function revealCards(){
 
 window.addEventListener("load", revealCards);
 
-/* ===== حفظ مكان القراءة لمدة ساعة ===== */
 
-const PAGE_KEY = "guideScrollPosition";
-const TIME_KEY = "guideScrollTime";
-const ONE_HOUR = 60 * 60 * 1000;
 
-// عند الدخول
-window.addEventListener("load", () => {
-
-  const savedTime = localStorage.getItem(TIME_KEY);
-  const savedScroll = localStorage.getItem(PAGE_KEY);
-
-  if(savedTime && savedScroll){
-    const now = Date.now();
-    const diff = now - parseInt(savedTime);
-
-    if(diff < ONE_HOUR){
-      window.scrollTo(0, parseInt(savedScroll));
-    } else {
-      localStorage.removeItem(PAGE_KEY);
-      localStorage.removeItem(TIME_KEY);
-    }
-  }
-
-});
-
-// أثناء التمرير
-window.addEventListener("scroll", () => {
-  localStorage.setItem(PAGE_KEY, window.scrollY);
-  localStorage.setItem(TIME_KEY, Date.now());
-});
 
 /* ===== SAVE PAGE + SCROLL ===== */
+
+window.addEventListener("scroll", () => {
+  localStorage.setItem("scrollPosition", window.scrollY);
+});
 
 window.addEventListener("beforeunload", () => {
 
@@ -2011,6 +2002,28 @@ window.addEventListener("load", () => {
   }
 
 });
+
+/* ===== Restore Scroll Position ===== */
+
+window.addEventListener("load", () => {
+
+  const lastTime = localStorage.getItem("lastVisitTime");
+  const oneHour = 60 * 60 * 1000;
+  const now = Date.now();
+
+  if(lastTime && (now - lastTime < oneHour)){
+
+    const savedScroll = localStorage.getItem("scrollPosition");
+
+    if(savedScroll){
+      window.scrollTo(0, parseInt(savedScroll));
+    }
+
+  }
+
+});
+
+
 
 
 
