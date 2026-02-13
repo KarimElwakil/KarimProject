@@ -1833,6 +1833,10 @@ window.addEventListener("load", updateAboutTitleSmart);
 
 /* ===== SAVE PAGE + SCROLL ===== */
 
+window.addEventListener("scroll", () => {
+  localStorage.setItem("scrollPosition", window.scrollY);
+});
+
 window.addEventListener("beforeunload", () => {
 
   localStorage.setItem("lastPage", window.location.pathname);
@@ -1855,6 +1859,25 @@ window.addEventListener("load", () => {
 
 });
 
+/* ===== Restore Scroll Position ===== */
+
+window.addEventListener("load", () => {
+
+  const lastTime = localStorage.getItem("lastVisitTime");
+  const oneHour = 60 * 60 * 1000;
+  const now = Date.now();
+
+  if(lastTime && (now - lastTime < oneHour)){
+
+    const savedScroll = localStorage.getItem("scrollPosition");
+
+    if(savedScroll){
+      window.scrollTo(0, parseInt(savedScroll));
+    }
+
+  }
+
+});
 
 
 </script>
