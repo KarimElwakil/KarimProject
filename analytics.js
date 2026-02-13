@@ -91,21 +91,21 @@ if (!sessionId) {
 const sessionRef = deviceRef.child("sessions").child(sessionId);
 
 
-// حالة الاتصال
-sessionRef.child("isOnline").set(true);
 
-// لما يقفل الصفحة أو يفصل النت
-sessionRef.child("isOnline").onDisconnect().set(false);
 
   
-  sessionRef.update({
+ sessionRef.update({
   device: detectDevice(),
   os: detectOS(),
   browser: detectBrowser(),
   fingerprint: getDeviceFingerprint(),
   startTime: formatDateTime(sessionStart),
-  startTimestamp: sessionStart
+  startTimestamp: sessionStart,
+  isOnline: true
 });
+
+sessionRef.child("isOnline").onDisconnect().set(false);
+
 /* ==============================
    DEVICE GLOBAL STATS
 ============================== */
@@ -392,6 +392,12 @@ pageRef.update({
    TOTAL TIME ON PAGE (DEVICE)
 ============================== */
 
+  const endTime = Date.now();
+  const durationSec =
+  Math.floor((Date.now() - pageStart) / 1000);
+
+
+
 devicePageRef.child("totalTimeOnPageSec")
   .transaction(v => (v || 0) + durationSec);
 
@@ -401,8 +407,7 @@ deviceStatsRef.child("totalTimeSpent")
 
   const endTime = Date.now();
 
-  const durationSec =
-    Math.floor((endTime - pageStart) / 1000);
+ 
 
   pageRef.update({
     exitedAt: formatDateTime(endTime),
@@ -463,6 +468,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
