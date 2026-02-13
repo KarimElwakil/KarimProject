@@ -2910,8 +2910,13 @@ sessionRef.update({
    3️⃣ PAGE TRACKING
 ================================= */
 
-const pageName =
-  window.location.pathname.replace(/\//g, "_") || "home";
+const rawPage = window.location.pathname;
+const pageName = rawPage
+  .replace(/\//g, "_")
+  .replace(".html", "")
+  .replace(".", "")
+  || "home";
+
 
 const pageRef = sessionRef.child("pages/" + pageName);
 
@@ -2990,6 +2995,7 @@ window.addEventListener("scroll", () => {
   
 </body>
 </html>
+
 
 
 
