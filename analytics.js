@@ -77,6 +77,25 @@ document.addEventListener("DOMContentLoaded", function () {
   startTime: formatDateTime(sessionStart),
   startTimestamp: sessionStart
 });
+
+/* ==============================
+   DEVICE GLOBAL STATS
+============================== */
+
+const deviceStatsRef = deviceRef.child("stats");
+
+deviceStatsRef.child("totalSessions")
+  .transaction(v => (v || 0) + 1);
+  
+  if (navigator.connection) {
+
+  sessionRef.update({
+    networkType: navigator.connection.effectiveType,
+    downlink: navigator.connection.downlink + "Mb/s"
+  });
+
+}
+
   sessionRef.update({
   screenResolution: window.screen.width + "x" + window.screen.height
 });
@@ -139,6 +158,28 @@ observer.observe(document.documentElement, {
 
 const pageName = getPageName();
 
+  /* ==============================
+   PAGE TRANSITION TRACKING
+============================== */
+
+const previousPage = localStorage.getItem("lastPage");
+
+if (previousPage && previousPage !== pageName) {
+
+  const transitionRef = sessionRef.child("transitions").push();
+
+  transitionRef.set({
+    from: previousPage,
+    to: pageName,
+    at: formatDateTime(Date.now())
+  });
+
+}
+
+// حفظ الصفحة الحالية للانتقال القادم
+localStorage.setItem("lastPage", pageName);
+
+
 
   const pageStart = Date.now();
 
@@ -174,6 +215,23 @@ setInterval(function () {
   /* ========= SCROLL TRACKING FIXED ========= */
 
 let maxScroll = 0;
+  let lastScrollTime = Date.now();
+let scrollSpeedSum = 0;
+let scrollCount = 0;
+
+window.addEventListener("scroll", function () {
+
+  const now = Date.now();
+  const diff = now - lastScrollTime;
+
+  if (diff > 0) {
+    scrollSpeedSum += diff;
+    scrollCount++;
+  }
+
+  lastScrollTime = now;
+});
+
 
 function updateScroll() {
 
@@ -234,6 +292,19 @@ setInterval(function () {
   // عند الخروج
 function savePageExit() {
 
+  const avgScrollSpeed =
+  scrollCount > 0 ? (scrollSpeedSum / scrollCount).toFixed(0) : 0;
+
+pageRef.update({
+  avgScrollIntervalMs: avgScrollSpeed
+});
+
+  const sessionDurationSec =
+  Math.floor((Date.now() - sessionStart) / 1000);
+
+deviceStatsRef.child("totalTimeSpent")
+  .transaction(v => (v || 0) + sessionDurationSec);
+
   const endTime = Date.now();
 
   const durationSec =
@@ -281,6 +352,7 @@ db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
