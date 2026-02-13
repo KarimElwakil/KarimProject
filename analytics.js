@@ -74,11 +74,24 @@ document.addEventListener("DOMContentLoaded", function () {
   device: detectDevice(),
   browser: detectBrowser(),
   fingerprint: getDeviceFingerprint(),
-  theme: document.documentElement.dataset.theme || "light",
   startTime: formatDateTime(sessionStart),
   startTimestamp: sessionStart
 });
-
+  sessionRef.update({
+  screenResolution: window.screen.width + "x" + window.screen.height
+});
+sessionRef.update({
+  language: navigator.language
+});
+sessionRef.update({
+  timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+});
+pageRef.update({
+  referrer: document.referrer || "Direct"
+});
+sessionRef.update({
+  isTouchDevice: ('ontouchstart' in window)
+});
 
 
   // تحديث الثيم كل 3 ثواني
@@ -88,7 +101,7 @@ setInterval(function () {
     theme: document.documentElement.dataset.theme || "light"
   });
 
-}, 3000);
+}, 500);
 
 
   // تحديث الثيم لو اتغير
@@ -146,6 +159,12 @@ setInterval(function () {
   enterTimestamp: pageStart,
   maxScroll: 0
 });
+
+  setTimeout(function () {
+  pageRef.update({
+    theme: document.documentElement.dataset.theme || "light"
+  });
+}, 500);
 
 
   /* ==============================
@@ -262,6 +281,7 @@ db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
