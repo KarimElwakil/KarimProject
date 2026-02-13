@@ -198,14 +198,7 @@ document.addEventListener("visibilitychange", function () {
 
 
     
-  }
-
-});
-
-
-   
-
-  });
+  
 
   /* ==============================
      Global Counters
@@ -219,6 +212,7 @@ db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
