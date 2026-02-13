@@ -74,13 +74,33 @@ document.addEventListener("DOMContentLoaded", function () {
      Page Tracking
   ============================== */
 
-  let pageName = window.location.pathname
-    .replace(/\//g, '')
-    .replace('.html', '') || "home";
+ function getCleanPageName() {
+  let path = window.location.pathname;
 
-  const pageRef = sessionRef.child("pages/" + pageName);
+  // لو الصفحة الرئيسية
+  if (path === "/" || path === "") {
+    return "home";
+  }
 
-  pageRef.child("enterTime").set(getDateTime());
+  // شيل أول /
+  path = path.substring(1);
+
+  // شيل .html
+  path = path.replace(".html", "");
+
+  // شيل اسم الفولدر لو موجود
+  if (path.includes("/")) {
+    path = path.split("/").pop();
+  }
+
+  return path;
+}
+
+const pageName = getCleanPageName();
+
+ const pageRef = db.ref("analytics/pages/" + pageName + "/views");
+pageRef.transaction(current => (current || 0) + 1);
+
 
   /* ==============================
      Global Counters
@@ -110,3 +130,4 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("Analytics tracking active");
 
 });
+
