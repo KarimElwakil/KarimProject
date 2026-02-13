@@ -100,13 +100,11 @@ deviceStatsRef.child("totalSessions")
   screenResolution: window.screen.width + "x" + window.screen.height
 });
 sessionRef.update({
-  language: navigator.language
+  language: "ar"
 });
+
 sessionRef.update({
   timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-});
-pageRef.update({
-  referrer: document.referrer || "Direct"
 });
 sessionRef.update({
   isTouchDevice: ('ontouchstart' in window)
@@ -184,6 +182,10 @@ localStorage.setItem("lastPage", pageName);
   const pageStart = Date.now();
 
   const pageRef = sessionRef.child("pages").child(pageName);
+
+  pageRef.update({
+  referrer: document.referrer || "Direct"
+});
 
   // تحديث الثيم للصفحة كل 3 ثواني
 setInterval(function () {
@@ -352,6 +354,7 @@ db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
