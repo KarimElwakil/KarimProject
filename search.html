@@ -2923,12 +2923,80 @@ connectedRef.on("value", function(snapshot){
 
 </script>
 
+  <script>
+/* ===============================
+   ADVANCED SESSION TRACKING
+================================ */
+
+const db = firebase.database();
+const sessionId = db.ref("analytics/sessions").push().key;
+
+const sessionRef = db.ref("analytics/sessions/" + sessionId);
+
+/* ===== Device Detection ===== */
+function getDeviceType() {
+  const ua = navigator.userAgent;
+  if (/mobile/i.test(ua)) return "Mobile";
+  if (/tablet/i.test(ua)) return "Tablet";
+  return "Desktop";
+}
+
+/* ===== Session Start ===== */
+sessionRef.set({
+  device: getDeviceType(),
+  browser: navigator.userAgent,
+  startTime: Date.now(),
+  page: window.location.pathname,
+  actions: {}
+});
+
+/* ===== Track Page Time ===== */
+const startTime = Date.now();
+
+window.addEventListener("beforeunload", () => {
+  const duration = Date.now() - startTime;
+
+  sessionRef.update({
+    endTime: Date.now(),
+    duration: duration
+  });
+});
+
+/* ===== Track Clicks ===== */
+document.addEventListener("click", function(e){
+  const actionId = sessionRef.child("actions").push().key;
+
+  sessionRef.child("actions/" + actionId).set({
+    type: "click",
+    target: e.target.tagName,
+    time: Date.now()
+  });
+});
+
+/* ===== Track Scroll ===== */
+let scrollTimeout;
+
+window.addEventListener("scroll", function(){
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    const actionId = sessionRef.child("actions").push().key;
+
+    sessionRef.child("actions/" + actionId).set({
+      type: "scroll",
+      position: window.scrollY,
+      time: Date.now()
+    });
+  }, 800);
+});
+</script>
+
 
 
 
   
 </body>
 </html>
+
 
 
 
