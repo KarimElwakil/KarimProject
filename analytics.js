@@ -197,28 +197,13 @@ document.addEventListener("visibilitychange", function () {
 });
 
 
-    document.addEventListener("visibilitychange", function () {
-
-  if (document.visibilityState === "hidden") {
-
-    const endTime = Date.now();
-
-    pageRef.update({
-      durationOnPageSec:
-        Math.floor((endTime - pageStart) / 1000)
-    });
-
+    
   }
 
 });
 
 
-    pageRef.update({
-      exitedAt: formatDateTime(endTime),
-      durationOnPageSec:
-        Math.floor((endTime - pageStart) / 1000),
-      maxScroll: maxScroll
-    });
+   
 
   });
 
@@ -226,13 +211,16 @@ document.addEventListener("visibilitychange", function () {
      Global Counters
   ============================== */
 
-  db.ref("analytics/overview/pageViews")
-    .transaction(v => (v || 0) + 1);
+  // Global Counters
+db.ref("analytics/overview/pageViews")
+  .transaction(v => (v || 0) + 1);
 
-  db.ref("analytics/overview/totalVisits")
-    .transaction(v => (v || 0) + 1);
+db.ref("analytics/overview/totalVisits")
+  .transaction(v => (v || 0) + 1);
 
-});
+}); // ← دي نهاية DOMContentLoaded
+
+
 
 
 
