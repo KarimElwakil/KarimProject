@@ -108,7 +108,7 @@ fetch("https://ipapi.co/json/")
     sessionRef.set({
       device: detectDevice(),
       browser: detectBrowser(),
-      os: navigator.platform,
+     os: detectOS(),
       country: loc.country_name || "Unknown",
       city: loc.city || "",
       startTime: formatDateTime(sessionStart),
@@ -129,11 +129,15 @@ sessionRef.update({
     sessionRef.set({
       device: detectDevice(),
       browser: detectBrowser(),
-      os: navigator.platform,
+     os: detectOS(),
       country: "Unknown",
       startTime: formatDateTime(sessionStart),
       startTimestamp: sessionStart
+      isOnline: true,
     });
+
+
+
 
   });
 
@@ -447,10 +451,6 @@ devicePageRef.child("totalTimeOnPageSec")
 
 
 
-devicePageRef.child("totalTimeOnPageSec")
-  .transaction(v => (v || 0) + durationSec);
-
-
 deviceStatsRef.child("totalTimeSpent")
   .transaction(v => (v || 0) + sessionDurationSec);
 
@@ -517,6 +517,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
