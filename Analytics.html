@@ -430,7 +430,6 @@ db.ref("analytics/devices").on("value", snap => {
 
 
 
-// Device Types
 /* =============================
    DEVICE TYPES
 ============================= */
@@ -467,9 +466,9 @@ db.ref("analytics/devices").on("value", snap => {
   const total = mobile + desktop + tablet;
 
   renderDeviceTypes([
-    { type:"Mobile", icon:"📱", count:mobile, pct: ((mobile/total)*100||0).toFixed(1) },
-    { type:"Desktop", icon:"🖥️", count:desktop, pct: ((desktop/total)*100||0).toFixed(1) },
-    { type:"Tablet", icon:"📋", count:tablet, pct: ((tablet/total)*100||0).toFixed(1) }
+    { type:"Mobile", icon:"📱", count:mobile, pct: total ? ((mobile/total)*100).toFixed(1) : 0 },
+    { type:"Desktop", icon:"🖥️", count:desktop, pct: total ? ((desktop/total)*100).toFixed(1) : 0 },
+    { type:"Tablet", icon:"📋", count:tablet, pct: total ? ((tablet/total)*100).toFixed(1) : 0 }
   ]);
 
 });
@@ -826,6 +825,7 @@ db.ref("analytics/devices").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
