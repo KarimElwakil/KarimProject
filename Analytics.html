@@ -329,6 +329,49 @@
 
 const db = firebase.database();
 
+  // =============================
+// TOP STAT CARDS (FIX)
+// =============================
+
+// أيقونات
+const svgIcons = {
+  eye:'<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  users:'<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M17 20h5v-2a3 3 0 00-5-2M9 20H4v-2a3 3 0 015-2m8-6a4 4 0 11-8 0 4 4 0 018 0z"/></svg>',
+  bounce:'<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13 17h8V9m0 8l-8-8-4 4-6-6"/></svg>',
+  clock:'<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-width="2" d="M12 7v5l3 3"/></svg>',
+  page:'<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M9 12h6m-6 4h6M7 3h7l5 5v13H7z"/></svg>',
+  layers:'<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M12 2l10 6-10 6L2 8l10-6z"/></svg>',
+  userPlus:'<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M18 9v6m3-3h-6M12 14a4 4 0 10-8 0v4h8v-4z"/></svg>',
+  refresh:'<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 4v5h5M20 20v-5h-5"/></svg>'
+};
+
+function createStatCard(title,value,icon){
+  return `
+  <div class="glass stat-card">
+    <div class="stat-header">
+      <span class="stat-label">${title}</span>
+      <div class="stat-icon">${icon}</div>
+    </div>
+    <div class="stat-value">${value}</div>
+  </div>`;
+}
+
+// رسم الكروت
+document.getElementById("statsRow1").innerHTML = [
+  createStatCard("إجمالي الزيارات",'<span id="totalVisits">0</span>',svgIcons.eye),
+  createStatCard("الزوار الفريدين",'<span id="uniqueVisitors">0</span>',svgIcons.users),
+  createStatCard("معدل الارتداد",'<span id="bounceRate">0%</span>',svgIcons.bounce),
+  createStatCard("متوسط مدة الجلسة",'<span id="avgSession">0</span>',svgIcons.clock)
+].join("");
+
+document.getElementById("statsRow2").innerHTML = [
+  createStatCard("مشاهدات الصفحات",'<span id="pageViews">0</span>',svgIcons.page),
+  createStatCard("صفحات/جلسة",'<span id="pagesPerSession">0</span>',svgIcons.layers),
+  createStatCard("زوار جدد",'<span id="newVisitors">0</span>',svgIcons.userPlus),
+  createStatCard("زوار عائدين",'<span id="returningVisitors">0</span>',svgIcons.refresh)
+].join("");
+
+
 /* =============================
    COUNTRIES
 ============================= */
@@ -708,6 +751,7 @@ db.ref("analytics/sources").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
