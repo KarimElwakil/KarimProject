@@ -103,9 +103,13 @@ const sessionRef = deviceRef.child("sessions").child(sessionId);
   
 
   const baseSessionData = {
-  device: detectDevice(),
-  userAgent: navigator.userAgent,
-  platform: navigator.platform,
+ device: detectDevice(),
+deviceLabel:
+  detectDevice() +
+  " | " +
+  screen.width + "x" + screen.height +
+  " | " +
+  deviceId.slice(-4),
   browser: detectBrowser(),
   os: detectOS(),
   startTime: formatDateTime(sessionStart),
@@ -504,6 +508,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
