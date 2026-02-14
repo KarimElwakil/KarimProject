@@ -372,6 +372,14 @@ document.getElementById("statsRow2").innerHTML = [
 ].join("");
 
 
+
+
+  db.ref("analytics/overview/uniqueVisitors").on("value",snap=>{
+ if(!snap.exists()) return;
+ document.getElementById("uniqueVisitors").textContent =
+ Object.keys(snap.val()).length;
+});
+
 /* =============================
    COUNTRIES
 ============================= */
@@ -751,6 +759,7 @@ db.ref("analytics/sources").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
