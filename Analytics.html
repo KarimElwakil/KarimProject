@@ -546,10 +546,12 @@ db.ref("analytics/devices").on("value", snap => {
 
     Object.values(device.sessions).forEach(session => {
 
-      if (!session.device) return;
+     const label = session.deviceLabel || session.device;
 
-      names[session.device] =
-        names[session.deviceLabel || session.device]++
+if (!label) return;
+
+names[label] = (names[label] || 0) + 1;
+
 
     });
 
@@ -878,6 +880,7 @@ db.ref("analytics/devices").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
