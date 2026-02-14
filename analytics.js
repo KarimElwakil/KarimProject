@@ -143,13 +143,26 @@ const deviceRef = db.ref("analytics/devices/" + deviceId);
    SESSION
 ============================== */
 
-let sessionId = sessionStorage.getItem("sessionId");
+/* ==============================
+   SESSION FIX REAL
+============================== */
 
-if (!sessionId) {
-  sessionId = deviceRef.child("sessions").push().key;
+let sessionId = sessionStorage.getItem("sessionId");
+let lastActivity = localStorage.getItem("lastActivity");
+
+// لو مفيش جلسة أو مر عليها 30 دقيقة → جلسة جديدة
+if (!sessionId || !lastActivity || (Date.now() - lastActivity > 1800000)) {
+
+  sessionId = db.ref("analytics/devices/" + deviceId + "/sessions").push().key;
+
   sessionStorage.setItem("sessionId", sessionId);
+
 }
 
+// حدث آخر نشاط
+localStorage.setItem("lastActivity", Date.now());
+
+const deviceRef = db.ref("analytics/devices/" + deviceId);
 const sessionRef = deviceRef.child("sessions").child(sessionId);
 
 
@@ -194,14 +207,17 @@ fetch("https://ipapi.co/json/")
     baseSessionData.country = loc.country_name || "Unknown";
     baseSessionData.city = loc.city || "";
 
-    sessionRef.set(baseSessionData);
+    sessionRef.update(baseSessionData);
+
+
 
   })
   .catch(() => {
 
     baseSessionData.country = "Unknown";
 
-    sessionRef.set(baseSessionData);
+    sessionRef.update(baseSessionData);
+
 
   });
 
@@ -574,10 +590,28 @@ db.ref("analytics/overview/pageViews")
 db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
+  /* ==============================
+   GLOBAL OVERVIEW COUNTERS
+============================== */
+
+// زيارة
+db.ref("analytics/overview/totalVisits")
+.transaction(v => (v || 0) + 1);
+
+// page view
+db.ref("analytics/overview/pageViews")
+.transaction(v => (v || 0) + 1);
+
+// unique
+db.ref("analytics/overview/uniqueVisitors/" + deviceId)
+.set(true);
+
+
 
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
