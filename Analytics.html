@@ -397,14 +397,17 @@ db.ref("analytics/devices").on("value", snap => {
 
     Object.values(device.sessions).forEach(session => {
 
-      const c = session.country || "Unknown";
-      countries[c] = (countries[c] || 0) + 1;
+      if (!session.country) return;
+
+      countries[session.country] =
+        (countries[session.country] || 0) + 1;
 
     });
 
   });
 
-  const total = Object.values(countries).reduce((a,b)=>a+b,0);
+  const total = Object.values(countries)
+    .reduce((a,b)=>a+b,0);
 
   const list = Object.keys(countries).map(name => ({
     country: name,
@@ -450,7 +453,7 @@ db.ref("analytics/devices").on("value", snap => {
   const devices = snap.val();
   if (!devices) return;
 
-  const deviceNames = {};
+  const names = {};
 
   Object.values(devices).forEach(device => {
 
@@ -458,22 +461,25 @@ db.ref("analytics/devices").on("value", snap => {
 
     Object.values(device.sessions).forEach(session => {
 
-      const name = session.device || "Unknown";
-      deviceNames[name] = (deviceNames[name] || 0) + 1;
+      if (!session.device) return;
+
+      names[session.device] =
+        (names[session.device] || 0) + 1;
 
     });
 
   });
 
-  const list = Object.keys(deviceNames).map(name => ({
+  const list = Object.keys(names).map(name => ({
     name,
     brand: "",
-    count: deviceNames[name]
+    count: names[name]
   }));
 
   renderDeviceNames(list);
 
 });
+
 
 
 // Browsers
@@ -519,14 +525,17 @@ db.ref("analytics/devices").on("value", snap => {
 
     Object.values(device.sessions).forEach(session => {
 
-      const os = session.os || "Unknown";
-      osCount[os] = (osCount[os] || 0) + 1;
+      if (!session.os) return;
+
+      osCount[session.os] =
+        (osCount[session.os] || 0) + 1;
 
     });
 
   });
 
-  const total = Object.values(osCount).reduce((a,b)=>a+b,0);
+  const total = Object.values(osCount)
+    .reduce((a,b)=>a+b,0);
 
   const list = Object.keys(osCount).map(name => ({
     name,
@@ -757,4 +766,5 @@ db.ref("analytics/devices").on("value", snap => {
 
 </script>
 </body>
+
 </html>
