@@ -101,15 +101,42 @@ const sessionRef = deviceRef.child("sessions").child(sessionId);
 
 
   
- sessionRef.update({
-  device: detectDevice(),
-  os: detectOS(),
-  browser: detectBrowser(),
-  fingerprint: getDeviceFingerprint(),
-  startTime: formatDateTime(sessionStart),
-  startTimestamp: sessionStart,
-  isOnline: true
+fetch("https://ipapi.co/json/")
+  .then(res => res.json())
+  .then(loc => {
+
+    sessionRef.set({
+      device: detectDevice(),
+      browser: detectBrowser(),
+      os: navigator.platform,
+      country: loc.country_name || "Unknown",
+      city: loc.city || "",
+      startTime: formatDateTime(sessionStart),
+      startTimestamp: sessionStart
+    });
+
+    const source = document.referrer
+  ? new URL(document.referrer).hostname
+  : "Direct";
+
+sessionRef.update({
+  referrer: source
 });
+
+  })
+  .catch(() => {
+
+    sessionRef.set({
+      device: detectDevice(),
+      browser: detectBrowser(),
+      os: navigator.platform,
+      country: "Unknown",
+      startTime: formatDateTime(sessionStart),
+      startTimestamp: sessionStart
+    });
+
+  });
+
 
 sessionRef.child("isOnline").onDisconnect().set(false);
 
@@ -121,6 +148,10 @@ const deviceStatsRef = deviceRef.child("stats");
 
 deviceStatsRef.child("totalSessions")
   .transaction(v => (v || 0) + 1);
+
+  db.ref("analytics/overview/uniqueVisitors")
+  .transaction(v => (v || 0) + 1);
+
   
   if (navigator.connection) {
 
@@ -385,6 +416,13 @@ setInterval(function () {
   // عند الخروج
 function savePageExit() {
 
+  db.ref("analytics/overview/totalSessionTime")
+  .transaction(v => (v || 0) + durationSec);
+
+db.ref("analytics/overview/totalSessions")
+  .transaction(v => (v || 0) + 1);
+
+
   const avgScrollSpeed =
   scrollCount > 0 ? (scrollSpeedSum / scrollCount).toFixed(0) : 0;
 
@@ -479,6 +517,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
