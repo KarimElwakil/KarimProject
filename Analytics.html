@@ -355,6 +355,14 @@ db.ref("analytics/overview").on("value", snap => {
   const data = snap.val();
   if (!data) return;
 
+  const avgEl = document.querySelectorAll(".stat-value")[3];
+
+if (data.totalSessionTime && data.totalSessions) {
+  const avg = Math.floor(data.totalSessionTime / data.totalSessions);
+  avgEl.textContent = avg + " ث";
+}
+
+
   const stats = document.querySelectorAll(".stat-value");
 
   stats[0].textContent = data.totalVisits || 0;
@@ -782,7 +790,7 @@ db.ref("analytics/devices").on("value", snap => {
   const devices = snap.val();
   if (!devices) return;
 
-  const browsers = {};
+  const sources = {};
 
   Object.values(devices).forEach(device => {
 
@@ -790,25 +798,23 @@ db.ref("analytics/devices").on("value", snap => {
 
     Object.values(device.sessions).forEach(session => {
 
-      const b = session.browser || "Unknown";
+      const src = session.referrer || "Direct";
 
-      browsers[b] = (browsers[b] || 0) + 1;
+      sources[src] = (sources[src] || 0) + 1;
 
     });
 
   });
 
-  const total = Object.values(browsers).reduce((a,b)=>a+b,0);
-
-  const list = Object.keys(browsers).map(name => ({
-    name,
-    count: browsers[name],
-    pct: ((browsers[name]/total)*100).toFixed(1)
+  const list = Object.keys(sources).map(name => ({
+    source: name,
+    visits: sources[name]
   }));
 
-  renderBrowsers(list);
+  renderSources(list);
 
 });
+
 
 /* =============================
    REALTIME
@@ -843,5 +849,6 @@ db.ref("analytics/devices").on("value", snap => {
 </body>
 
 </html>
+
 
 
