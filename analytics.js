@@ -156,6 +156,17 @@ deviceStatsRef.child("totalSessions")
   db.ref("analytics/overview/uniqueVisitors")
   .transaction(v => (v || 0) + 1);
 
+sessionRef.update({
+  lastActive: Date.now()
+});
+
+setInterval(() => {
+  sessionRef.update({
+    lastActive: Date.now()
+  });
+}, 10000);
+
+
   
   if (navigator.connection) {
 
@@ -499,24 +510,11 @@ db.ref("analytics/overview/pageViews")
 db.ref("analytics/overview/totalVisits")
   .transaction(v => (v || 0) + 1);
 
-  fetch("https://ipapi.co/json/")
-  .then(res => res.json())
-  .then(data => {
 
-    sessionRef.update({
-      country: data.country_name || "Unknown",
-      countryCode: data.country || "UN"
-    });
-
-  })
-  .catch(() => {
-    sessionRef.update({
-      country: "Unknown"
-    });
-  });
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
