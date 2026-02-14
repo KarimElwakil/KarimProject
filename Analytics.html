@@ -646,22 +646,60 @@ function renderPages(list = []) {
   `).join('');
 }
 
-  db.ref("analytics/sources").on("value", snap => {
 
-  const sources = snap.val();
-  if (!sources) {
+  // =============================
+// SOURCES RENDER
+// =============================
+
+function renderSources(list = []) {
+  const container = document.getElementById('sourcesList');
+
+  if (!container) return;
+
+  if (!list.length) {
+    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div>`;
+    return;
+  }
+
+  const total = list.reduce((a,b)=>a+b.visits,0);
+
+  container.innerHTML = list.map(s=>`
+    <div class="source-item list-item">
+      <span class="source-icon">🌐</span>
+      <div class="info">
+        <div class="info-row">
+          <span class="name">${s.source}</span>
+          <span class="count">${s.visits}</span>
+        </div>
+        <div class="progress-bg">
+          <div class="progress-bar" style="width:${(s.visits/total)*100}%"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+  // =============================
+// LOAD SOURCES FROM FIREBASE
+// =============================
+
+db.ref("analytics/sources").on("value", snap => {
+
+  const data = snap.val();
+  if (!data) {
     renderSources([]);
     return;
   }
 
-  const list = Object.keys(sources).map(key => ({
+  const list = Object.keys(data).map(key => ({
     source: key,
-    visits: sources[key]
+    visits: data[key]
   }));
 
   renderSources(list);
 
 });
+
 
 
 </script>
@@ -670,6 +708,7 @@ function renderPages(list = []) {
 </body>
 
 </html>
+
 
 
 
