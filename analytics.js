@@ -101,43 +101,33 @@ const sessionRef = deviceRef.child("sessions").child(sessionId);
 
 
   
+
+  const baseSessionData = {
+  device: detectDevice(),
+  userAgent: navigator.userAgent,
+  platform: navigator.platform,
+  browser: detectBrowser(),
+  os: detectOS(),
+  startTime: formatDateTime(sessionStart),
+  startTimestamp: sessionStart,
+  isOnline: true
+};
+
 fetch("https://ipapi.co/json/")
   .then(res => res.json())
   .then(loc => {
 
-    sessionRef.set({
-      device: detectDevice(),
-      browser: detectBrowser(),
-     os: detectOS(),
-      country: loc.country_name || "Unknown",
-      city: loc.city || "",
-      startTime: formatDateTime(sessionStart),
-      startTimestamp: sessionStart
-    });
+    baseSessionData.country = loc.country_name || "Unknown";
+    baseSessionData.city = loc.city || "";
 
-    const source = document.referrer
-  ? new URL(document.referrer).hostname
-  : "Direct";
-
-sessionRef.update({
-  referrer: source
-});
+    sessionRef.set(baseSessionData);
 
   })
   .catch(() => {
 
-    sessionRef.set({
-      device: detectDevice(),
-      browser: detectBrowser(),
-     os: detectOS(),
-      country: "Unknown",
-      startTime: formatDateTime(sessionStart),
-      startTimestamp: sessionStart,
-      isOnline: true
-    });
+    baseSessionData.country = "Unknown";
 
-
-
+    sessionRef.set(baseSessionData);
 
   });
 
@@ -514,6 +504,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
