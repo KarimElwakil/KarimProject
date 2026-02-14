@@ -416,7 +416,7 @@ devicePageRef.child("totalTimeOnPageSec")
 deviceStatsRef.child("totalTimeSpent")
   .transaction(v => (v || 0) + sessionDurationSec);
 
-  const endTime = Date.now();
+  
 
  
 
@@ -479,6 +479,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
