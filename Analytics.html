@@ -484,18 +484,19 @@ db.ref("analytics/overview").on("value", snap => {
   const data = snap.val();
   if (!data) return;
 
-  const totalEl = document.getElementById("totalVisits");
-  const viewsEl = document.getElementById("pageViews");
+  if (document.getElementById("totalVisits"))
+    document.getElementById("totalVisits").textContent = data.totalVisits || 0;
 
-  if (totalEl) totalEl.textContent = data.totalVisits || 0;
-  if (viewsEl) viewsEl.textContent = data.pageViews || 0;
+  if (document.getElementById("pageViews"))
+    document.getElementById("pageViews").textContent = data.pageViews || 0;
 
   if (data.totalSessionTime && data.totalSessions) {
     const avg = Math.floor(data.totalSessionTime / data.totalSessions);
-    const values = document.querySelectorAll(".stat-value");
-    if (values[3]) values[3].textContent = avg + " ث";
+    if (document.getElementById("avgSession"))
+      document.getElementById("avgSession").textContent = avg + " ث";
   }
 });
+
 
   /* =============================
    RENDER FUNCTIONS (MISSING FIX)
@@ -645,6 +646,23 @@ function renderPages(list = []) {
   `).join('');
 }
 
+  db.ref("analytics/sources").on("value", snap => {
+
+  const sources = snap.val();
+  if (!sources) {
+    renderSources([]);
+    return;
+  }
+
+  const list = Object.keys(sources).map(key => ({
+    source: key,
+    visits: sources[key]
+  }));
+
+  renderSources(list);
+
+});
+
 
 </script>
 
@@ -652,6 +670,7 @@ function renderPages(list = []) {
 </body>
 
 </html>
+
 
 
 
