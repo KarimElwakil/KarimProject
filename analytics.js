@@ -100,7 +100,7 @@ Math.random().toString(36).substring(2);
 
 localStorage.setItem("deviceId", deviceId);
 
-const sessionRef = db.ref("analytics/devices/" + deviceId + "/sessions").push();
+
 
 
   /* ==============================
@@ -546,6 +546,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
