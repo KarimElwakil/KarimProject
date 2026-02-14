@@ -762,8 +762,26 @@ db.ref("analytics/devices").on("value", snap => {
 
   Object.values(devices).forEach(device => {
 
-    const type = device.sessions ?
-      Object.values(device.sessions)[0]?.device : null;
+    Object.values(devices).forEach(device => {
+
+  if (!device.sessions) return;
+
+  Object.values(device.sessions).forEach(session => {
+
+    const type = session.device;
+    if (!type) return;
+
+    if (type.includes("iPhone") || type.includes("Android"))
+      mobile++;
+    else if (type.includes("iPad"))
+      tablet++;
+    else
+      desktop++;
+
+  });
+
+});
+
 
     if (!type) return;
 
@@ -860,6 +878,7 @@ db.ref("analytics/devices").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
