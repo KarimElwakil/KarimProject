@@ -1,5 +1,12 @@
 console.log("Analytics system starting...");
 
+console.log("Firebase working test");
+
+firebase.database().ref("test")
+  .set({ time: Date.now() })
+  .then(() => console.log("WRITE OK"))
+  .catch(err => console.error("WRITE ERROR", err));
+
 document.addEventListener("DOMContentLoaded", function () {
 
   if (typeof firebase === "undefined") {
@@ -393,8 +400,12 @@ pageRef.update({
 ============================== */
 
   const endTime = Date.now();
-  const durationSec =
-  Math.floor((Date.now() - pageStart) / 1000);
+const durationSec =
+  Math.floor((endTime - pageStart) / 1000);
+
+devicePageRef.child("totalTimeOnPageSec")
+  .transaction(v => (v || 0) + durationSec);
+
 
 
 
@@ -468,6 +479,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
