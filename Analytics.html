@@ -481,16 +481,20 @@ db.ref("analytics/pages").on("value", snap => {
 ============================= */
 
 db.ref("analytics/overview").on("value", snap => {
-
   const data = snap.val();
   if (!data) return;
 
-  const total = document.getElementById("totalVisits");
-  const views = document.getElementById("pageViews");
+  const totalEl = document.getElementById("totalVisits");
+  const viewsEl = document.getElementById("pageViews");
 
-  if (total) total.textContent = data.totalVisits || 0;
-  if (views) views.textContent = data.pageViews || 0;
+  if (totalEl) totalEl.textContent = data.totalVisits || 0;
+  if (viewsEl) viewsEl.textContent = data.pageViews || 0;
 
+  if (data.totalSessionTime && data.totalSessions) {
+    const avg = Math.floor(data.totalSessionTime / data.totalSessions);
+    const values = document.querySelectorAll(".stat-value");
+    if (values[3]) values[3].textContent = avg + " ث";
+  }
 });
 
   /* =============================
@@ -592,6 +596,55 @@ function renderOS(list = []) {
   `).join('');
 }
 
+  function renderBrowsers(list = []) {
+  const container = document.getElementById("browserList");
+  if (!container) return;
+
+  if (!list.length) {
+    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(b => `
+    <div class="bar-item">
+      <div class="bar-header">
+        <span class="bar-name">${b.name}</span>
+        <span class="bar-count">${b.count}</span>
+      </div>
+      <div class="progress-bg">
+        <div class="progress-bar" style="width:${b.pct}%"></div>
+      </div>
+      <span class="bar-pct">${b.pct}%</span>
+    </div>
+  `).join('');
+}
+
+
+function renderPages(list = []) {
+  const tbody = document.querySelector("#pagesTable tbody");
+  if (!tbody) return;
+
+  if (!list.length) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" style="color:var(--muted)">
+          لا توجد بيانات حالياً
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  tbody.innerHTML = list.map(p => `
+    <tr>
+      <td>${p.title}</td>
+      <td class="mono" style="color:var(--muted)">${p.path}</td>
+      <td class="mono primary">${p.views}</td>
+      <td class="mono accent">${p.unique}</td>
+    </tr>
+  `).join('');
+}
+
 
 </script>
 
@@ -599,6 +652,7 @@ function renderOS(list = []) {
 </body>
 
 </html>
+
 
 
 
