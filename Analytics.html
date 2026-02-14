@@ -327,70 +327,10 @@
 
 <script>
 
-
-// ============ HELPERS ============
-const fmt = n => n.toLocaleString();
-const svgIcons = {
-  eye: '<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>',
-  users: '<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>',
-  bounce: '<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/></svg>',
-  clock: '<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
-  page: '<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>',
-  layers: '<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>',
-  userPlus: '<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>',
-  refresh: '<svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>'
-};
-
-function createStatCard(title, value, icon, change, type, delay) {
-  return `<div class="glass stat-card anim-up" style="animation-delay:${delay}ms">
-    <div class="stat-header"><span class="stat-label">${title}</span><div class="stat-icon">${icon}</div></div>
-    <div class="stat-value">${value}</div>
-    ${change ? `<span class="stat-change ${type}">${change}</span>` : ''}
-  </div>`;
-}
-
 const db = firebase.database();
 
-db.ref("analytics/overview").on("value", snap => {
-  const data = snap.val();
-  if (!data) return;
-
-  const avgEl = document.querySelectorAll(".stat-value")[3];
-
-if (data.totalSessionTime && data.totalSessions) {
-  const avg = Math.floor(data.totalSessionTime / data.totalSessions);
-  avgEl.textContent = avg + " ث";
-}
-
-
-  const stats = document.querySelectorAll(".stat-value");
-
-  stats[0].textContent = data.totalVisits || 0;
-  stats[4].textContent = data.pageViews || 0;
-});
-
-
-// ============ RENDER ============
-document.getElementById('statsRow1').innerHTML =
-[
-  createStatCard("إجمالي الزيارات", '<span id="totalVisits">--</span>', svgIcons.eye, "", "", 50),
-  createStatCard("الزوار الفريدين", "--", svgIcons.users, "", "", 100),
-  createStatCard("معدل الارتداد", "--", svgIcons.bounce, "", "", 150),
-  createStatCard("متوسط مدة الجلسة", "--", svgIcons.clock, "", "", 200)
-].join('');
-
-document.getElementById('statsRow2').innerHTML =
-[
-  createStatCard("مشاهدات الصفحات", '<span id="pageViews">--</span>', svgIcons.page, "", "", 250),
-  createStatCard("صفحات/جلسة", "--", svgIcons.layers, "", "", 300),
-  createStatCard("زوار جدد", "--", svgIcons.userPlus, "", "", 350),
-  createStatCard("زوار عائدين", "--", svgIcons.refresh, "", "", 400)
-].join('');
-
-
-
 /* =============================
-   COUNTRY
+   COUNTRIES
 ============================= */
 
 db.ref("analytics/devices").on("value", snap => {
@@ -399,49 +339,14 @@ db.ref("analytics/devices").on("value", snap => {
   if (!devices) return;
 
   const countries = {};
-
-  Object.values(devices).forEach(device => {
-
-    if (!device.sessions) return;
-
-    Object.values(device.sessions).forEach(session => {
-
-      if (!session.country) return;
-
-      countries[session.country] =
-        (countries[session.country] || 0) + 1;
-
-    });
-
-  });
-
-  const total = Object.values(countries)
-    .reduce((a,b)=>a+b,0);
-
-  const list = Object.keys(countries).map(name => ({
-    country: name,
-    visits: countries[name],
-    pct: total ? ((countries[name]/total)*100).toFixed(1) : 0
-  }));
-
-  renderCountries(list);
-
-});
-
-
-
-/* =============================
-   DEVICE TYPES
-============================= */
-
-db.ref("analytics/devices").on("value", snap => {
-
-  const devices = snap.val();
-  if (!devices) return;
+  const deviceNames = {};
+  const osCount = {};
+  const browsers = {};
 
   let mobile = 0;
   let desktop = 0;
   let tablet = 0;
+  let active = 0;
 
   Object.values(devices).forEach(device => {
 
@@ -449,8 +354,29 @@ db.ref("analytics/devices").on("value", snap => {
 
     Object.values(device.sessions).forEach(session => {
 
-      const type = session.device;
-      if (!type) return;
+      /* COUNTRY */
+      if (session.country)
+        countries[session.country] =
+          (countries[session.country] || 0) + 1;
+
+      /* DEVICE NAME */
+      const label = session.deviceLabel || session.device;
+      if (label)
+        deviceNames[label] =
+          (deviceNames[label] || 0) + 1;
+
+      /* OS */
+      if (session.os)
+        osCount[session.os] =
+          (osCount[session.os] || 0) + 1;
+
+      /* BROWSER */
+      if (session.browser)
+        browsers[session.browser] =
+          (browsers[session.browser] || 0) + 1;
+
+      /* DEVICE TYPE */
+      const type = session.device || "";
 
       if (type.includes("iPhone") || type.includes("Android"))
         mobile++;
@@ -459,221 +385,95 @@ db.ref("analytics/devices").on("value", snap => {
       else
         desktop++;
 
+      /* REALTIME */
+      if (session.isOnline === true)
+        active++;
+
     });
 
   });
 
-  const total = mobile + desktop + tablet;
+  /* ===== RENDER COUNTRIES ===== */
+
+  const totalCountries = Object.values(countries).reduce((a,b)=>a+b,0);
+
+  renderCountries(
+    Object.keys(countries).map(name => ({
+      country: name,
+      visits: countries[name],
+      pct: totalCountries ? ((countries[name]/totalCountries)*100).toFixed(1) : 0
+    }))
+  );
+
+  /* ===== RENDER DEVICE TYPES ===== */
+
+  const totalDevices = mobile + desktop + tablet;
 
   renderDeviceTypes([
-    { type:"Mobile", icon:"📱", count:mobile, pct: total ? ((mobile/total)*100).toFixed(1) : 0 },
-    { type:"Desktop", icon:"🖥️", count:desktop, pct: total ? ((desktop/total)*100).toFixed(1) : 0 },
-    { type:"Tablet", icon:"📋", count:tablet, pct: total ? ((tablet/total)*100).toFixed(1) : 0 }
+    { type:"Mobile", icon:"📱", count:mobile, pct: totalDevices ? ((mobile/totalDevices)*100).toFixed(1) : 0 },
+    { type:"Desktop", icon:"🖥️", count:desktop, pct: totalDevices ? ((desktop/totalDevices)*100).toFixed(1) : 0 },
+    { type:"Tablet", icon:"📋", count:tablet, pct: totalDevices ? ((tablet/totalDevices)*100).toFixed(1) : 0 }
   ]);
 
+  /* ===== RENDER DEVICE NAMES ===== */
+
+  renderDeviceNames(
+    Object.keys(deviceNames).map(name => ({
+      name,
+      count: deviceNames[name]
+    }))
+  );
+
+  /* ===== RENDER OS ===== */
+
+  const totalOS = Object.values(osCount).reduce((a,b)=>a+b,0);
+
+  renderOS(
+    Object.keys(osCount).map(name => ({
+      name,
+      count: osCount[name],
+      pct: totalOS ? ((osCount[name]/totalOS)*100).toFixed(1) : 0
+    }))
+  );
+
+  /* ===== RENDER BROWSERS ===== */
+
+  const totalBrowsers = Object.values(browsers).reduce((a,b)=>a+b,0);
+
+  renderBrowsers(
+    Object.keys(browsers).map(name => ({
+      name,
+      count: browsers[name],
+      pct: totalBrowsers ? ((browsers[name]/totalBrowsers)*100).toFixed(1) : 0
+    }))
+  );
+
+  /* ===== REALTIME ===== */
+
+  document.getElementById("realtimeCount").textContent = active;
+
 });
 
 
 /* =============================
-   DEVICE NAMES
+   PAGES
 ============================= */
-
-db.ref("analytics/devices").on("value", snap => {
-
-  const devices = snap.val();
-  if (!devices) return;
-
-  const names = {};
-
-  Object.values(devices).forEach(device => {
-
-    if (!device.sessions) return;
-
-    Object.values(device.sessions).forEach(session => {
-
-     const label = session.deviceLabel || session.device;
-
-if (!label) return;
-
-names[label] = (names[label] || 0) + 1;
-
-
-    });
-
-  });
-
-  const list = Object.keys(names).map(name => ({
-    name,
-    brand: "",
-    count: names[name]
-  }));
-
-  renderDeviceNames(list);
-
-  
-
-});
-
-
-
-// Browsers
-function renderBrowsers(list = []) {
-  const container = document.getElementById('browserList');
-
-  if (!list.length) {
-    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div>`;
-    return;
-  }
-
-  container.innerHTML = list.map(b => `
-    <div class="bar-item">
-      <div class="bar-header">
-        <span class="bar-name">${b.name}</span>
-        <span class="bar-count">${b.count}</span>
-      </div>
-      <div class="progress-bg">
-        <div class="progress-bar" style="width:${b.pct}%"></div>
-      </div>
-      <span class="bar-pct">${b.pct}%</span>
-    </div>
-  `).join('');
-}
-
-
-
-
-/* =============================
-   OS
-============================= */
-
-db.ref("analytics/devices").on("value", snap => {
-
-  const devices = snap.val();
-  if (!devices) return;
-
-  const osCount = {};
-
-  Object.values(devices).forEach(device => {
-
-    if (!device.sessions) return;
-
-    Object.values(device.sessions).forEach(session => {
-
-      if (!session.os) return;
-
-      osCount[session.os] =
-        (osCount[session.os] || 0) + 1;
-
-    });
-
-  });
-
-  const total = Object.values(osCount)
-    .reduce((a,b)=>a+b,0);
-
-  const list = Object.keys(osCount).map(name => ({
-    name,
-    count: osCount[name],
-    pct: total ? ((osCount[name]/total)*100).toFixed(1) : 0
-  }));
-
-  renderOS(list);
-
-
-});
-
-
-// Pages Table
-function renderPages(list = []) {
-  const tbody = document.querySelector('#pagesTable tbody');
-
-  if (!list.length) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="4" style="color:var(--muted)">
-          لا توجد بيانات حالياً
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
-  tbody.innerHTML = list.map(p => `
-    <tr>
-      <td>${p.title}</td>
-      <td class="mono" style="color:var(--muted)">${p.path}</td>
-      <td class="mono primary">${p.views}</td>
-      <td class="mono accent">${p.unique}</td>
-    </tr>
-  `).join('');
-}
-
-
-
-
-// Traffic Sources
-function renderSources(list = []) {
-  const container = document.getElementById('sourcesList');
-
-  if (!list.length) {
-    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div>`;
-    return;
-  }
-
-  const total = list.reduce((a, b) => a + b.visits, 0);
-
-  container.innerHTML = list.map(s => `
-    <div class="source-item list-item">
-      <span class="source-icon">${s.icon || "🌐"}</span>
-      <div class="info">
-        <div class="info-row">
-          <span class="name">${s.source}</span>
-          <span class="count">${s.visits}</span>
-        </div>
-        <div class="progress-bg">
-          <div class="progress-bar" style="width:${(s.visits/total)*100}%"></div>
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-
-
-
-function updateRealtime(current, last30) {
-  document.getElementById("realtimeCount").textContent =
-    current ?? "--";
-  document.getElementById("last30Min").textContent =
-    last30 ?? "--";
-}
-
-
 
 db.ref("analytics/pages").on("value", snap => {
 
   const pages = snap.val();
   if (!pages) return;
 
-  const list = [];
-
-  Object.keys(pages).forEach(key => {
-
-    list.push({
-      title: key,
-      path: "/" + key,
-      views: pages[key].views || 0,
-      unique: "-"
-    });
-
-  });
-
-  list.sort((a,b) => b.views - a.views);
+  const list = Object.keys(pages).map(key => ({
+    title: key,
+    path: "/" + key,
+    views: pages[key].views || 0,
+    unique: "-"
+  })).sort((a,b)=>b.views - a.views);
 
   renderPages(list);
 
 });
-
 
 
 /* =============================
@@ -693,138 +493,13 @@ db.ref("analytics/overview").on("value", snap => {
 
 });
 
-
-/* =============================
-   DEVICE TYPES
-============================= */
-
-db.ref("analytics/devices").on("value", snap => {
-
-  const devices = snap.val();
-  if (!devices) return;
-
-  let mobile = 0;
-  let desktop = 0;
-  let tablet = 0;
-
-  Object.values(devices).forEach(device => {
-
-    Object.values(devices).forEach(device => {
-
-  if (!device.sessions) return;
-
-  Object.values(device.sessions).forEach(session => {
-
-    const type = session.device;
-    if (!type) return;
-
-    if (type.includes("iPhone") || type.includes("Android"))
-      mobile++;
-    else if (type.includes("iPad"))
-      tablet++;
-    else
-      desktop++;
-
-  });
-
-});
-
-
-    if (!type) return;
-
-    if (type.includes("iPhone") || type.includes("Android"))
-      mobile++;
-    else if (type.includes("iPad"))
-      tablet++;
-    else
-      desktop++;
-
-  });
-
-  const total = mobile + desktop + tablet;
-
-  renderDeviceTypes([
-    { type:"Mobile", icon:"📱", count:mobile, pct: ((mobile/total)*100||0).toFixed(1) },
-    { type:"Desktop", icon:"🖥️", count:desktop, pct: ((desktop/total)*100||0).toFixed(1) },
-    { type:"Tablet", icon:"📋", count:tablet, pct: ((tablet/total)*100||0).toFixed(1) }
-  ]);
-
-});
-
-/* =============================
-   BROWSERS
-============================= */
-
-db.ref("analytics/devices").on("value", snap => {
-
-  const devices = snap.val();
-  if (!devices) return;
-
-  const browsers = {};
-
-  Object.values(devices).forEach(device => {
-
-    if (!device.sessions) return;
-
-    Object.values(device.sessions).forEach(session => {
-
-      if (!session.browser) return;
-
-      browsers[session.browser] =
-        (browsers[session.browser] || 0) + 1;
-
-    });
-
-  });
-
-  const total = Object.values(browsers)
-    .reduce((a,b)=>a+b,0);
-
-  const list = Object.keys(browsers).map(name => ({
-    name,
-    count: browsers[name],
-    pct: total ? ((browsers[name]/total)*100).toFixed(1) : 0
-  }));
-
-  renderBrowsers(list);
-
-});
-
-
-
-/* =============================
-   REALTIME
-============================= */
-
-db.ref("analytics/devices").on("value", snap => {
-
-  const devices = snap.val();
-  if (!devices) return;
-
-  let active = 0;
-
-  Object.values(devices).forEach(device => {
-
-    if (!device.sessions) return;
-
-    Object.values(device.sessions).forEach(session => {
-
-      if (session.isOnline === true)
-        active++;
-
-    });
-
-  });
-
-  document.getElementById("realtimeCount").textContent = active;
-
-});
-
-
 </script>
+
+
 </body>
 
 </html>
+
 
 
 
