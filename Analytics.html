@@ -493,12 +493,113 @@ db.ref("analytics/overview").on("value", snap => {
 
 });
 
+  /* =============================
+   RENDER FUNCTIONS (MISSING FIX)
+============================= */
+
+function renderCountries(list = []) {
+  const container = document.getElementById("countryList");
+  if (!container) return;
+
+  if (!list.length) {
+    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div>`;
+    return;
+  }
+
+  const total = list.reduce((a,b)=>a+b.visits,0);
+
+  container.innerHTML = list.map(c => `
+    <div class="list-item">
+      <div class="info">
+        <div class="info-row">
+          <span class="name">${c.country}</span>
+          <span class="count">${c.visits}</span>
+        </div>
+        <div class="progress-bg">
+          <div class="progress-bar" style="width:${(c.visits/total)*100}%"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+
+function renderDeviceTypes(list = []) {
+  const container = document.getElementById("deviceTypes");
+  if (!container) return;
+
+  if (!list.length) {
+    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(d => `
+    <div class="device-type">
+      <span class="emoji">${d.icon}</span>
+      <div class="dt-count">${d.count}</div>
+      <div class="dt-label">${d.type}</div>
+      <div class="dt-pct">${d.pct}%</div>
+    </div>
+  `).join('');
+}
+
+
+function renderDeviceNames(list = []) {
+  const container = document.getElementById("deviceNames");
+  if (!container) return;
+
+  if (!list.length) {
+    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div>`;
+    return;
+  }
+
+  container.innerHTML = list
+    .sort((a,b)=>b.count-a.count)
+    .map((d,i) => `
+      <div class="device-row">
+        <div class="dr-left">
+          <div class="dr-rank">${i+1}</div>
+          <div>
+            <div class="dr-name">${d.name}</div>
+          </div>
+        </div>
+        <div class="dr-count">${d.count}</div>
+      </div>
+    `).join('');
+}
+
+
+function renderOS(list = []) {
+  const container = document.getElementById("osList");
+  if (!container) return;
+
+  if (!list.length) {
+    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(o => `
+    <div class="bar-item">
+      <div class="bar-header">
+        <span class="bar-name">${o.name}</span>
+        <span class="bar-count">${o.count}</span>
+      </div>
+      <div class="progress-bg">
+        <div class="progress-bar" style="width:${o.pct}%"></div>
+      </div>
+      <span class="bar-pct">${o.pct}%</span>
+    </div>
+  `).join('');
+}
+
+
 </script>
 
 
 </body>
 
 </html>
+
 
 
 
