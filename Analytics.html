@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <link rel="icon" href="data:,">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>لوحة التحليلات</title>
@@ -416,7 +417,7 @@ db.ref("analytics/devices").on("value", snap => {
     pct: total ? ((countries[name]/total)*100).toFixed(1) : 0
   }));
 
-  renderCountries(list);
+ 
 
 });
 
@@ -441,7 +442,7 @@ function renderDeviceTypes(list = []) {
   `).join('');
 }
 
-renderDeviceTypes();
+
 
   function renderCountries(list = []) {
   const container = document.getElementById("countryList");
@@ -550,7 +551,7 @@ db.ref("analytics/devices").on("value", snap => {
     count: names[name]
   }));
 
-  renderDeviceNames(list);
+  
 
 });
 
@@ -579,7 +580,7 @@ function renderBrowsers(list = []) {
   `).join('');
 }
 
-renderBrowsers();
+
 
 
 /* =============================
@@ -617,7 +618,7 @@ db.ref("analytics/devices").on("value", snap => {
     pct: total ? ((osCount[name]/total)*100).toFixed(1) : 0
   }));
 
-  renderOS(list);
+  
 
 });
 
@@ -677,7 +678,7 @@ function renderSources(list = []) {
   `).join('');
 }
 
-renderSources();
+
 
 
 function updateRealtime(current, last30) {
@@ -842,4 +843,5 @@ db.ref("analytics/devices").on("value", snap => {
 </body>
 
 </html>
+
 
