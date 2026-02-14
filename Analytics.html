@@ -425,6 +425,8 @@ db.ref("analytics/devices").on("value", snap => {
     pct: total ? ((countries[name]/total)*100).toFixed(1) : 0
   }));
 
+  renderCountries(list);
+
  
 
 });
@@ -559,6 +561,8 @@ db.ref("analytics/devices").on("value", snap => {
     count: names[name]
   }));
 
+  renderDeviceNames(list);
+
   
 
 });
@@ -626,7 +630,8 @@ db.ref("analytics/devices").on("value", snap => {
     pct: total ? ((osCount[name]/total)*100).toFixed(1) : 0
   }));
 
-  
+  renderOS(list);
+
 
 });
 
@@ -790,7 +795,7 @@ db.ref("analytics/devices").on("value", snap => {
   const devices = snap.val();
   if (!devices) return;
 
-  const sources = {};
+  const browsers = {};
 
   Object.values(devices).forEach(device => {
 
@@ -798,22 +803,28 @@ db.ref("analytics/devices").on("value", snap => {
 
     Object.values(device.sessions).forEach(session => {
 
-      const src = session.referrer || "Direct";
+      if (!session.browser) return;
 
-      sources[src] = (sources[src] || 0) + 1;
+      browsers[session.browser] =
+        (browsers[session.browser] || 0) + 1;
 
     });
 
   });
 
-  const list = Object.keys(sources).map(name => ({
-    source: name,
-    visits: sources[name]
+  const total = Object.values(browsers)
+    .reduce((a,b)=>a+b,0);
+
+  const list = Object.keys(browsers).map(name => ({
+    name,
+    count: browsers[name],
+    pct: total ? ((browsers[name]/total)*100).toFixed(1) : 0
   }));
 
-  renderSources(list);
+  renderBrowsers(list);
 
 });
+
 
 
 /* =============================
@@ -849,6 +860,7 @@ db.ref("analytics/devices").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
