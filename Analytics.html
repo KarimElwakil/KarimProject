@@ -549,7 +549,7 @@ db.ref("analytics/devices").on("value", snap => {
       if (!session.device) return;
 
       names[session.device] =
-        (names[session.device] || 0) + 1;
+        names[session.deviceLabel || session.device]++
 
     });
 
@@ -878,6 +878,7 @@ db.ref("analytics/devices").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
