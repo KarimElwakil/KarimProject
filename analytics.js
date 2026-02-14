@@ -172,11 +172,18 @@ deviceLabel:
   isOnline: true
 };
 
-  const source = document.referrer
+let source = document.referrer
   ? new URL(document.referrer).hostname
   : "Direct";
 
-db.ref("analytics/sources/" + source)
+// تنظيف الاسم من الحروف الممنوعة
+source = source.replace(/\./g,"_")
+               .replace(/#/g,"")
+               .replace(/\$/g,"")
+               .replace(/\[/g,"")
+               .replace(/\]/g,"");
+
+db.ref("analytics/sources/" + source + "/visits")
   .transaction(v => (v || 0) + 1);
 
 
@@ -571,6 +578,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
