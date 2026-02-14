@@ -93,14 +93,13 @@ document.getElementById('statsRow2').innerHTML =
      Device ID
   ============================== */
 
-  let deviceId = localStorage.getItem("deviceId");
+ const deviceId = localStorage.getItem("deviceId") || 
+Math.random().toString(36).substring(2);
 
-  if (!deviceId) {
-    deviceId = "device_" + Math.random().toString(36).substring(2, 10);
-    localStorage.setItem("deviceId", deviceId);
-  }
+localStorage.setItem("deviceId", deviceId);
 
-  const deviceRef = db.ref("analytics/devices/" + deviceId);
+const sessionRef = db.ref("analytics/devices/" + deviceId + "/sessions").push();
+
 
   /* ==============================
      SESSION
@@ -527,6 +526,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
