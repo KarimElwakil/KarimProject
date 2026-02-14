@@ -2,6 +2,31 @@ console.log("Analytics system starting...");
 
 console.log("Firebase working test");
 
+// ===== UI HELPERS =====
+
+const svgIcons = {
+  eye: "👁️",
+  users: "👥",
+  bounce: "📉",
+  clock: "⏱️",
+  page: "📄",
+  layers: "📚",
+  userPlus: "🆕",
+  refresh: "🔄"
+};
+
+function createStatCard(title, value, icon, change, type, delay) {
+  return `
+  <div class="glass stat-card anim-up" style="animation-delay:${delay}ms">
+    <div class="stat-header">
+      <span class="stat-label">${title}</span>
+      <div class="stat-icon">${icon}</div>
+    </div>
+    <div class="stat-value">${value}</div>
+  </div>`;
+}
+
+
 firebase.database().ref("test")
   .set({ time: Date.now() })
   .then(() => console.log("WRITE OK"))
@@ -546,6 +571,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
