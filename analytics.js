@@ -128,11 +128,12 @@ localStorage.setItem("deviceId", deviceId);
 
 
 
-  /* ==============================
-     SESSION
-  ============================== */
+/* ==============================
+   SESSION START
+============================== */
 
-  const sessionStart = Date.now();
+const sessionStart = Date.now();
+
 /* ==============================
    DEVICE REF
 ============================== */
@@ -140,24 +141,18 @@ localStorage.setItem("deviceId", deviceId);
 const deviceRef = db.ref("analytics/devices/" + deviceId);
 
 /* ==============================
-   SESSION
+   SESSION CREATE (نظيف ونهائي)
 ============================== */
 
-/* ==============================
-   SESSION FIX REAL
-============================== */
+// كل دخول صفحة = جلسة جديدة (ده اللي انت عايزه)
+const sessionId = deviceRef.child("sessions").push().key;
 
-let sessionId = sessionStorage.getItem("sessionId");
-let lastActivity = localStorage.getItem("lastActivity");
+// حفظ آخر نشاط
+localStorage.setItem("lastActivity", Date.now());
 
-// لو مفيش جلسة أو مر عليها 30 دقيقة → جلسة جديدة
-if (!sessionId || !lastActivity || (Date.now() - lastActivity > 1800000)) {
+// مرجع الجلسة الحالية
+const sessionRef = deviceRef.child("sessions").child(sessionId);
 
-  sessionId = db.ref("analytics/devices/" + deviceId + "/sessions").push().key;
-
-  sessionStorage.setItem("sessionId", sessionId);
-
-}
 
 // حدث آخر نشاط
 localStorage.setItem("lastActivity", Date.now());
@@ -611,6 +606,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
