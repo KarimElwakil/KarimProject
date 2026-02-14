@@ -132,8 +132,8 @@ sessionRef.update({
      os: detectOS(),
       country: "Unknown",
       startTime: formatDateTime(sessionStart),
-      startTimestamp: sessionStart
-      isOnline: true,
+      startTimestamp: sessionStart,
+      isOnline: true
     });
 
 
@@ -514,6 +514,7 @@ db.ref("analytics/overview/totalVisits")
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
