@@ -604,10 +604,11 @@ document.addEventListener("visibilitychange", ()=>{
   }
 });
 
-}
+
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
