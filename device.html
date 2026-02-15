@@ -87,205 +87,203 @@ db.ref(devicePath).on("value", snap=>{
 
 function drawDevice(name,data){
 
- let totalSessions=0;
- let totalTime=0;
  let sessionsHTML="";
- let deviceLastSeen=0;
+ let totalTimeAll=0;
 
  if(!data.browsers){
-   container.innerHTML="لا توجد بيانات";
+   container.innerHTML="لا يوجد جلسات";
    return;
  }
 
  Object.keys(data.browsers).forEach(browser=>{
 
-  const sessions = data.browsers[browser].sessions;
-  if(!sessions) return;
+   const sessions = data.browsers[browser].sessions;
+   if(!sessions) return;
 
-  Object.keys(sessions).forEach(sid=>{
+   Object.keys(sessions).forEach(sid=>{
 
-    const s = sessions[sid];
-    totalSessions++;
+     const s = sessions[sid];
 
-    // ===== last seen =====
-    let lastSeenTxt="غير معروف";
-    if(s.lastActive){
-      const diff=Math.floor((Date.now()-s.lastActive)/1000);
-      if(diff<60) lastSeenTxt="الآن";
-      else if(diff<3600) lastSeenTxt=Math.floor(diff/60)+" دقيقة";
-      else lastSeenTxt=Math.floor(diff/3600)+" ساعة";
-    }
+     let totalSessionTime=0;
+     let pagesCount=0;
+     let online=false;
+     let lastSeen="";
 
-    if(s.lastActive && s.lastActive>deviceLastSeen)
-      deviceLastSeen=s.lastActive;
+     if(s.info){
+       if(s.info.isOnline) online=true;
+       if(s.info.lastActive){
+         lastSeen = new Date(s.info.lastActive).toLocaleString();
+       }
+     }
 
-    // ===== online =====
-    let onlineBadge = s.isOnline
-     ? `<span style="color:#00ffa6">● متصل الآن</span>`
-     : `<span style="color:#777">غير متصل</span>`;
+     if(s.pages){
+       Object.values(s.pages).forEach(p=>{
+         if(p.visits){
+           Object.values(p.visits).forEach(v=>{
+             if(v.durationSec){
+               totalSessionTime += v.durationSec;
+               totalTimeAll += v.durationSec;
+             }
+             pagesCount++;
+           });
+         }
+       });
+     }
 
-    // ===== location =====
-    let country = s.country && s.country!=="Unknown" ? s.country : "Egypt";
-    let city = s.city && s.city!=="Unknown" ? s.city : "";
-    let location = city ? `${city}, ${country}` : country;
+     const statusColor = online ? "#00ffc3" : "#666";
 
-    // ===== الصفحات =====
-    let pagesHTML="";
-    if(s.pages){
-      Object.keys(s.pages).forEach(p=>{
+     sessionsHTML += `
+     <div class="card" 
+     style="cursor:pointer;border-left:5px solid ${statusColor}"
+     onclick="toggleSession('${sid}')">
 
-        const page = s.pages[p];
-        let visits = page.visits || {};
+     <b>🧠 جلسة ${browser}</b><br>
+     ⏱ الوقت: ${(totalSessionTime/60).toFixed(1)} دقيقة<br>
+     📄 عدد الصفحات: ${pagesCount}<br>
+     👁 آخر ظهور: ${lastSeen || "—"}<br>
+     ${online ? "🟢 نشط الآن" : "⚫ مغلق"}
+     
+     <div id="sess_${sid}" style="display:none;margin-top:10px"></div>
 
-        Object.keys(visits).forEach(v=>{
-          const visit = visits[v];
-
-          pagesHTML+=`
-          <div style="
-          background:#0f172a;
-          padding:10px;
-          border-radius:10px;
-          margin-top:8px;
-          font-size:13px">
-
-          📄 <b>${p}</b><br>
-
-          ⏱ مدة: ${visit.durationSec||0} ثانية<br>
-
-          📜 scroll: ${visit.maxScroll||0}%<br>
-
-          <div style="
-height:6px;
-background:#111;
-border-radius:6px;
-margin-top:6px">
-<div style="
-width:${visit.maxScroll||0}%;
-background:#00ffc3;
-height:6px;
-border-radius:6px">
-</div>
-</div>
-
-
-          ↩ من: ${visit.from||"direct"}<br>
-
-          🕒 دخول: ${visit.enterTime||""}<br>
-          📴 خروج: ${visit.exitTimeReadable||"لم يخرج"}
-
-          </div>`;
-        });
-      });
-    }
-
-    sessionsHTML+=`
-    <div style="
-    background:#111827;
-    padding:15px;
-    border-radius:14px;
-    margin-bottom:18px;
-    border:1px solid #1f2937">
-
-    <div style="font-size:14px;margin-bottom:8px">
-    ${onlineBadge}
-    </div>
-
-    <b>🧠 جلسة:</b> ${sid}<br>
-
-    📍 ${location}<br>
-    🌐 ${browser}<br>
-    📱 ${s.device||""}<br>
-
-    🕒 آخر ظهور: ${lastSeenTxt}
-
-    <div style="
-    margin-top:10px;
-    padding-top:10px;
-    border-top:1px solid #222">
-
-    <b>📊 الصفحات:</b>
-    ${pagesHTML||"لا يوجد تصفح"}
-
-    </div>
-
-    </div>
-    `;
-
-    // تحليل المستخدم
-let behavior="زائر جديد";
-
-if(totalSessions>5) behavior="زائر متكرر";
-if(totalSessions>15) behavior="زائر مخلص 🔥";
-if(totalSessions>30) behavior="مدمن الموقع 😈";
-
-container.innerHTML+=`
-<div style="
-background:#020617;
-padding:18px;
-border-radius:14px;
-margin-top:20px;
-border:1px solid #0f172a">
-
-<h3>🧠 تحليل المستخدم</h3>
-${behavior}
-
-</div>`;
-
-  });
+     </div>`;
+   });
 
  });
 
- // ===== last seen للجهاز =====
- let deviceSeen="غير معروف";
- if(deviceLastSeen){
-   const diff=Math.floor((Date.now()-deviceLastSeen)/1000);
-   if(diff<60) deviceSeen="الآن";
-   else if(diff<3600) deviceSeen=Math.floor(diff/60)+" دقيقة";
-   else deviceSeen=Math.floor(diff/3600)+" ساعة";
- }
-
-  let isOnlineNow = false;
-
-if(data.browsers){
- Object.values(data.browsers).forEach(b=>{
-  Object.values(b.sessions).forEach(s=>{
-   if(s.isOnline === true){
-     isOnlineNow = true;
-   }
-  });
- });
-}
-
-
- container.innerHTML=`
-
- <div style="
- background:#020617;
- padding:20px;
- border-radius:16px;
- margin-bottom:20px;
- border:1px solid #0f172a">
-
-
-${isOnlineNow ? 
-'<div style="color:#00ffa6;font-weight:bold;margin-bottom:8px">🟢 يتصفح الآن</div>' 
-:
-'<div style="color:#666;margin-bottom:8px">⚫ غير متصل</div>'
-}
-
- <h2>📱 الجهاز</h2>
-
- 🧠 عدد الجلسات: ${totalSessions}<br>
- 🕒 آخر ظهور للجهاز: ${deviceSeen}
-
+ container.innerHTML = `
+ <div class="card">
+ <h3>📱 الجهاز</h3>
+ ${name}<br>
+ ⏱ إجمالي الوقت: ${(totalTimeAll/60).toFixed(1)} دقيقة
  </div>
 
+ <div class="card">
+ <h3>🧠 الجلسات</h3>
  ${sessionsHTML}
-
+ </div>
  `;
-
- drawMap(data);
 }
+
+  function toggleSession(id){
+
+ const box = document.getElementById("sess_"+id);
+
+ if(box.style.display==="block"){
+   box.style.display="none";
+   return;
+ }
+
+ box.style.display="block";
+
+ const db = firebase.database();
+
+ db.ref("analytics/devices").once("value").then(snap=>{
+
+  const devices = snap.val();
+  if(!devices) return;
+
+  Object.values(devices).forEach(device=>{
+   if(!device.browsers) return;
+
+   Object.values(device.browsers).forEach(b=>{
+    if(!b.sessions) return;
+
+    if(b.sessions[id]){
+
+      const session = b.sessions[id];
+      drawPages(box,session);
+
+    }
+   });
+
+  });
+
+ });
+
+}
+
+  function drawPages(container,session){
+
+ let html="";
+
+ if(!session.pages){
+   container.innerHTML="لا يوجد صفحات";
+   return;
+ }
+
+ Object.keys(session.pages).forEach(pageName=>{
+
+   html+=`
+   <div class="card"
+   style="cursor:pointer"
+   onclick="togglePage('${pageName}','${session.info.start}')">
+   📄 ${pageName}
+   <div id="pg_${pageName+session.info.start}" style="display:none"></div>
+   </div>`;
+ });
+
+ container.innerHTML = html;
+}
+
+  function togglePage(pageName,start){
+
+ const id = "pg_"+pageName+start;
+ const box = document.getElementById(id);
+
+ if(box.style.display==="block"){
+   box.style.display="none";
+   return;
+ }
+
+ box.style.display="block";
+
+ const db = firebase.database();
+
+ db.ref("analytics/devices").once("value").then(snap=>{
+
+  const devices = snap.val();
+  if(!devices) return;
+
+  Object.values(devices).forEach(device=>{
+   if(!device.browsers) return;
+
+   Object.values(device.browsers).forEach(b=>{
+    if(!b.sessions) return;
+
+    Object.values(b.sessions).forEach(s=>{
+
+      if(s.info.start!=start) return;
+      if(!s.pages || !s.pages[pageName]) return;
+
+      const visits = s.pages[pageName].visits;
+      if(!visits) return;
+
+      let html="";
+
+      Object.values(visits).forEach(v=>{
+
+        html+=`
+        <div class="card">
+        ⏱ ${(v.durationSec||0)} ثانية<br>
+        📜 scroll: ${v.maxScroll||0}%<br>
+        🎨 theme: ${v.theme||""}<br>
+        📱 ${v.device||""}<br>
+        🌐 ${v.browser||""}
+        </div>`;
+      });
+
+      box.innerHTML = html;
+
+    });
+
+   });
+
+  });
+
+ });
+
+}
+
 
 
 function drawMap(data){
