@@ -40,9 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const db = firebase.database();
-
-  /* ===============================
-   DEVICE ID (ثابت لكل جهاز)
+/* ===============================
+   DEVICE ID ثابت
 =============================== */
 
 let deviceId = localStorage.getItem("deviceId");
@@ -53,33 +52,37 @@ if (!deviceId) {
 }
 
 /* ===============================
-   SESSION SYSTEM (احترافي)
+   SESSION SYSTEM احترافي
 =============================== */
 
-// نحاول نجيب session الحالية
 let sessionId = sessionStorage.getItem("sessionId");
+let lastSeen = localStorage.getItem("lastSeen");
 
-// لو مش موجودة → جلسة جديدة
-if (!sessionId) {
+// لو مفيش جلسة او اختفى اكتر من 30 دقيقة → جلسة جديدة
+if (!sessionId || !lastSeen || (Date.now() - lastSeen > 1800000)) {
+
   sessionId = db.ref("analytics/devices/" + deviceId + "/sessions").push().key;
   sessionStorage.setItem("sessionId", sessionId);
+
 }
 
-// ريفرنس الجهاز
-const deviceRef = db.ref("analytics/devices/" + deviceId);
+// حدث اخر نشاط
+localStorage.setItem("lastSeen", Date.now());
 
-// ريفرنس الجلسة
+const deviceRef = db.ref("analytics/devices/" + deviceId);
 const sessionRef = deviceRef.child("sessions").child(sessionId);
 
-// تسجيل وقت الدخول
+// دخول صفحة
 sessionRef.update({
   start: Date.now(),
-  isOnline: true,
-  page: location.pathname
+  page: location.pathname,
+  isOnline:true
 });
 
-// عند الخروج
+// خروج
 window.addEventListener("beforeunload", () => {
+  localStorage.setItem("lastSeen", Date.now());
+
   sessionRef.update({
     isOnline:false,
     end: Date.now()
@@ -625,6 +628,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
