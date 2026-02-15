@@ -314,130 +314,62 @@ observer.observe(document.documentElement, {
      PAGE
   ============================== */
 
-function getPageName() {
+/* ===============================
+   PAGE BADGE SYSTEM PRO
+=============================== */
 
-  let path = window.location.pathname;
-
-  if (!path || path === "/") return "home";
-
-  path = path.split("/").pop() || "home";
-
-  // حذف أي حروف غير مسموح بيها
-  path = path.replace(/\.html$/, "");
-  path = path.replace(/[.#$\[\]]/g, "");
-  path = path.replace(/\//g, "_");
-
-  return path || "home";
+function getPageName(){
+  let path = location.pathname;
+  if(!path || path==="/") return "home";
+  path = path.split("/").pop();
+  return path.replace(".html","");
 }
-
 
 const pageName = getPageName();
 
-  /* ==============================
-   GLOBAL PAGE COUNTER
-============================== */
+// ترتيب الصفحات داخل الجلسة
+let globalRank = localStorage.getItem("globalRank");
+if(!globalRank) globalRank = 0;
+globalRank = parseInt(globalRank) + 1;
+localStorage.setItem("globalRank", globalRank);
 
-const globalPageRef = db
-  .ref("analytics/pages/" + pageName + "/views");
+// معرفة جاي منين
+let fromPage = localStorage.getItem("lastPage") || "direct";
 
-globalPageRef.transaction(v => (v || 0) + 1);
-
-
-/* ==============================
-   DEVICE PAGE COUNTER
-============================== */
-
-const devicePageRef = deviceRef
-  .child("pageStats")
-  .child(pageName)
-  .child("visits");
-
-  /* ==============================
-   DEVICE PAGE LAST VISIT
-============================== */
-
-const devicePageBaseRef = deviceRef
-  .child("pageStats")
-  .child(pageName);
-
-/* ==============================
-   DEVICE PAGE STATS (ADVANCED)
-============================== */
-
-// عداد الزيارات
-devicePageRef.child("visits")
-  .transaction(v => (v || 0) + 1);
-
-// أول زيارة (تتحط مرة واحدة بس)
-devicePageRef.child("firstVisited")
-  .transaction(v => v || formatDateTime(Date.now()));
-
-devicePageRef.child("firstVisitTimestamp")
-  .transaction(v => v || Date.now());
-
-// آخر زيارة
-devicePageRef.update({
-  lastVisited: formatDateTime(Date.now()),
-  lastVisitTimestamp: Date.now()
-});
-
-
-
-
-
-
-  /* ==============================
-   PAGE TRANSITION TRACKING
-============================== */
-
-const previousPage = localStorage.getItem("lastPage");
-
-if (previousPage && previousPage !== pageName) {
-
-  const transitionRef = sessionRef.child("transitions").push();
-
-  transitionRef.set({
-    from: previousPage,
-    to: pageName,
-    at: formatDateTime(Date.now())
-  });
-
+if(fromPage === pageName){
+  fromPage = "refresh";
 }
 
-// حفظ الصفحة الحالية للانتقال القادم
+// حفظ اخر صفحة
 localStorage.setItem("lastPage", pageName);
 
+// reference
+const pageRef = sessionRef.child("pages").child(pageName).child("visits");
 
+// رقم الزيارة داخل الصفحة
+pageRef.once("value").then(snap=>{
 
-  const pageStart = Date.now();
+  let visitNumber = 1;
 
-  const pageRef = sessionRef.child("pages").child(pageName);
+  if(snap.exists()){
+    visitNumber = Object.keys(snap.val()).length + 1;
+  }
 
-  pageRef.update({
-  referrer: document.referrer || "Direct"
-});
+  const visitRef = pageRef.child(visitNumber);
 
-  // تحديث الثيم للصفحة كل 3 ثواني
-setInterval(function () {
-
-  pageRef.update({
-    theme: document.documentElement.dataset.theme || "light"
+  visitRef.set({
+    rank: globalRank,
+    from: fromPage,
+    enterTime: new Date().toLocaleString(),
+    enterTimestamp: Date.now(),
+    device: navigator.userAgent,
+    browser: detectBrowser(),
+    os: detectOS(),
+    resolution: screen.width+"x"+screen.height,
+    language: navigator.language
   });
 
-}, 3000);
-
-
- pageRef.update({
-  enteredAt: formatDateTime(pageStart),
-  enterTimestamp: pageStart,
-  maxScroll: 0
 });
-
-  setTimeout(function () {
-  pageRef.update({
-    theme: document.documentElement.dataset.theme || "light"
-  });
-}, 500);
 
 
   /* ==============================
@@ -624,6 +556,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
