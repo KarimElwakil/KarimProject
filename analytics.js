@@ -413,61 +413,9 @@ visitRef.child("isOnline").onDisconnect().set(false);
 
 
 
-  /* ==============================
-     SCROLL
-  ============================== */
+  
 
-  /* ========= SCROLL TRACKING FIXED ========= */
-
-let maxScroll = 0;
-  let lastScrollTime = Date.now();
-let scrollSpeedSum = 0;
-let scrollCount = 0;
-
-window.addEventListener("scroll", function () {
-
-  const now = Date.now();
-  const diff = now - lastScrollTime;
-
-  if (diff > 0) {
-    scrollSpeedSum += diff;
-    scrollCount++;
-  }
-
-  lastScrollTime = now;
-});
-
-
-function updateScroll() {
-
-  const scrollTop =
-    window.pageYOffset || document.documentElement.scrollTop;
-
-  const docHeight =
-    Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight
-    ) - window.innerHeight;
-
-  if (docHeight <= 0) {
-    maxScroll = 100;
-    return;
-  }
-
-  const percent = Math.round((scrollTop / docHeight) * 100);
-
-  if (percent > maxScroll) {
-    maxScroll = percent;
-  }
-
-}
-
-window.addEventListener("scroll", updateScroll);
-
-// تأكد إنه يتحسب أول ما الصفحة تفتح
-updateScroll();
-
-
+ 
 
 
 
@@ -578,6 +526,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
