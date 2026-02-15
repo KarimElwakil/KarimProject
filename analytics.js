@@ -41,6 +41,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const db = firebase.database();
 
+  /* ===============================
+   DEVICE ID (ثابت لكل جهاز)
+=============================== */
+
+let deviceId = localStorage.getItem("deviceId");
+
+if (!deviceId) {
+  deviceId = "dev_" + Math.random().toString(36).substr(2,9);
+  localStorage.setItem("deviceId", deviceId);
+}
+
+/* ===============================
+   SESSION SYSTEM (احترافي)
+=============================== */
+
+// نحاول نجيب session الحالية
+let sessionId = sessionStorage.getItem("sessionId");
+
+// لو مش موجودة → جلسة جديدة
+if (!sessionId) {
+  sessionId = db.ref("analytics/devices/" + deviceId + "/sessions").push().key;
+  sessionStorage.setItem("sessionId", sessionId);
+}
+
+// ريفرنس الجهاز
+const deviceRef = db.ref("analytics/devices/" + deviceId);
+
+// ريفرنس الجلسة
+const sessionRef = deviceRef.child("sessions").child(sessionId);
+
+// تسجيل وقت الدخول
+sessionRef.update({
+  start: Date.now(),
+  isOnline: true,
+  page: location.pathname
+});
+
+// عند الخروج
+window.addEventListener("beforeunload", () => {
+  sessionRef.update({
+    isOnline:false,
+    end: Date.now()
+  });
+});
+
+
  
 
 
@@ -128,30 +174,8 @@ localStorage.setItem("deviceId", deviceId);
 
 
 
-/* ==============================
-   SESSION START
-============================== */
 
-const sessionStart = Date.now();
 
-/* ==============================
-   DEVICE REF
-============================== */
-
-const deviceRef = db.ref("analytics/devices/" + deviceId);
-
-/* ==============================
-   SESSION CREATE (نظيف ونهائي)
-============================== */
-
-// كل دخول صفحة = جلسة جديدة (ده اللي انت عايزه)
-const sessionId = deviceRef.child("sessions").push().key;
-
-// حفظ آخر نشاط
-localStorage.setItem("lastActivity", Date.now());
-
-// مرجع الجلسة الحالية
-const sessionRef = deviceRef.child("sessions").child(sessionId);
 
 
 
@@ -601,6 +625,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
