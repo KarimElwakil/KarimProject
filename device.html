@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تفاصيل الجهاز</title>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+const firebaseConfig = {
+apiKey: "AIzaSyCs6OJNRdad5jwpaWOmEzs-Z_71QJcA-4M",
+authDomain: "searchanalytics-4bbbf.firebaseapp.com",
+databaseURL: "https://searchanalytics-4bbbf-default-rtdb.europe-west1.firebasedatabase.app",
+projectId: "searchanalytics-4bbbf",
+};
+firebase.initializeApp(firebaseConfig);
+</script>
+
+<style>
+body{background:#0b0f14;color:#fff;font-family:Arial;padding:20px}
+.card{background:#111827;padding:15px;border-radius:12px;margin:10px 0}
+</style>
+</head>
+<body>
+
+<h2>تفاصيل الجهاز</h2>
+<div id="info"></div>
+
+<script>
+const db = firebase.database();
+
+const url = new URL(location.href);
+const id = url.searchParams.get("id");
+
+document.getElementById("info").innerHTML = "جارى التحميل...";
+
+db.ref("analytics/devices").on("value",snap=>{
+
+ const devices = snap.val();
+ if(!devices) return;
+
+ let html="";
+
+ Object.keys(devices).forEach(devId=>{
+
+   if(!devId.includes(id)) return;
+
+   const device = devices[devId];
+
+   html+=`<div class="card">
+   <h3>${devId}</h3>`;
+
+   if(device.browsers){
+     Object.keys(device.browsers).forEach(browser=>{
+
+       html+=`<b>المتصفح:</b> ${browser}<br>`;
+
+       const sessions = device.browsers[browser].sessions;
+
+       Object.keys(sessions).forEach(sid=>{
+         const s = sessions[sid];
+
+         html+=`
+         <div class="card">
+         جلسة: ${sid}<br>
+         البلد: ${s.country||""}<br>
+         المدينة: ${s.city||""}<br>
+         الوقت: ${s.startTime||""}
+         </div>`;
+       });
+
+     });
+   }
+
+   html+="</div>";
+ });
+
+ document.getElementById("info").innerHTML = html || "لا يوجد بيانات";
+
+});
+</script>
+
+</body>
+</html>
