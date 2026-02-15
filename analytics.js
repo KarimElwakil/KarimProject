@@ -58,42 +58,31 @@ function startAfterDevice(deviceId){
 
 function initDevice(){
 
-  let deviceId = localStorage.getItem("deviceId");
+ /* ===============================
+   UNIVERSAL DEVICE ID FINAL PRO
+=============================== */
 
-  if(deviceId){
-    startAfterDevice(deviceId);
-    return;
-  }
+// نحاول نجيب ID محفوظ
+let deviceId = localStorage.getItem("deviceId");
 
-  const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
-  const res = screen.width+"x"+screen.height;
-  const lang = navigator.language;
+// بصمة ثابتة للجهاز
+const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
+const res = screen.width + "x" + screen.height;
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const lang = navigator.language;
 
-  const fingerprint = btoa(ua+res+lang).substring(0,40);
+const fingerprint = btoa(ua + res + tz + lang).substring(0,50);
 
-  db.ref("fingerprints/"+fingerprint).once("value").then(snap=>{
+// لو مفيش deviceId
+if(!deviceId){
 
-    if(snap.exists()){
-      deviceId = snap.val();
-      localStorage.setItem("deviceId",deviceId);
-      startAfterDevice(deviceId);
-
-    }else{
-
-      deviceId = "dev_"+Date.now()+"_"+Math.floor(Math.random()*9999);
-      localStorage.setItem("deviceId",deviceId);
-
-      db.ref("fingerprints/"+fingerprint).set(deviceId);
-
-      startAfterDevice(deviceId);
-    }
-
-  });
+  deviceId = "dev_" + fingerprint;
+  localStorage.setItem("deviceId", deviceId);
 
 }
 
-initDevice();
-
+// خزنه فايربيز للربط فقط
+db.ref("deviceFingerprints/"+fingerprint).set(deviceId);
 
 
 /* ===============================
@@ -628,6 +617,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
