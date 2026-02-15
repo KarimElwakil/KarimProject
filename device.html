@@ -164,6 +164,48 @@ function drawDevice(name,data){
  `;
 }
 
+ function toggleSession(id){
+
+ const box = document.getElementById("sess_"+id);
+
+ // فتح وقفل
+ if(box.style.display==="block"){
+   box.style.display="none";
+   return;
+ }
+
+ box.style.display="block";
+
+ const db = firebase.database();
+
+ db.ref("analytics/devices").once("value").then(snap=>{
+
+  const devices = snap.val();
+  if(!devices) return;
+
+  Object.values(devices).forEach(device=>{
+   if(!device.browsers) return;
+
+   Object.values(device.browsers).forEach(b=>{
+    if(!b.sessions) return;
+
+    if(b.sessions[id]){
+
+      const session = b.sessions[id];
+      drawPages(box,session);
+
+    }
+
+   });
+
+  });
+
+ });
+
+}
+
+
+
   function togglePage(pageName,start){
 
  const id = "pg_"+pageName+start;
