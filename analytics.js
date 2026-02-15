@@ -104,6 +104,40 @@ window.addEventListener("beforeunload",()=>{
 
 sessionRef.child("info/isOnline").set(true);
 
+/* ===============================
+   THEME TRACKING PRO
+=============================== */
+
+// حفظ أول ثيم
+let currentTheme = document.documentElement.getAttribute("data-theme") || "light";
+
+sessionRef.child("info/theme").set(currentTheme);
+
+// مراقبة التغيير الحقيقي فقط
+const themeObserver = new MutationObserver(() => {
+
+  const newTheme = document.documentElement.getAttribute("data-theme") || "light";
+
+  if (newTheme !== currentTheme) {
+    currentTheme = newTheme;
+
+    sessionRef.child("info/theme").set(currentTheme);
+
+    // كمان نسجل داخل الصفحة الحالية لو موجودة
+    if (window.currentVisitRef) {
+      window.currentVisitRef.child("themeChanges").push({
+        theme: currentTheme,
+        at: Date.now()
+      });
+    }
+  }
+
+});
+
+themeObserver.observe(document.documentElement,{
+  attributes:true,
+  attributeFilter:["data-theme"]
+});
 
  
 
@@ -330,6 +364,13 @@ if(!fromPage){
 
 sessionStorage.setItem("lastPage", pageName);
 
+  // last seen للصفحة
+sessionRef.child("pages").child(pageName).child("lastSeen").set({
+  time: Date.now(),
+  readable: new Date().toLocaleString()
+});
+
+
   const pageVisitsRef = sessionRef
   .child("pages")
   .child(pageName)
@@ -359,6 +400,11 @@ sessionStorage.setItem("lastPage", pageName);
 // إنشاء زيارة جديدة مستقلة
 const visitRef = pageVisitsRef.push();
 
+  // نخليه متاح عالمياً
+window.currentVisitRef = visitRef;
+window.pageEnterTime = Date.now();
+
+
 visitRef.set({
   visitNumber: pageVisitCount,
   rank: sessionRank,
@@ -374,23 +420,7 @@ visitRef.set({
   isOnline:true
 });
 
-  function sendTheme(){
-  const theme = document.documentElement.dataset.theme || "light";
-  visitRef.update({theme:theme});
-}
-
-sendTheme();
-
-// مراقبة التغيير
-new MutationObserver(()=>{
-  sendTheme();
-}).observe(document.documentElement,{
-  attributes:true,
-  attributeFilter:["data-theme"]
-});
-
-// تحديث كل 5 ثواني احتياطي
-setInterval(sendTheme,5000);
+  
 
 
   let maxScroll = 0;
@@ -522,10 +552,40 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 .set(true);
 
 
+/* ===============================
+   EXIT + DURATION لكل زيارة
+=============================== */
+
+function closeVisit(){
+
+  if(!window.currentVisitRef) return;
+
+  const exitTime = Date.now();
+  const durationSec = Math.floor((exitTime - window.pageEnterTime)/1000);
+
+  window.currentVisitRef.update({
+    exitTimeReadable: new Date().toLocaleString(),
+    exitTimestamp: exitTime,
+    durationSec: durationSec,
+    durationMin: (durationSec/60).toFixed(2)
+  });
+
+}
+
+// عند الانتقال او قفل الصفحة
+window.addEventListener("beforeunload", closeVisit);
+
+// عند تغيير التاب
+document.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState==="hidden"){
+    closeVisit();
+  }
+});
 
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
