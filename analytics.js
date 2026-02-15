@@ -46,13 +46,35 @@ document.addEventListener("DOMContentLoaded", function () {
 /* ===============================
    DEVICE ID ثابت
 =============================== */
+/* ===============================
+   DEVICE ID UNIVERSAL (PRO)
+=============================== */
+
+function generateFingerprint(){
+
+  const ua = navigator.userAgent;
+  const lang = navigator.language;
+  const res = screen.width + "x" + screen.height;
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const raw = ua + "|" + lang + "|" + res + "|" + tz;
+
+  let hash = 0;
+  for (let i = 0; i < raw.length; i++) {
+    hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+    hash |= 0;
+  }
+
+  return "dev_" + Math.abs(hash);
+}
 
 let deviceId = localStorage.getItem("deviceId");
 
-if (!deviceId) {
-  deviceId = "dev_" + Math.random().toString(36).substr(2,9);
+if(!deviceId){
+  deviceId = generateFingerprint();
   localStorage.setItem("deviceId", deviceId);
 }
+
 
 /* ===============================
    SESSION SYSTEM PRO (15 MIN)
@@ -585,6 +607,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
