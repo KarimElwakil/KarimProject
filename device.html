@@ -119,12 +119,15 @@ function drawDevice(name,data){
       totalTime+=dur;
 
       sessionsHTML+=`
-      <div class="card">
-      🕒 ${sid}<br>
-      📍 ${s.country||""} ${s.city||""}<br>
-      ⏱ مدة: ${Math.floor(dur/60)} دقيقة<br>
-      📱 ${s.device||""}
-      </div>`;
+<div class="card">
+<h4>🧠 جلسة</h4>
+🕒 بدأ: ${sid}<br>
+📍 ${s.city||""} ${s.country||"Egypt"}<br>
+⏱ المدة: ${Math.floor(dur/60)} دقيقة<br>
+📱 الجهاز: ${s.device||""}<br>
+🌐 المتصفح: ${s.browser||""}
+</div>`;
+
     });
 
   });
@@ -132,9 +135,6 @@ function drawDevice(name,data){
  }
 
  container.innerHTML=`
- drawChart(totalSessions);
-
-
 <div class="card">
 <h3>📱 معلومات الجهاز</h3>
 الاسم: ${name}<br>
@@ -151,41 +151,43 @@ ${browsersHTML || "لا يوجد"}
 <h3>🧠 الجلسات</h3>
 ${sessionsHTML || "لا يوجد جلسات"}
 </div>
-
 `;
+drawChart(totalSessions);
+drawMap(data);
 
 }
+
+ function drawMap(data){
+
+ let country="Egypt";
+ let city="";
 
  if(data.browsers){
- let firstCountry="Egypt";
-
-if(data.browsers){
- Object.values(data.browsers).forEach(b=>{
-  Object.values(b.sessions).forEach(s=>{
-   if(s.country && s.country!=="Unknown"){
-     firstCountry = s.country;
-   }
+  Object.values(data.browsers).forEach(b=>{
+   Object.values(b.sessions).forEach(s=>{
+     if(s.country && s.country!=="Unknown") country=s.country;
+     if(s.city) city=s.city;
+   });
   });
+ }
+
+ if(country==="Unknown" || !country) country="Egypt";
+
+ let location = city ? `${city}, ${country}` : country;
+
+ container.innerHTML+=`
+ <div class="card">
+ <h3>🌍 موقع الجهاز</h3>
+ <iframe width="100%" height="260"
+ src="https://maps.google.com/maps?q=${location}&output=embed">
+ </iframe>
+ </div>`;
 }
 
-// لو لسه unknown نخليها مصر
-if(firstCountry==="Unknown" || !firstCountry){
- firstCountry="Egypt";
-}
-
-container.innerHTML+=`
-<div class="card">
-<h3>🌍 موقع الجهاز</h3>
-<iframe width="100%" height="250"
-src="https://maps.google.com/maps?q=${firstCountry}&output=embed">
-</iframe>
-</div>`;
-}
-
-
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </script>
- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <canvas id="sessionsChart" height="120"></canvas>
 
 
