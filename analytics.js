@@ -47,32 +47,40 @@ document.addEventListener("DOMContentLoaded", function () {
    DEVICE ID ثابت
 =============================== */
 /* ===============================
-   DEVICE ID UNIVERSAL (PRO)
+   GLOBAL DEVICE SYSTEM FINAL
 =============================== */
-
-function generateFingerprint(){
-
-  const ua = navigator.userAgent;
-  const lang = navigator.language;
-  const res = screen.width + "x" + screen.height;
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-  const raw = ua + "|" + lang + "|" + res + "|" + tz;
-
-  let hash = 0;
-  for (let i = 0; i < raw.length; i++) {
-    hash = ((hash << 5) - hash) + raw.charCodeAt(i);
-    hash |= 0;
-  }
-
-  return "dev_" + Math.abs(hash);
-}
 
 let deviceId = localStorage.getItem("deviceId");
 
-if(!deviceId){
-  deviceId = generateFingerprint();
-  localStorage.setItem("deviceId", deviceId);
+// لو الجهاز عنده ID قديم
+if(deviceId){
+
+  // اربطه في فايربيز للتأكيد
+  db.ref("deviceLinks/"+deviceId).set(true);
+
+}else{
+
+  // حاول تجيب جهاز محفوظ قبل كده بنفس البصمة
+  const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
+  const res = screen.width+"x"+screen.height;
+
+  const fingerprint = btoa(ua+res).substring(0,25);
+
+  db.ref("fingerprints/"+fingerprint).once("value").then(snap=>{
+
+    if(snap.exists()){
+      deviceId = snap.val();
+      localStorage.setItem("deviceId",deviceId);
+    }else{
+
+      deviceId = "dev_"+Date.now()+"_"+Math.floor(Math.random()*9999);
+      localStorage.setItem("deviceId",deviceId);
+
+      db.ref("fingerprints/"+fingerprint).set(deviceId);
+    }
+
+  });
+
 }
 
 
@@ -607,6 +615,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
