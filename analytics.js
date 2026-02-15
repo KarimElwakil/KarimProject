@@ -440,12 +440,7 @@ window.addEventListener("scroll", updateScroll);
 updateScroll();
 
 
-  // تحديث القيمة في فايربيز كل 3 ثواني
-setInterval(function () {
-  pageRef.update({
-    maxScroll: maxScroll
-  });
-}, 1000);
+
 
 
 
@@ -460,9 +455,7 @@ setInterval(function () {
   const duration =
     Math.floor((endTime - pageStart) / 1000);
 
-  pageRef.update({
-    durationOnPageSec: duration
-  });
+ 
 
 }
 
@@ -479,9 +472,7 @@ db.ref("analytics/overview/totalSessions")
   const avgScrollSpeed =
   scrollCount > 0 ? (scrollSpeedSum / scrollCount).toFixed(0) : 0;
 
-pageRef.update({
-  avgScrollIntervalMs: avgScrollSpeed
-});
+
 
   const sessionDurationSec =
   Math.floor((Date.now() - sessionStart) / 1000);
@@ -507,11 +498,7 @@ deviceStatsRef.child("totalTimeSpent")
 
  
 
-  pageRef.update({
-    exitedAt: formatDateTime(endTime),
-    exitTimestamp: endTime,
-    durationMinutes: (durationSec / 60).toFixed(2)
-  });
+  
 
 }
 
@@ -524,13 +511,7 @@ document.addEventListener("visibilitychange", function () {
     const durationSec =
       Math.floor((endTime - pageStart) / 1000);
 
-    pageRef.update({
-      exitedAt: formatDateTime(endTime),
-      exitTimestamp: endTime,
-      durationMinutes: (durationSec / 60).toFixed(2),
-      maxScroll: maxScroll,
-      theme: document.documentElement.dataset.theme || "light"
-    });
+    
 
   }
 
@@ -569,6 +550,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
