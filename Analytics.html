@@ -618,17 +618,22 @@ function renderDeviceNames(list = []) {
     return;
   }
 
-  container.innerHTML = list
-    .sort((a,b)=>b.count-a.count)
-    .map(d => `
-      <div class="device-row">
-        <div class="dr-left">
-          <div>
-            <div class="dr-name">${d.name}</div>
-          </div>
-        </div>
+ container.innerHTML = list
+.sort((a,b)=>b.count-a.count)
+.map(d => `
+  <div class="device-row" 
+       style="cursor:pointer"
+       onclick="openDevice('${d.name}')">
+
+    <div class="dr-left">
+      <div>
+        <div class="dr-name">${d.name}</div>
       </div>
-    `).join('');
+    </div>
+
+  </div>
+`).join('');
+
 }
 
 
@@ -798,6 +803,14 @@ setInterval(()=>{
 
 },5000);
 
+function openDevice(deviceName){
+
+  // نحول الاسم ل id
+  const id = deviceName.split("|").pop().trim();
+
+  window.open("device.html?id="+id,"_blank");
+
+}
 
 
 
@@ -807,6 +820,7 @@ setInterval(()=>{
 </body>
 
 </html>
+
 
 
 
