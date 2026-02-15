@@ -154,11 +154,6 @@ localStorage.setItem("lastActivity", Date.now());
 const sessionRef = deviceRef.child("sessions").child(sessionId);
 
 
-// حدث آخر نشاط
-localStorage.setItem("lastActivity", Date.now());
-
-const deviceRef = db.ref("analytics/devices/" + deviceId);
-const sessionRef = deviceRef.child("sessions").child(sessionId);
 
 
 
@@ -606,6 +601,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
