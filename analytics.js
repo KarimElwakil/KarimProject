@@ -387,6 +387,8 @@ sessionRef.update({
 /* ===============================
    PAGE VISITS SYSTEM FINAL
 =============================== */
+  const pageStart = Date.now();
+
 
 function getPageName(){
   let path = location.pathname;
@@ -640,6 +642,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
