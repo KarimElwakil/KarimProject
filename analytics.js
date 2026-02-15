@@ -122,8 +122,6 @@ const sessionRef = browserRef.child("sessions").child(sessionId);
 
 // فتح الجلسة لو أول مرة
 sessionRef.child("info").update({
-  // جمع وقت الجلسة
-sessionRef.child("totalTime").transaction(v => (v || 0) + durationSec);
   start: Date.now(),
   readableStart: new Date().toLocaleString(),
   device: navigator.userAgent
@@ -570,11 +568,7 @@ visitRef.child("isOnline").onDisconnect().set(false);
   // عند الخروج
 function savePageExit() {
 
-  db.ref("analytics/overview/totalSessionTime")
-  .transaction(v => (v || 0) + durationSec);
 
-db.ref("analytics/overview/totalSessions")
-  .transaction(v => (v || 0) + 1);
 
 
   const avgScrollSpeed =
@@ -699,6 +693,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
