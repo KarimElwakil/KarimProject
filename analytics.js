@@ -47,41 +47,53 @@ document.addEventListener("DOMContentLoaded", function () {
    DEVICE ID ثابت
 =============================== */
 /* ===============================
-   GLOBAL DEVICE SYSTEM FINAL
+   DEVICE ID FINAL FIX
 =============================== */
 
-let deviceId = localStorage.getItem("deviceId");
+function startAfterDevice(deviceId){
 
-// لو الجهاز عنده ID قديم
-if(deviceId){
+  // هنا يبدأ كل كود التحليلات
+  initAnalytics(deviceId);
+}
 
-  // اربطه في فايربيز للتأكيد
-  db.ref("deviceLinks/"+deviceId).set(true);
+function initDevice(){
 
-}else{
+  let deviceId = localStorage.getItem("deviceId");
 
-  // حاول تجيب جهاز محفوظ قبل كده بنفس البصمة
+  if(deviceId){
+    startAfterDevice(deviceId);
+    return;
+  }
+
   const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
   const res = screen.width+"x"+screen.height;
+  const lang = navigator.language;
 
-  const fingerprint = btoa(ua+res).substring(0,25);
+  const fingerprint = btoa(ua+res+lang).substring(0,40);
 
   db.ref("fingerprints/"+fingerprint).once("value").then(snap=>{
 
     if(snap.exists()){
       deviceId = snap.val();
       localStorage.setItem("deviceId",deviceId);
+      startAfterDevice(deviceId);
+
     }else{
 
       deviceId = "dev_"+Date.now()+"_"+Math.floor(Math.random()*9999);
       localStorage.setItem("deviceId",deviceId);
 
       db.ref("fingerprints/"+fingerprint).set(deviceId);
+
+      startAfterDevice(deviceId);
     }
 
   });
 
 }
+
+initDevice();
+
 
 
 /* ===============================
@@ -612,9 +624,11 @@ document.addEventListener("visibilitychange", ()=>{
   }
 });
 
+}
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
