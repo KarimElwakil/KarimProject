@@ -40,6 +40,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   const db = firebase.database();
+
+  const sessionStart = Date.now();
+
 /* ===============================
    DEVICE ID ثابت
 =============================== */
@@ -163,22 +166,6 @@ document.getElementById('statsRow2').innerHTML =
   createStatCard("زوار جدد", '<span id="newVisitors">0</span>', svgIcons.userPlus, "", "", 350),
   createStatCard("زوار عائدين", '<span id="returningVisitors">0</span>', svgIcons.refresh, "", "", 400)
 ].join('');
-
-
-  /* ==============================
-     Device ID
-  ============================== */
-
- const deviceId = localStorage.getItem("deviceId") || 
-Math.random().toString(36).substring(2);
-
-localStorage.setItem("deviceId", deviceId);
-
-
-
-
-
-
 
 
 
@@ -628,6 +615,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
