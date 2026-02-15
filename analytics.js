@@ -73,6 +73,9 @@ if (!sessionId || !lastSeen || (Date.now() - lastSeen > 900000)) {
   sessionId = "session_" + readable;
 
   localStorage.setItem("sessionId", sessionId);
+  sessionStorage.removeItem("sessionRank");
+sessionStorage.clear();
+
 }
 
 localStorage.setItem("lastSeen", Date.now());
@@ -285,29 +288,9 @@ sessionRef.update({
 });
 
 
-  // تحديث الثيم كل 3 ثواني
-setInterval(function () {
-
-  sessionRef.update({
-    theme: document.documentElement.dataset.theme || "light"
-  });
-
-}, 500);
 
 
-  // تحديث الثيم لو اتغير
-const observer = new MutationObserver(function () {
-
-  sessionRef.update({
-    theme: document.documentElement.dataset.theme || "light"
-  });
-
-});
-
-observer.observe(document.documentElement, {
-  attributes: true,
-  attributeFilter: ["data-theme"]
-});
+  
 
 
   /* ==============================
@@ -347,42 +330,87 @@ if(!fromPage){
 
 sessionStorage.setItem("lastPage", pageName);
 
-/* ========= reference ========= */
-
-const pageVisitsRef = sessionRef
+  const pageVisitsRef = sessionRef
   .child("pages")
   .child(pageName)
   .child("visits");
 
-/* ========= احسب رقم الزيارة ========= */
+// رقم الزيارة داخل الصفحة
+let pageVisitCount = sessionStorage.getItem("visitCount_"+pageName);
+if(!pageVisitCount) pageVisitCount = 0;
 
-pageVisitsRef.once("value").then(snap=>{
+pageVisitCount = parseInt(pageVisitCount) + 1;
+sessionStorage.setItem("visitCount_"+pageName, pageVisitCount);
 
-  let visitNumber = 1;
+// ترتيب داخل الجلسة
+let sessionRank = sessionStorage.getItem("sessionRank");
+if(!sessionRank) sessionRank = 0;
 
-  if(snap.exists()){
-    visitNumber = snap.numChildren() + 1;
-  }
+sessionRank = parseInt(sessionRank) + 1;
+sessionStorage.setItem("sessionRank", sessionRank);
 
-  const visitRef = pageVisitsRef.child(visitNumber);
+// جاي منين
+let fromPage = sessionStorage.getItem("lastPage");
+if(!fromPage) fromPage = "direct";
+else if(fromPage === pageName) fromPage = "refresh";
 
-  visitRef.set({
-    visitNumber: visitNumber,
-    rank: globalRank,
-    from: fromPage,
-    enterTime: new Date().toLocaleString(),
-    enterTimestamp: Date.now(),
+sessionStorage.setItem("lastPage", pageName);
 
-    device: detectDevice(),
-    browser: detectBrowser(),
-    os: detectOS(),
-    resolution: screen.width+"x"+screen.height,
-    language: navigator.language,
-    isOnline:true
-  });
+// إنشاء زيارة جديدة مستقلة
+const visitRef = pageVisitsRef.push();
 
-  visitRef.child("isOnline").onDisconnect().set(false);
+visitRef.set({
+  visitNumber: pageVisitCount,
+  rank: sessionRank,
+  from: fromPage,
+  enterTime: new Date().toLocaleString(),
+  enterTimestamp: Date.now(),
+
+  device: detectDevice(),
+  browser: detectBrowser(),
+  os: detectOS(),
+  resolution: screen.width+"x"+screen.height,
+  language: navigator.language,
+  isOnline:true
 });
+
+  function sendTheme(){
+  const theme = document.documentElement.dataset.theme || "light";
+  visitRef.update({theme:theme});
+}
+
+sendTheme();
+
+// مراقبة التغيير
+new MutationObserver(()=>{
+  sendTheme();
+}).observe(document.documentElement,{
+  attributes:true,
+  attributeFilter:["data-theme"]
+});
+
+// تحديث كل 5 ثواني احتياطي
+setInterval(sendTheme,5000);
+
+
+  let maxScroll = 0;
+
+window.addEventListener("scroll",()=>{
+  const scrollTop = window.scrollY;
+  const height = document.body.scrollHeight - window.innerHeight;
+  const percent = Math.round((scrollTop/height)*100);
+
+  if(percent>maxScroll){
+    maxScroll = percent;
+    visitRef.update({
+      maxScroll:maxScroll
+    });
+  }
+});
+
+
+visitRef.child("isOnline").onDisconnect().set(false);
+
 
 
   /* ==============================
@@ -550,6 +578,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
