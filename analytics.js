@@ -315,7 +315,7 @@ observer.observe(document.documentElement, {
   ============================== */
 
 /* ===============================
-   PAGE BADGE SYSTEM PRO
+   PAGE VISITS SYSTEM FINAL
 =============================== */
 
 function getPageName(){
@@ -327,48 +327,61 @@ function getPageName(){
 
 const pageName = getPageName();
 
-// ترتيب الصفحات داخل الجلسة
-let globalRank = localStorage.getItem("globalRank");
+/* ========= ترتيب الصفحات داخل الجلسة ========= */
+
+let globalRank = sessionStorage.getItem("globalRank");
 if(!globalRank) globalRank = 0;
+
 globalRank = parseInt(globalRank) + 1;
-localStorage.setItem("globalRank", globalRank);
+sessionStorage.setItem("globalRank", globalRank);
 
-// معرفة جاي منين
-let fromPage = localStorage.getItem("lastPage") || "direct";
+/* ========= جاي منين ========= */
 
-if(fromPage === pageName){
+let fromPage = sessionStorage.getItem("lastPage");
+
+if(!fromPage){
+  fromPage = "direct";
+}else if(fromPage === pageName){
   fromPage = "refresh";
 }
 
-// حفظ اخر صفحة
-localStorage.setItem("lastPage", pageName);
+sessionStorage.setItem("lastPage", pageName);
 
-// reference
-const pageRef = sessionRef.child("pages").child(pageName).child("visits");
+/* ========= reference ========= */
 
-// رقم الزيارة داخل الصفحة
-pageRef.once("value").then(snap=>{
+const pageVisitsRef = sessionRef
+  .child("pages")
+  .child(pageName)
+  .child("visits");
+
+/* ========= احسب رقم الزيارة ========= */
+
+pageVisitsRef.once("value").then(snap=>{
 
   let visitNumber = 1;
 
   if(snap.exists()){
-    visitNumber = Object.keys(snap.val()).length + 1;
+    visitNumber = snap.numChildren() + 1;
   }
 
-  const visitRef = pageRef.child(visitNumber);
+  const visitRef = pageVisitsRef.child(visitNumber);
 
   visitRef.set({
+    visitNumber: visitNumber,
     rank: globalRank,
     from: fromPage,
     enterTime: new Date().toLocaleString(),
     enterTimestamp: Date.now(),
-    device: navigator.userAgent,
+
+    device: detectDevice(),
     browser: detectBrowser(),
     os: detectOS(),
     resolution: screen.width+"x"+screen.height,
-    language: navigator.language
+    language: navigator.language,
+    isOnline:true
   });
 
+  visitRef.child("isOnline").onDisconnect().set(false);
 });
 
 
@@ -556,6 +569,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
