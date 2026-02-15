@@ -399,6 +399,15 @@ function getPageName(){
 
 const pageName = getPageName();
 
+  /* تسجيل مشاهدة صفحة عالمياً */
+const globalPageRef = db.ref("analytics/pages/"+pageName);
+
+globalPageRef.child("views").transaction(v => (v || 0) + 1);
+
+// unique per device
+globalPageRef.child("devices/"+deviceId).set(true);
+
+
 /* ========= ترتيب الصفحات داخل الجلسة ========= */
 
 let globalRank = sessionStorage.getItem("globalRank");
@@ -642,6 +651,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
