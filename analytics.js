@@ -109,7 +109,16 @@ sessionStorage.clear();
 localStorage.setItem("lastSeen", Date.now());
 
 const deviceRef = db.ref("analytics/devices/" + deviceId);
-const sessionRef = deviceRef.child("sessions").child(sessionId);
+
+// اسم المتصفح
+const browserName = detectBrowser();
+
+// مسار المتصفح
+const browserRef = deviceRef.child("browsers").child(browserName);
+
+// مسار الجلسة داخل المتصفح
+const sessionRef = browserRef.child("sessions").child(sessionId);
+
 
 // فتح الجلسة لو أول مرة
 sessionRef.child("info").update({
@@ -615,6 +624,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
