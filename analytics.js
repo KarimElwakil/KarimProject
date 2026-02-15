@@ -43,37 +43,44 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const sessionStart = Date.now();
 
+
 /* ===============================
-   DEVICE ID ثابت
-=============================== */
-/* ===============================
-   DEVICE ID FINAL FIX
-=============================== */
-/* ===============================
-   DEVICE ID FINAL (STABLE)
+   UNIVERSAL DEVICE ID (FINAL PRO)
 =============================== */
 
-let deviceId = localStorage.getItem("deviceId");
+let deviceId = null;
 
-if(!deviceId){
+const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
+const res = screen.width + "x" + screen.height;
+const lang = navigator.language;
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const mem = navigator.deviceMemory || "0";
+const cores = navigator.hardwareConcurrency || "0";
 
-  const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
-  const res = screen.width + "x" + screen.height;
-  const lang = navigator.language;
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+// بصمة شبه ثابتة للجهاز
+const fingerprintRaw = ua + res + lang + tz + mem + cores;
+const fingerprint = btoa(fingerprintRaw).substring(0,60);
 
-  const fingerprint = btoa(ua + res + lang + tz).substring(0,40);
+// شوف موجود قبل كده ولا لا
+db.ref("fingerprintLinks/" + fingerprint).once("value").then(snap=>{
 
-  deviceId = "dev_" + fingerprint;
-  localStorage.setItem("deviceId", deviceId);
-}
+  if(snap.exists()){
+    deviceId = snap.val();
+    localStorage.setItem("deviceId", deviceId);
+    startAnalytics();
 
-// ربطه في فايربيز
-db.ref("deviceFingerprints/" + deviceId).set({
-  ua: navigator.userAgent,
-  res: screen.width+"x"+screen.height,
-  lastSeen: Date.now()
+  }else{
+
+    deviceId = "dev_" + Date.now() + "_" + Math.floor(Math.random()*9999);
+    localStorage.setItem("deviceId", deviceId);
+
+    db.ref("fingerprintLinks/" + fingerprint).set(deviceId);
+
+    startAnalytics();
+  }
+
 });
+
 
 
 /* ===============================
@@ -608,6 +615,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
