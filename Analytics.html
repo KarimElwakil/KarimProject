@@ -398,14 +398,9 @@ db.ref("analytics/devices").on("value", snap => {
   let desktop = 0;
   let tablet = 0;
   let active = 0;
+Object.values(devices).forEach(device => {
 
-  Object.values(devices).forEach(device => {
-
-    if (!device.sessions) return;
-
-   Object.values(devices).forEach(device => {
-
-  // ===== DEVICE INFO (مرة واحدة فقط) =====
+  // ===== DEVICE INFO =====
   let firstSession = null;
 
   if (device.sessions)
@@ -452,7 +447,6 @@ db.ref("analytics/devices").on("value", snap => {
   }
 
 });
-
 
   /* ===== RENDER COUNTRIES ===== */
 
@@ -769,6 +763,7 @@ db.ref("analytics/sources").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
