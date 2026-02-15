@@ -659,14 +659,19 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 =============================== */
 
 function closeVisit(){
-  // جمع وقت الجلسة
-sessionRef.child("totalTime").transaction(v => (v || 0) + durationSec);
+
 
 
   if(!window.currentVisitRef) return;
 
   const exitTime = Date.now();
   const durationSec = Math.floor((exitTime - window.pageEnterTime)/1000);
+  /* جمع وقت الجلسة كله */
+sessionRef.child("totalDuration").transaction(v => (v || 0) + durationSec);
+
+/* آخر نشاط */
+sessionRef.child("info/lastSeen").set(Date.now());
+
 
   window.currentVisitRef.update({
  exitTimeReadable: new Date().toLocaleString(),
@@ -694,6 +699,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
