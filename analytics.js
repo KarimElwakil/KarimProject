@@ -470,6 +470,8 @@ window.pageEnterTime = Date.now();
 
 
 visitRef.set({
+  mouseMoves:[],
+clicks:[],
   visitNumber: pageVisitCount,
   rank: sessionRank,
   from: fromPage,
@@ -501,6 +503,29 @@ window.addEventListener("scroll",()=>{
     });
   }
 });
+
+  // تسجيل الماوس
+document.addEventListener("mousemove",(e)=>{
+  if(!window.currentVisitRef) return;
+
+  window.currentVisitRef.child("mouseMoves").push({
+    x:e.clientX,
+    y:e.clientY,
+    t:Date.now()
+  });
+});
+
+// تسجيل الكليك
+document.addEventListener("click",(e)=>{
+  if(!window.currentVisitRef) return;
+
+  window.currentVisitRef.child("clicks").push({
+    x:e.clientX,
+    y:e.clientY,
+    t:Date.now()
+  });
+});
+
 
 
 visitRef.child("isOnline").onDisconnect().set(false);
@@ -651,6 +676,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
