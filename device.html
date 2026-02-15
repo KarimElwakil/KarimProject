@@ -164,67 +164,6 @@ function drawDevice(name,data){
  `;
 }
 
-  function toggleSession(id){
-
- const box = document.getElementById("sess_"+id);
-
- if(box.style.display==="block"){
-   box.style.display="none";
-   return;
- }
-
- box.style.display="block";
-
- const db = firebase.database();
-
- db.ref("analytics/devices").once("value").then(snap=>{
-
-  const devices = snap.val();
-  if(!devices) return;
-
-  Object.values(devices).forEach(device=>{
-   if(!device.browsers) return;
-
-   Object.values(device.browsers).forEach(b=>{
-    if(!b.sessions) return;
-
-    if(b.sessions[id]){
-
-      const session = b.sessions[id];
-      drawPages(box,session);
-
-    }
-   });
-
-  });
-
- });
-
-}
-
-  function drawPages(container,session){
-
- let html="";
-
- if(!session.pages){
-   container.innerHTML="لا يوجد صفحات";
-   return;
- }
-
- Object.keys(session.pages).forEach(pageName=>{
-
-   html+=`
-   <div class="card"
-   style="cursor:pointer"
-   onclick="togglePage('${pageName}','${session.info.start}')">
-   📄 ${pageName}
-   <div id="pg_${pageName+session.info.start}" style="display:none"></div>
-   </div>`;
- });
-
- container.innerHTML = html;
-}
-
   function togglePage(pageName,start){
 
  const id = "pg_"+pageName+start;
@@ -263,12 +202,22 @@ function drawDevice(name,data){
       Object.values(visits).forEach(v=>{
 
         html+=`
-        <div class="card">
-        ⏱ ${(v.durationSec||0)} ثانية<br>
+        <div style="
+        background:#000;
+        padding:12px;
+        border-radius:12px;
+        margin:10px 0">
+
+        ⏱ الوقت: ${v.durationSec||0} ثانية 
+        (${v.durationMin||0} دقيقة)<br>
+
+        🎨 الثيم: ${v.theme||"light"}<br>
         📜 scroll: ${v.maxScroll||0}%<br>
-        🎨 theme: ${v.theme||""}<br>
+        🖱 clicks: ${v.clicks?Object.keys(v.clicks).length:0}<br>
+        🧠 mouse: ${v.mouseMoves?Object.keys(v.mouseMoves).length:0}<br>
         📱 ${v.device||""}<br>
         🌐 ${v.browser||""}
+
         </div>`;
       });
 
@@ -283,6 +232,39 @@ function drawDevice(name,data){
  });
 
 }
+
+
+ function drawPages(container,session){
+
+ let html="";
+
+ if(!session.flow){
+   container.innerHTML="لا يوجد صفحات";
+   return;
+ }
+
+ // ترتيب الصفحات حسب الدخول
+ const sorted = Object.values(session.flow).sort((a,b)=>a.time-b.time);
+
+ sorted.forEach((p,i)=>{
+
+   html+=`
+   <div class="card"
+   style="cursor:pointer;background:#020617"
+   onclick="togglePage('${p.page}','${session.info.start}')">
+
+   ${i+1}️⃣ ${p.page}
+
+   <div id="pg_${p.page+session.info.start}" 
+   style="display:none;margin-top:10px"></div>
+
+   </div>`;
+
+ });
+
+ container.innerHTML = html;
+}
+
 
 
 
