@@ -59,7 +59,12 @@ container.innerHTML = "جاري تحميل بيانات الجهاز...";
 
 const devicePath = "analytics/devices";
 
+let firstLoad = true;
+
 db.ref(devicePath).on("value", snap=>{
+
+ if(!firstLoad) return; // يمنع اعادة الرسم كل ثانية
+ firstLoad = false;
 
  const devices = snap.val();
  if(!devices) return;
@@ -280,26 +285,27 @@ function drawPages(container,session){
 
  let html="";
 
- if(!session.pages){
-   container.innerHTML="لا يوجد صفحات";
+ if(!session.flow){
+   container.innerHTML="لا يوجد مسار";
    return;
  }
 
+ const flowArr = Object.values(session.flow).sort((a,b)=>a.time-b.time);
+
  let i = 1;
 
- Object.keys(session.pages).forEach(pageName=>{
+ flowArr.forEach(step=>{
 
-   const uniqueId = pageName + "_" + session.info.start;
+   const pageName = step.page;
+   const uid = pageName+"_"+step.time;
 
    html+=`
    <div class="card"
-   style="cursor:pointer;background:#020617"
-   onclick="event.stopPropagation();togglePage('${pageName}','${session.info.start}')">
+   style="cursor:pointer;background:#020617;border-left:4px solid #00ffc3"
+   onclick="event.stopPropagation();openPageDetails('${pageName}','${session.info.start}','${step.time}')">
 
-   📄 ${pageName}
-   <span style="float:left;background:#0ea5e9;padding:2px 8px;border-radius:6px">${i}</span>
-
-   <div id="pg_${uniqueId}" style="display:none;margin-top:10px"></div>
+   <b>${i}️⃣ ${pageName}</b>
+   <div id="flow_${uid}" style="display:none;margin-top:10px"></div>
    </div>
    `;
 
@@ -307,6 +313,70 @@ function drawPages(container,session){
  });
 
  container.innerHTML = html;
+}
+
+  function openPageDetails(pageName,start,time){
+
+ const id = "flow_"+pageName+"_"+time;
+ const box = document.getElementById(id);
+
+ if(box.style.display==="block"){
+   box.style.display="none";
+   return;
+ }
+
+ box.style.display="block";
+
+ const db = firebase.database();
+
+ db.ref("analytics/devices").once("value").then(snap=>{
+
+  const devices = snap.val();
+  if(!devices) return;
+
+  Object.values(devices).forEach(device=>{
+   if(!device.browsers) return;
+
+   Object.values(device.browsers).forEach(b=>{
+    if(!b.sessions) return;
+
+    Object.values(b.sessions).forEach(s=>{
+
+      if(!s.info || s.info.start!=start) return;
+      if(!s.pages || !s.pages[pageName]) return;
+
+      const visits = s.pages[pageName].visits;
+      if(!visits) return;
+
+      let html="";
+
+      Object.values(visits).forEach(v=>{
+
+        html+=`
+        <div style="
+        background:#020617;
+        padding:12px;
+        border-radius:10px;
+        margin:6px 0;
+        border:1px solid #0f172a">
+
+        ⏱ ${(v.durationSec||0)} ثانية<br>
+        📜 scroll: ${v.maxScroll||0}%<br>
+        🎨 theme: ${v.theme||"light"}<br>
+        📱 ${v.device||""}<br>
+        🌐 ${v.browser||""}
+        </div>`;
+      });
+
+      box.innerHTML = html || "لا بيانات";
+
+    });
+
+   });
+
+  });
+
+ });
 }
 
 
