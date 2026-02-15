@@ -403,46 +403,56 @@ db.ref("analytics/devices").on("value", snap => {
 
     if (!device.sessions) return;
 
-    Object.values(device.sessions).forEach(session => {
+   Object.values(devices).forEach(device => {
 
-      /* COUNTRY */
-      if (session.country)
-        countries[session.country] =
-          (countries[session.country] || 0) + 1;
+  // ===== DEVICE INFO (مرة واحدة فقط) =====
+  let firstSession = null;
 
-      /* DEVICE NAME */
-      const label = session.deviceLabel || session.device;
-      if (label)
-        deviceNames[label] =
-          (deviceNames[label] || 0) + 1;
+  if (device.sessions)
+    firstSession = Object.values(device.sessions)[0];
 
-      /* OS */
-      if (session.os)
-        osCount[session.os] =
-          (osCount[session.os] || 0) + 1;
+  if (!firstSession) return;
 
-      /* BROWSER */
-      if (session.browser)
-        browsers[session.browser] =
-          (browsers[session.browser] || 0) + 1;
+  /* ===== COUNTRY ===== */
+  let country = firstSession.country || "Egypt";
+  if (country === "Unknown") country = "Egypt";
 
-      /* DEVICE TYPE */
-      const type = session.device || "";
+  countries[country] = (countries[country] || 0) + 1;
 
-      if (type.includes("iPhone") || type.includes("Android"))
-        mobile++;
-      else if (type.includes("iPad"))
-        tablet++;
-      else
-        desktop++;
+  /* ===== DEVICE NAME ===== */
+  const label = firstSession.deviceLabel || firstSession.device;
+  if (label)
+    deviceNames[label] = (deviceNames[label] || 0) + 1;
 
-      /* REALTIME */
-      if (session.isOnline === true)
-        active++;
+  /* ===== OS ===== */
+  if (firstSession.os)
+    osCount[firstSession.os] =
+      (osCount[firstSession.os] || 0) + 1;
 
+  /* ===== BROWSER ===== */
+  if (firstSession.browser)
+    browsers[firstSession.browser] =
+      (browsers[firstSession.browser] || 0) + 1;
+
+  /* ===== DEVICE TYPE ===== */
+  const type = firstSession.device || "";
+
+  if (type.includes("iPhone") || type.includes("Android"))
+    mobile++;
+  else if (type.includes("iPad"))
+    tablet++;
+  else
+    desktop++;
+
+  /* ===== REALTIME ===== */
+  if (device.sessions) {
+    Object.values(device.sessions).forEach(s=>{
+      if (s.isOnline === true) active++;
     });
+  }
 
-  });
+});
+
 
   /* ===== RENDER COUNTRIES ===== */
 
@@ -759,6 +769,7 @@ db.ref("analytics/sources").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
