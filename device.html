@@ -117,18 +117,49 @@ function drawDevice(name,data){
     Object.keys(sessions).forEach(sid=>{
       const s = sessions[sid];
 
+      // ===== last seen =====
+let lastSeen = "غير معروف";
+if(s.lastActive){
+  const diff = Math.floor((Date.now()-s.lastActive)/1000);
+
+  if(diff < 60) lastSeen = "الآن";
+  else if(diff < 3600) lastSeen = Math.floor(diff/60)+" دقيقة";
+  else lastSeen = Math.floor(diff/3600)+" ساعة";
+}
+
+// ===== online =====
+let onlineBadge = s.isOnline
+ ? `<span style="color:#00ffa6">● متصل الآن</span>`
+ : `<span style="color:#999">غير متصل</span>`;
+
+
       let dur = s.totalTimeSpent || 0;
       totalTime+=dur;
 
-      sessionsHTML+=`
-<div class="card">
-<h4>🧠 جلسة</h4>
-🕒 بدأ: ${sid}<br>
-📍 ${s.city||""} ${s.country||"Egypt"}<br>
-⏱ المدة: ${Math.floor(dur/60)} دقيقة<br>
-📱 الجهاز: ${s.device||""}<br>
-🌐 المتصفح: ${s.browser||""}
-</div>`;
+     sessionsHTML+=`
+<div class="card" style="border:1px solid #222">
+
+<div style="font-size:14px;margin-bottom:6px">
+${onlineBadge}
+</div>
+
+<b>🧠 جلسة:</b> ${sid}<br>
+
+📍 ${s.city||"غير معروف"} - ${s.country||"Egypt"}<br>
+
+🕒 آخر ظهور: ${lastSeen}<br>
+
+📱 ${s.device||""}<br>
+🌐 ${s.browser||""}<br>
+
+<hr style="opacity:.1">
+
+📊 عدد الصفحات:
+${s.pages ? Object.keys(s.pages).length : 0}
+
+</div>
+`;
+
 
     });
 
@@ -174,13 +205,19 @@ drawMap(data);
  }
 
  if(country==="Unknown" || !country) country="Egypt";
+   if(!city || city==="Unknown") city="Egypt";
+
 
  let location = city ? `${city}, ${country}` : country;
 
  container.innerHTML+=`
  <div class="card">
  <h3>🌍 موقع الجهاز</h3>
- <iframe width="100%" height="260"
+ <div style="margin-bottom:8px;font-size:15px">
+📍 الموقع التقريبي: <b>${location}</b>
+</div>
+ <iframe width="100%" height="180"
+style="border-radius:12px;border:none"
  src="https://maps.google.com/maps?q=${location}&output=embed">
  </iframe>
  </div>`;
@@ -190,7 +227,8 @@ drawMap(data);
 
 </script>
 
-<canvas id="sessionsChart" height="120"></canvas>
+<canvas id="sessionsChart" height="60"></canvas>
+
 
 
 </body>
