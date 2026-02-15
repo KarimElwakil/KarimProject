@@ -539,18 +539,38 @@ db.ref("analytics/overview").on("value", snap => {
   const data = snap.val();
   if (!data) return;
 
-  if (document.getElementById("totalVisits"))
-    document.getElementById("totalVisits").textContent = data.totalVisits || 0;
+  const totalVisits = data.totalVisits || 0;
+  const pageViews = data.pageViews || 0;
+  const totalSessions = data.totalSessions || 0;
+  const bounce = data.bounce || 0;
 
-  if (document.getElementById("pageViews"))
-    document.getElementById("pageViews").textContent = data.pageViews || 0;
+  // إجمالي زيارات
+  document.getElementById("totalVisits").textContent = totalVisits;
 
-  if (data.totalSessionTime && data.totalSessions) {
-    const avg = Math.floor(data.totalSessionTime / data.totalSessions);
-    if (document.getElementById("avgSession"))
-      document.getElementById("avgSession").textContent = avg + " ث";
+  // مشاهدات
+  document.getElementById("pageViews").textContent = pageViews;
+
+  // صفحات لكل جلسة
+  if (totalSessions)
+    document.getElementById("pagesPerSession").textContent =
+      (pageViews / totalSessions).toFixed(1);
+
+  // معدل ارتداد
+  document.getElementById("bounceRate").textContent =
+    bounce ? Math.round(bounce) + "%" : "0%";
+
+  // متوسط الجلسة
+  if (data.totalSessionTime && totalSessions) {
+    const avg = Math.floor(data.totalSessionTime / totalSessions);
+    document.getElementById("avgSession").textContent = avg + " ث";
   }
+
+  // realtime
+  if (data.onlineNow)
+    document.getElementById("realtimeCount").textContent = data.onlineNow;
+
 });
+
 
 
   /* =============================
@@ -609,24 +629,23 @@ function renderDeviceNames(list = []) {
   if (!container) return;
 
   if (!list.length) {
-    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div>`;
+    container.innerHTML = `<div style="color:var(--muted)">لا توجد بيانات حالياً</div بالإضافة>`;
     return;
   }
 
   container.innerHTML = list
     .sort((a,b)=>b.count-a.count)
-    .map((d,i) => `
+    .map(d => `
       <div class="device-row">
         <div class="dr-left">
-          <div class="dr-rank">${i+1}</div>
           <div>
             <div class="dr-name">${d.name}</div>
           </div>
         </div>
-        <div class="dr-count">${d.count}</div>
       </div>
     `).join('');
 }
+
 
 
 function renderOS(list = []) {
@@ -746,14 +765,25 @@ db.ref("analytics/sources").on("value", snap => {
     return;
   }
 
-  const list = Object.keys(data).map(key => ({
-    source: key,
-    visits: data[key]
-  }));
+  const list = [];
+
+  Object.keys(data).forEach(key=>{
+    let val = data[key];
+
+    // لو object نحوله لرقم
+    if (typeof val === "object")
+      val = Object.keys(val).length;
+
+    list.push({
+      source: key,
+      visits: val || 0
+    });
+  });
 
   renderSources(list);
 
 });
+
 
 
 
@@ -763,6 +793,7 @@ db.ref("analytics/sources").on("value", snap => {
 </body>
 
 </html>
+
 
 
 
