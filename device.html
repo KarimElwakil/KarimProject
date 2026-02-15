@@ -283,8 +283,6 @@ function drawDevice(name,data){
 
 function drawPages(container,session){
 
- let html="";
-
  if(!session.flow){
    container.innerHTML="لا يوجد مسار";
    return;
@@ -292,20 +290,22 @@ function drawPages(container,session){
 
  const flowArr = Object.values(session.flow).sort((a,b)=>a.time-b.time);
 
- let i = 1;
+ let html="";
+ let i=1;
 
  flowArr.forEach(step=>{
 
    const pageName = step.page;
-   const uid = pageName+"_"+step.time;
+   const stepTime = step.time;
+   const uid = "flow_"+stepTime;
 
    html+=`
    <div class="card"
    style="cursor:pointer;background:#020617;border-left:4px solid #00ffc3"
-   onclick="event.stopPropagation();openPageDetails('${pageName}','${session.info.start}','${step.time}')">
+   onclick="event.stopPropagation();openVisit('${pageName}','${session.info.start}','${stepTime}')">
 
    <b>${i}️⃣ ${pageName}</b>
-   <div id="flow_${uid}" style="display:none;margin-top:10px"></div>
+   <div id="${uid}" style="display:none;margin-top:10px"></div>
    </div>
    `;
 
@@ -314,6 +314,77 @@ function drawPages(container,session){
 
  container.innerHTML = html;
 }
+
+  function openVisit(pageName,start,stepTime){
+
+ const box = document.getElementById("flow_"+stepTime);
+
+ if(box.style.display==="block"){
+   box.style.display="none";
+   return;
+ }
+
+ box.style.display="block";
+
+ const db = firebase.database();
+
+ db.ref("analytics/devices").once("value").then(snap=>{
+
+  const devices = snap.val();
+  if(!devices) return;
+
+  Object.values(devices).forEach(device=>{
+   if(!device.browsers) return;
+
+   Object.values(device.browsers).forEach(b=>{
+    if(!b.sessions) return;
+
+    Object.values(b.sessions).forEach(s=>{
+
+      if(!s.info || s.info.start!=start) return;
+      if(!s.pages || !s.pages[pageName]) return;
+
+      const visits = Object.values(s.pages[pageName].visits || {});
+      if(!visits.length) return;
+
+      // نجيب أقرب زيارة حسب التوقيت
+      let closest = visits[0];
+      let minDiff = Math.abs(visits[0].enterTimestamp - stepTime);
+
+      visits.forEach(v=>{
+        const diff = Math.abs(v.enterTimestamp - stepTime);
+        if(diff < minDiff){
+          minDiff = diff;
+          closest = v;
+        }
+      });
+
+      const v = closest;
+
+      box.innerHTML = `
+      <div style="
+      background:#020617;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid #0f172a">
+
+      ⏱ المدة: ${(v.durationSec||0)} ثانية<br>
+      📜 scroll: ${v.maxScroll||0}%<br>
+      🎨 الثيم: ${v.theme||"light"}<br>
+      📱 الجهاز: ${v.device||""}<br>
+      🌐 المتصفح: ${v.browser||""}
+      </div>
+      `;
+
+    });
+
+   });
+
+  });
+
+ });
+}
+
 
   function openPageDetails(pageName,start,time){
 
