@@ -390,60 +390,60 @@ db.ref("analytics/devices").on("value", snap => {
   let desktop = 0;
   let tablet = 0;
   let active = 0;
-Object.values(devices).forEach(device => {
 
-  // ===== DEVICE INFO =====
-  let firstSession = null;
+  Object.values(devices).forEach(device => {
 
-  if (device.sessions)
-    firstSession = Object.values(device.sessions)[0];
+    if (!device.browsers) return;
 
-  if (!firstSession) return;
+    Object.values(device.browsers).forEach(browser => {
 
-  /* ===== COUNTRY ===== */
-  let country = firstSession.country || "Egypt";
-  if (country === "Unknown") country = "Egypt";
+      if (!browser.sessions) return;
 
-  countries[country] = (countries[country] || 0) + 1;
+      Object.values(browser.sessions).forEach(session => {
 
-  /* ===== DEVICE NAME ===== */
-  const label = firstSession.deviceLabel || firstSession.device;
-  if (label)
-    deviceNames[label] = (deviceNames[label] || 0) + 1;
+        const info = session;
 
-  /* ===== OS ===== */
-  if (firstSession.os)
-    osCount[firstSession.os] =
-      (osCount[firstSession.os] || 0) + 1;
+        /* ===== COUNTRY ===== */
+        let country = info.country || "Egypt";
+        if (country === "Unknown") country = "Egypt";
+        countries[country] = (countries[country] || 0) + 1;
 
-  /* ===== BROWSER ===== */
-  if (firstSession.browser)
-    browsers[firstSession.browser] =
-      (browsers[firstSession.browser] || 0) + 1;
+        /* ===== DEVICE NAME ===== */
+        const label = info.deviceLabel || info.device;
+        if (label)
+          deviceNames[label] = (deviceNames[label] || 0) + 1;
 
-  /* ===== DEVICE TYPE ===== */
-  const type = firstSession.device || "";
+        /* ===== OS ===== */
+        if (info.os)
+          osCount[info.os] =
+            (osCount[info.os] || 0) + 1;
 
-  if (type.includes("iPhone") || type.includes("Android"))
-    mobile++;
-  else if (type.includes("iPad"))
-    tablet++;
-  else
-    desktop++;
+        /* ===== BROWSER ===== */
+        if (info.browser)
+          browsers[info.browser] =
+            (browsers[info.browser] || 0) + 1;
 
-  /* ===== REALTIME ===== */
-  if (device.sessions) {
-    Object.values(device.sessions).forEach(s=>{
-      if (s.isOnline === true) active++;
+        /* ===== DEVICE TYPE ===== */
+        const type = info.device || "";
+
+        if (type.includes("iPhone") || type.includes("Android"))
+          mobile++;
+        else if (type.includes("iPad"))
+          tablet++;
+        else
+          desktop++;
+
+        /* ===== REALTIME ===== */
+        if (info.isOnline === true) active++;
+
+      });
+
     });
-  }
 
-});
+  });
 
-  /* ===== RENDER COUNTRIES ===== */
-
+  /* ===== COUNTRIES ===== */
   const totalCountries = Object.values(countries).reduce((a,b)=>a+b,0);
-
   renderCountries(
     Object.keys(countries).map(name => ({
       country: name,
@@ -452,18 +452,15 @@ Object.values(devices).forEach(device => {
     }))
   );
 
-  /* ===== RENDER DEVICE TYPES ===== */
-
+  /* ===== DEVICE TYPES ===== */
   const totalDevices = mobile + desktop + tablet;
-
   renderDeviceTypes([
     { type:"Mobile", icon:"📱", count:mobile, pct: totalDevices ? ((mobile/totalDevices)*100).toFixed(1) : 0 },
     { type:"Desktop", icon:"🖥️", count:desktop, pct: totalDevices ? ((desktop/totalDevices)*100).toFixed(1) : 0 },
     { type:"Tablet", icon:"📋", count:tablet, pct: totalDevices ? ((tablet/totalDevices)*100).toFixed(1) : 0 }
   ]);
 
-  /* ===== RENDER DEVICE NAMES ===== */
-
+  /* ===== DEVICE NAMES ===== */
   renderDeviceNames(
     Object.keys(deviceNames).map(name => ({
       name,
@@ -471,10 +468,8 @@ Object.values(devices).forEach(device => {
     }))
   );
 
-  /* ===== RENDER OS ===== */
-
+  /* ===== OS ===== */
   const totalOS = Object.values(osCount).reduce((a,b)=>a+b,0);
-
   renderOS(
     Object.keys(osCount).map(name => ({
       name,
@@ -483,10 +478,8 @@ Object.values(devices).forEach(device => {
     }))
   );
 
-  /* ===== RENDER BROWSERS ===== */
-
+  /* ===== BROWSERS ===== */
   const totalBrowsers = Object.values(browsers).reduce((a,b)=>a+b,0);
-
   renderBrowsers(
     Object.keys(browsers).map(name => ({
       name,
@@ -496,10 +489,10 @@ Object.values(devices).forEach(device => {
   );
 
   /* ===== REALTIME ===== */
-
   document.getElementById("realtimeCount").textContent = active;
 
 });
+
 
 
 /* =============================
@@ -814,6 +807,7 @@ setInterval(()=>{
 </body>
 
 </html>
+
 
 
 
