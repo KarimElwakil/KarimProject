@@ -55,42 +55,51 @@ if (!deviceId) {
 }
 
 /* ===============================
-   SESSION SYSTEM احترافي
+   SESSION SYSTEM PRO (15 MIN)
 =============================== */
 
-let sessionId = sessionStorage.getItem("sessionId");
+let sessionId = localStorage.getItem("sessionId");
 let lastSeen = localStorage.getItem("lastSeen");
+let lastPage = localStorage.getItem("lastPage");
 
-// لو مفيش جلسة او اختفى اكتر من 30 دقيقة → جلسة جديدة
-if (!sessionId || !lastSeen || (Date.now() - lastSeen > 1800000)) {
+// لو خرج اكتر من 15 دقيقة → جلسة جديدة
+if (!sessionId || !lastSeen || (Date.now() - lastSeen > 900000)) {
 
-  sessionId = db.ref("analytics/devices/" + deviceId + "/sessions").push().key;
-  sessionStorage.setItem("sessionId", sessionId);
+  const now = new Date();
+  const readable =
+    now.getFullYear()+"-"+(now.getMonth()+1)+"-"+now.getDate()+" "+
+    now.getHours()+":"+now.getMinutes()+":"+now.getSeconds();
 
+  sessionId = "session_" + readable;
+
+  localStorage.setItem("sessionId", sessionId);
 }
 
-// حدث اخر نشاط
 localStorage.setItem("lastSeen", Date.now());
 
 const deviceRef = db.ref("analytics/devices/" + deviceId);
 const sessionRef = deviceRef.child("sessions").child(sessionId);
 
-// دخول صفحة
-sessionRef.update({
+// فتح الجلسة لو أول مرة
+sessionRef.child("info").update({
   start: Date.now(),
-  page: location.pathname,
-  isOnline:true
+  readableStart: new Date().toLocaleString(),
+  device: navigator.userAgent
 });
 
-// خروج
-window.addEventListener("beforeunload", () => {
+// تحديث اخر نشاط كل 10 ثواني
+setInterval(()=>{
   localStorage.setItem("lastSeen", Date.now());
+  sessionRef.child("info/lastActive").set(Date.now());
+},10000);
 
-  sessionRef.update({
-    isOnline:false,
-    end: Date.now()
-  });
+// عند الخروج
+window.addEventListener("beforeunload",()=>{
+  localStorage.setItem("lastSeen", Date.now());
+  sessionRef.child("info/isOnline").set(false);
 });
+
+sessionRef.child("info/isOnline").set(true);
 
 
  
@@ -615,6 +624,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
