@@ -122,6 +122,8 @@ const sessionRef = browserRef.child("sessions").child(sessionId);
 
 // فتح الجلسة لو أول مرة
 sessionRef.child("info").update({
+  // جمع وقت الجلسة
+sessionRef.child("totalTime").transaction(v => (v || 0) + durationSec);
   start: Date.now(),
   readableStart: new Date().toLocaleString(),
   device: navigator.userAgent
@@ -131,12 +133,15 @@ sessionRef.child("info").update({
 setInterval(()=>{
   localStorage.setItem("lastSeen", Date.now());
   sessionRef.child("info/lastActive").set(Date.now());
+sessionRef.child("info/isOnline").set(true);
+
 },10000);
 
 // عند الخروج
 window.addEventListener("beforeunload",()=>{
-  localStorage.setItem("lastSeen", Date.now());
   sessionRef.child("info/isOnline").set(false);
+sessionRef.child("info/closedAt").set(Date.now());
+
 });
 
 sessionRef.child("info/isOnline").set(true);
@@ -464,6 +469,14 @@ sessionStorage.setItem("lastPage", pageName);
 // إنشاء زيارة جديدة مستقلة
 const visitRef = pageVisitsRef.push();
 
+  // حفظ ترتيب الصفحات داخل الجلسة
+sessionRef.child("flow").push({
+ page: pageName,
+ time: Date.now(),
+ readable: new Date().toLocaleString()
+});
+
+
   // نخليه متاح عالمياً
 window.currentVisitRef = visitRef;
 window.pageEnterTime = Date.now();
@@ -646,6 +659,9 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 =============================== */
 
 function closeVisit(){
+  // جمع وقت الجلسة
+sessionRef.child("totalTime").transaction(v => (v || 0) + durationSec);
+
 
   if(!window.currentVisitRef) return;
 
@@ -653,11 +669,13 @@ function closeVisit(){
   const durationSec = Math.floor((exitTime - window.pageEnterTime)/1000);
 
   window.currentVisitRef.update({
-    exitTimeReadable: new Date().toLocaleString(),
-    exitTimestamp: exitTime,
-    durationSec: durationSec,
-    durationMin: (durationSec/60).toFixed(2)
-  });
+ exitTimeReadable: new Date().toLocaleString(),
+ exitTimestamp: exitTime,
+ durationSec: durationSec,
+ durationMin: (durationSec/60).toFixed(2),
+ theme: document.documentElement.getAttribute("data-theme") || "light"
+});
+
 
 }
 
@@ -676,6 +694,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
