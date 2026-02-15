@@ -197,15 +197,31 @@ themeObserver.observe(document.documentElement,{
     if (/Macintosh/i.test(ua)) return "Mac";
     return "Unknown Device";
   }
+function detectBrowser() {
+  const ua = navigator.userAgent;
 
-  function detectBrowser() {
-    const ua = navigator.userAgent;
-    if (ua.includes("Edg")) return "Edge";
-    if (ua.includes("Chrome")) return "Chrome";
-    if (ua.includes("Firefox")) return "Firefox";
-    if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
-    return "Unknown Browser";
-  }
+  // Telegram
+  if (ua.includes("Telegram")) return "Telegram";
+
+  // Facebook / Instagram webview
+  if (ua.includes("FBAN") || ua.includes("FBAV")) return "Facebook";
+  if (ua.includes("Instagram")) return "Instagram";
+
+  // Edge
+  if (ua.includes("Edg")) return "Edge";
+
+  // Chrome
+  if (ua.includes("Chrome") && !ua.includes("Edg")) return "Chrome";
+
+  // Firefox
+  if (ua.includes("Firefox")) return "Firefox";
+
+  // Safari الحقيقي
+  if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
+
+  return "Unknown";
+}
+
 
   function detectOS() {
   const ua = navigator.userAgent;
@@ -624,6 +640,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
