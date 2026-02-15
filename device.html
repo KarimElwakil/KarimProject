@@ -6,7 +6,7 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
 
 <script>
 
@@ -47,20 +47,7 @@ margin-bottom:15px">
 
 <script>
 
- function drawChart(count){
 
-const ctx = document.getElementById("sessionsChart");
-
-new Chart(ctx,{
- type:"doughnut",
- data:{
-  labels:["عدد الجلسات"],
-  datasets:[{
-   data:[count],
-  }]
- },
-});
-}
 
 const db = firebase.database();
 
@@ -98,99 +85,151 @@ function drawDevice(name,data){
 
  let totalSessions=0;
  let totalTime=0;
- let browsersHTML="";
  let sessionsHTML="";
+ let deviceLastSeen=0;
 
- if(data.browsers){
+ if(!data.browsers){
+   container.innerHTML="لا توجد بيانات";
+   return;
+ }
 
-  Object.keys(data.browsers).forEach(browser=>{
+ Object.keys(data.browsers).forEach(browser=>{
 
-    const sessions = data.browsers[browser].sessions;
-    const count = Object.keys(sessions).length;
-    totalSessions+=count;
+  const sessions = data.browsers[browser].sessions;
+  if(!sessions) return;
 
-    browsersHTML+=`
-    <div class="card">
-    🌐 ${browser} — ${count} جلسة
-    </div>`;
+  Object.keys(sessions).forEach(sid=>{
 
-    Object.keys(sessions).forEach(sid=>{
-      const s = sessions[sid];
+    const s = sessions[sid];
+    totalSessions++;
 
-      // ===== last seen =====
-let lastSeen = "غير معروف";
-if(s.lastActive){
-  const diff = Math.floor((Date.now()-s.lastActive)/1000);
+    // ===== last seen =====
+    let lastSeenTxt="غير معروف";
+    if(s.lastActive){
+      const diff=Math.floor((Date.now()-s.lastActive)/1000);
+      if(diff<60) lastSeenTxt="الآن";
+      else if(diff<3600) lastSeenTxt=Math.floor(diff/60)+" دقيقة";
+      else lastSeenTxt=Math.floor(diff/3600)+" ساعة";
+    }
 
-  if(diff < 60) lastSeen = "الآن";
-  else if(diff < 3600) lastSeen = Math.floor(diff/60)+" دقيقة";
-  else lastSeen = Math.floor(diff/3600)+" ساعة";
-}
+    if(s.lastActive && s.lastActive>deviceLastSeen)
+      deviceLastSeen=s.lastActive;
 
-// ===== online =====
-let onlineBadge = s.isOnline
- ? `<span style="color:#00ffa6">● متصل الآن</span>`
- : `<span style="color:#999">غير متصل</span>`;
+    // ===== online =====
+    let onlineBadge = s.isOnline
+     ? `<span style="color:#00ffa6">● متصل الآن</span>`
+     : `<span style="color:#777">غير متصل</span>`;
 
+    // ===== location =====
+    let country = s.country && s.country!=="Unknown" ? s.country : "Egypt";
+    let city = s.city && s.city!=="Unknown" ? s.city : "";
+    let location = city ? `${city}, ${country}` : country;
 
-      let dur = s.totalTimeSpent || 0;
-      totalTime+=dur;
+    // ===== الصفحات =====
+    let pagesHTML="";
+    if(s.pages){
+      Object.keys(s.pages).forEach(p=>{
 
-     sessionsHTML+=`
-<div class="card" style="border:1px solid #222">
+        const page = s.pages[p];
+        let visits = page.visits || {};
 
-<div style="font-size:14px;margin-bottom:6px">
-${onlineBadge}
-</div>
+        Object.keys(visits).forEach(v=>{
+          const visit = visits[v];
 
-<b>🧠 جلسة:</b> ${sid}<br>
+          pagesHTML+=`
+          <div style="
+          background:#0f172a;
+          padding:10px;
+          border-radius:10px;
+          margin-top:8px;
+          font-size:13px">
 
-📍 ${s.city||"غير معروف"} - ${s.country||"Egypt"}<br>
+          📄 <b>${p}</b><br>
 
-🕒 آخر ظهور: ${lastSeen}<br>
+          ⏱ مدة: ${visit.durationSec||0} ثانية<br>
 
-📱 ${s.device||""}<br>
-🌐 ${s.browser||""}<br>
+          📜 scroll: ${visit.maxScroll||0}%<br>
 
-<hr style="opacity:.1">
+          ↩ من: ${visit.from||"direct"}<br>
 
-📊 عدد الصفحات:
-${s.pages ? Object.keys(s.pages).length : 0}
+          🕒 دخول: ${visit.enterTime||""}<br>
+          📴 خروج: ${visit.exitTimeReadable||"لم يخرج"}
 
-</div>
-`;
+          </div>`;
+        });
+      });
+    }
 
+    sessionsHTML+=`
+    <div style="
+    background:#111827;
+    padding:15px;
+    border-radius:14px;
+    margin-bottom:18px;
+    border:1px solid #1f2937">
 
-    });
+    <div style="font-size:14px;margin-bottom:8px">
+    ${onlineBadge}
+    </div>
 
+    <b>🧠 جلسة:</b> ${sid}<br>
+
+    📍 ${location}<br>
+    🌐 ${browser}<br>
+    📱 ${s.device||""}<br>
+
+    🕒 آخر ظهور: ${lastSeenTxt}
+
+    <div style="
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px solid #222">
+
+    <b>📊 الصفحات:</b>
+    ${pagesHTML||"لا يوجد تصفح"}
+
+    </div>
+
+    </div>
+    `;
   });
 
+ });
+
+ // ===== last seen للجهاز =====
+ let deviceSeen="غير معروف";
+ if(deviceLastSeen){
+   const diff=Math.floor((Date.now()-deviceLastSeen)/1000);
+   if(diff<60) deviceSeen="الآن";
+   else if(diff<3600) deviceSeen=Math.floor(diff/60)+" دقيقة";
+   else deviceSeen=Math.floor(diff/3600)+" ساعة";
  }
 
  container.innerHTML=`
-<div class="card">
-<h3>📱 معلومات الجهاز</h3>
-الاسم: ${name}<br>
-عدد الجلسات: ${totalSessions}<br>
-إجمالي الوقت: ${Math.floor(totalTime/60)} دقيقة
-</div>
 
-<div class="card">
-<h3>🌐 المتصفحات</h3>
-${browsersHTML || "لا يوجد"}
-</div>
+ <div style="
+ background:#020617;
+ padding:20px;
+ border-radius:16px;
+ margin-bottom:20px;
+ border:1px solid #0f172a">
 
-<div class="card">
-<h3>🧠 الجلسات</h3>
-${sessionsHTML || "لا يوجد جلسات"}
-</div>
-`;
-drawChart(totalSessions);
-drawMap(data);
+ <h2>📱 الجهاز</h2>
 
+ 🧠 عدد الجلسات: ${totalSessions}<br>
+ 🕒 آخر ظهور للجهاز: ${deviceSeen}
+
+ </div>
+
+ ${sessionsHTML}
+
+ `;
+
+ drawMap(data);
 }
 
- function drawMap(data){
+
+function drawMap(data){
 
  let country="Egypt";
  let city="";
@@ -199,27 +238,34 @@ drawMap(data);
   Object.values(data.browsers).forEach(b=>{
    Object.values(b.sessions).forEach(s=>{
      if(s.country && s.country!=="Unknown") country=s.country;
-     if(s.city) city=s.city;
+     if(s.city && s.city!=="Unknown") city=s.city;
    });
   });
  }
 
- if(country==="Unknown" || !country) country="Egypt";
-   if(!city || city==="Unknown") city="Egypt";
-
+ if(country==="Unknown"||!country) country="Egypt";
 
  let location = city ? `${city}, ${country}` : country;
 
  container.innerHTML+=`
- <div class="card">
- <h3>🌍 موقع الجهاز</h3>
- <div style="margin-bottom:8px;font-size:15px">
-📍 الموقع التقريبي: <b>${location}</b>
+ <div style="
+ background:#020617;
+ padding:20px;
+ border-radius:16px;
+ margin-top:20px;
+ border:1px solid #0f172a">
+
+ <h3>🌍 الموقع</h3>
+
+ <div style="margin-bottom:8px">
+📍 <b>${location}</b>
 </div>
+
  <iframe width="100%" height="180"
-style="border-radius:12px;border:none"
+ style="border-radius:12px;border:none"
  src="https://maps.google.com/maps?q=${location}&output=embed">
  </iframe>
+
  </div>`;
 }
 
@@ -227,7 +273,7 @@ style="border-radius:12px;border:none"
 
 </script>
 
-<canvas id="sessionsChart" height="60"></canvas>
+
 
 
 
