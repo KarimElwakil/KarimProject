@@ -45,42 +45,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 /* ===============================
-   UNIVERSAL DEVICE ID (FINAL PRO)
+   DEVICE SYSTEM ULTRA FIXED
 =============================== */
 
 let deviceId = null;
 
+// بصمة قوية للجهاز
 const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
 const res = screen.width + "x" + screen.height;
 const lang = navigator.language;
 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const mem = navigator.deviceMemory || "0";
 const cores = navigator.hardwareConcurrency || "0";
 
-// بصمة شبه ثابتة للجهاز
-const fingerprintRaw = ua + res + lang + tz + mem + cores;
-const fingerprint = btoa(fingerprintRaw).substring(0,60);
+const fingerprint = btoa(ua + res + lang + tz + cores).substring(0,50);
 
-// شوف موجود قبل كده ولا لا
-db.ref("fingerprintLinks/" + fingerprint).once("value").then(snap=>{
+// نجيب او ننشئ device
+db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
   if(snap.exists()){
     deviceId = snap.val();
-    localStorage.setItem("deviceId", deviceId);
-    startAnalytics();
 
   }else{
-
-    deviceId = "dev_" + Date.now() + "_" + Math.floor(Math.random()*9999);
-    localStorage.setItem("deviceId", deviceId);
-
-    db.ref("fingerprintLinks/" + fingerprint).set(deviceId);
-
-    startAnalytics();
+    deviceId = "device_" + Math.random().toString(36).substring(2,10);
+    db.ref("devicesIndex/"+fingerprint).set(deviceId);
   }
+
+  // نحفظه محلي
+  localStorage.setItem("deviceId", deviceId);
+
+  // بعد ما يجهز نبدأ التحليلات
+  startAnalytics();
 
 });
 
+
+function startAnalytics(){
 
 
 /* ===============================
@@ -612,9 +611,11 @@ document.addEventListener("visibilitychange", ()=>{
 });
 
 
+}
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
