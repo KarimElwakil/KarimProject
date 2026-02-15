@@ -206,9 +206,9 @@ function drawDevice(name,data){
 
 
 
-  function togglePage(pageName,start){
+ function togglePage(pageName,start){
 
- const id = "pg_"+pageName+start;
+ const id = "pg_"+pageName+"_"+start;
  const box = document.getElementById(id);
 
  if(box.style.display==="block"){
@@ -233,7 +233,7 @@ function drawDevice(name,data){
 
     Object.values(b.sessions).forEach(s=>{
 
-      if(s.info.start!=start) return;
+      if(!s.info || s.info.start!=start) return;
       if(!s.pages || !s.pages[pageName]) return;
 
       const visits = s.pages[pageName].visits;
@@ -245,25 +245,23 @@ function drawDevice(name,data){
 
         html+=`
         <div style="
-        background:#000;
-        padding:12px;
-        border-radius:12px;
-        margin:10px 0">
+        background:#020617;
+        padding:10px;
+        border-radius:10px;
+        margin:6px 0;
+        border:1px solid #0f172a">
 
-        ⏱ الوقت: ${v.durationSec||0} ثانية 
-        (${v.durationMin||0} دقيقة)<br>
-
-        🎨 الثيم: ${v.theme||"light"}<br>
+        ⏱ الوقت: ${(v.durationSec||0)} ثانية<br>
         📜 scroll: ${v.maxScroll||0}%<br>
-        🖱 clicks: ${v.clicks?Object.keys(v.clicks).length:0}<br>
-        🧠 mouse: ${v.mouseMoves?Object.keys(v.mouseMoves).length:0}<br>
+        🎨 theme: ${v.theme||"light"}<br>
         📱 ${v.device||""}<br>
         🌐 ${v.browser||""}
+        </div>
+        `;
 
-        </div>`;
       });
 
-      box.innerHTML = html;
+      box.innerHTML = html || "لا بيانات";
 
     });
 
@@ -276,36 +274,41 @@ function drawDevice(name,data){
 }
 
 
- function drawPages(container,session){
+
+
+function drawPages(container,session){
 
  let html="";
 
- if(!session.flow){
+ if(!session.pages){
    container.innerHTML="لا يوجد صفحات";
    return;
  }
 
- // ترتيب الصفحات حسب الدخول
- const sorted = Object.values(session.flow).sort((a,b)=>a.time-b.time);
+ let i = 1;
 
- sorted.forEach((p,i)=>{
+ Object.keys(session.pages).forEach(pageName=>{
+
+   const uniqueId = pageName + "_" + session.info.start;
 
    html+=`
    <div class="card"
    style="cursor:pointer;background:#020617"
-   onclick="togglePage('${p.page}','${session.info.start}')">
+   onclick="event.stopPropagation();togglePage('${pageName}','${session.info.start}')">
 
-   ${i+1}️⃣ ${p.page}
+   📄 ${pageName}
+   <span style="float:left;background:#0ea5e9;padding:2px 8px;border-radius:6px">${i}</span>
 
-   <div id="pg_${p.page+session.info.start}" 
-   style="display:none;margin-top:10px"></div>
+   <div id="pg_${uniqueId}" style="display:none;margin-top:10px"></div>
+   </div>
+   `;
 
-   </div>`;
-
+   i++;
  });
 
  container.innerHTML = html;
 }
+
 
 
 
