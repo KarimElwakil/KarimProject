@@ -57,7 +57,9 @@ const id = url.searchParams.get("id");
 const container = document.getElementById("info");
 container.innerHTML = "جاري تحميل بيانات الجهاز...";
 
-db.ref("analytics/devices").once("value").then(snap=>{
+const devicePath = "analytics/devices";
+
+db.ref(devicePath).on("value", snap=>{
 
  const devices = snap.val();
  if(!devices) return;
@@ -73,13 +75,15 @@ db.ref("analytics/devices").once("value").then(snap=>{
  });
 
  if(!deviceData){
-   container.innerHTML="لم يتم العثور على الجهاز";
+   container.innerHTML="الجهاز غير موجود";
    return;
  }
 
+ // إعادة رسم لحظي
  drawDevice(deviceKey,deviceData);
 
 });
+
 
 function drawDevice(name,data){
 
@@ -150,6 +154,20 @@ function drawDevice(name,data){
 
           📜 scroll: ${visit.maxScroll||0}%<br>
 
+          <div style="
+height:6px;
+background:#111;
+border-radius:6px;
+margin-top:6px">
+<div style="
+width:${visit.maxScroll||0}%;
+background:#00ffc3;
+height:6px;
+border-radius:6px">
+</div>
+</div>
+
+
           ↩ من: ${visit.from||"direct"}<br>
 
           🕒 دخول: ${visit.enterTime||""}<br>
@@ -192,6 +210,27 @@ function drawDevice(name,data){
 
     </div>
     `;
+
+    // تحليل المستخدم
+let behavior="زائر جديد";
+
+if(totalSessions>5) behavior="زائر متكرر";
+if(totalSessions>15) behavior="زائر مخلص 🔥";
+if(totalSessions>30) behavior="مدمن الموقع 😈";
+
+container.innerHTML+=`
+<div style="
+background:#020617;
+padding:18px;
+border-radius:14px;
+margin-top:20px;
+border:1px solid #0f172a">
+
+<h3>🧠 تحليل المستخدم</h3>
+${behavior}
+
+</div>`;
+
   });
 
  });
@@ -205,6 +244,19 @@ function drawDevice(name,data){
    else deviceSeen=Math.floor(diff/3600)+" ساعة";
  }
 
+  let isOnlineNow = false;
+
+if(data.browsers){
+ Object.values(data.browsers).forEach(b=>{
+  Object.values(b.sessions).forEach(s=>{
+   if(s.isOnline === true){
+     isOnlineNow = true;
+   }
+  });
+ });
+}
+
+
  container.innerHTML=`
 
  <div style="
@@ -213,6 +265,13 @@ function drawDevice(name,data){
  border-radius:16px;
  margin-bottom:20px;
  border:1px solid #0f172a">
+
+
+${isOnlineNow ? 
+'<div style="color:#00ffa6;font-weight:bold;margin-bottom:8px">🟢 يتصفح الآن</div>' 
+:
+'<div style="color:#666;margin-bottom:8px">⚫ غير متصل</div>'
+}
 
  <h2>📱 الجهاز</h2>
 
