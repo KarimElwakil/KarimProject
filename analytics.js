@@ -49,40 +49,31 @@ document.addEventListener("DOMContentLoaded", function () {
 /* ===============================
    DEVICE ID FINAL FIX
 =============================== */
-
-function startAfterDevice(deviceId){
-
-  // هنا يبدأ كل كود التحليلات
-  initAnalytics(deviceId);
-}
-
-function initDevice(){
-
- /* ===============================
-   UNIVERSAL DEVICE ID FINAL PRO
+/* ===============================
+   DEVICE ID FINAL (STABLE)
 =============================== */
 
-// نحاول نجيب ID محفوظ
 let deviceId = localStorage.getItem("deviceId");
 
-// بصمة ثابتة للجهاز
-const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
-const res = screen.width + "x" + screen.height;
-const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const lang = navigator.language;
-
-const fingerprint = btoa(ua + res + tz + lang).substring(0,50);
-
-// لو مفيش deviceId
 if(!deviceId){
+
+  const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
+  const res = screen.width + "x" + screen.height;
+  const lang = navigator.language;
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const fingerprint = btoa(ua + res + lang + tz).substring(0,40);
 
   deviceId = "dev_" + fingerprint;
   localStorage.setItem("deviceId", deviceId);
-
 }
 
-// خزنه فايربيز للربط فقط
-db.ref("deviceFingerprints/"+fingerprint).set(deviceId);
+// ربطه في فايربيز
+db.ref("deviceFingerprints/" + deviceId).set({
+  ua: navigator.userAgent,
+  res: screen.width+"x"+screen.height,
+  lastSeen: Date.now()
+});
 
 
 /* ===============================
@@ -617,6 +608,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
