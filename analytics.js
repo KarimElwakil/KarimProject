@@ -350,7 +350,7 @@ sessionRank = parseInt(sessionRank) + 1;
 sessionStorage.setItem("sessionRank", sessionRank);
 
 // جاي منين
-let fromPage = sessionStorage.getItem("lastPage");
+
 if(!fromPage) fromPage = "direct";
 else if(fromPage === pageName) fromPage = "refresh";
 
@@ -578,6 +578,7 @@ db.ref("analytics/overview/uniqueVisitors/" + deviceId)
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
