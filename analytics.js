@@ -672,7 +672,7 @@ sessionRef.child("info/lastSeen").set(Date.now());
  exitTimestamp: exitTime,
  durationSec: durationSec,
  durationMin: (durationSec/60).toFixed(2),
- theme: document.documentElement.getAttribute("data-theme") || "light"
+theme: document.documentElement.getAttribute("data-theme") || "light"
 });
 
 
@@ -693,6 +693,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
