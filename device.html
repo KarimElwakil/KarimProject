@@ -222,8 +222,7 @@ display:none">
      👁 آخر ظهور: ${lastSeen || "—"}<br>
      ${online ? "🟢 نشط الآن" : "⚫ مغلق"}
      
-     <div id="sess_${sid}" style="display:none;margin-top:10px"></div>
-
+    
      </div>`;
    });
 
@@ -286,35 +285,6 @@ function toggleSession(id){
  box.style.display="block";
 
  const db = firebase.database();
-
- db.ref("analytics/devices").once("value").then(snap=>{
-
-  const devices = snap.val();
-  if(!devices) return;
-
-  Object.values(devices).forEach(device=>{
-   if(!device.browsers) return;
-
-   Object.values(device.browsers).forEach(b=>{
-    if(!b.sessions) return;
-
-    if(b.sessions[id]){
-
-      const session = b.sessions[id];
-
-      drawPages(box,session);
-
-      // 🔥 هنا اللايف الحقيقي
-      startLiveSession(id);
-
-    }
-
-   });
-
-  });
-
- });
-}
 
 
 
