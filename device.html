@@ -11,6 +11,8 @@
 <script>
   let openedSession = null;
 let openedPage = null;
+  let liveSessionListener = null;
+
   
 
 
@@ -243,10 +245,51 @@ function toggleSession(id){
  if(box.style.display==="block"){
    box.style.display="none";
    openedSession = null;
+
+   // افصل اللايف
+   if(liveSessionListener){
+     liveSessionListener.off();
+     liveSessionListener = null;
+   }
+
    return;
  }
 
  box.style.display="block";
+
+ const db = firebase.database();
+
+ db.ref("analytics/devices").once("value").then(snap=>{
+
+  const devices = snap.val();
+  if(!devices) return;
+
+  Object.values(devices).forEach(device=>{
+   if(!device.browsers) return;
+
+   Object.values(device.browsers).forEach(b=>{
+    if(!b.sessions) return;
+
+    if(b.sessions[id]){
+
+      const session = b.sessions[id];
+
+      drawPages(box,session);
+
+      // 🔥 هنا اللايف الحقيقي
+      startLiveSession(id);
+
+    }
+
+   });
+
+  });
+
+ });
+}
+
+
+
 
 
 
@@ -599,6 +642,47 @@ function drawMap(data){
   });
 
  });
+}
+
+  function startLiveSession(sessionId){
+
+ // افصل القديم
+ if(liveSessionListener){
+   liveSessionListener.off();
+ }
+
+ const deviceRef = firebase.database().ref("analytics/devices");
+
+ liveSessionListener = deviceRef;
+
+ deviceRef.on("value", snap=>{
+
+  const devices = snap.val();
+  if(!devices) return;
+
+  Object.values(devices).forEach(device=>{
+   if(!device.browsers) return;
+
+   Object.values(device.browsers).forEach(b=>{
+    if(!b.sessions) return;
+    if(!b.sessions[sessionId]) return;
+
+    const session = b.sessions[sessionId];
+
+    // لو الصفحة مفتوحة حدثها فقط
+    if(openedSession===sessionId){
+      const box = document.getElementById("sess_"+sessionId);
+      if(box){
+        drawPages(box,session);
+      }
+    }
+
+   });
+
+  });
+
+ });
+
 }
 
 
