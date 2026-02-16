@@ -308,7 +308,7 @@ function toggleSession(id){
 
       const session = b.sessions[id];
       drawPages(box,session);
-      startLiveSession(sessionId,id);
+      startLiveSession(id);
 
 
     }
@@ -319,6 +319,8 @@ function toggleSession(id){
 
  });
 
+});  
+}     
 
 
 
@@ -376,6 +378,8 @@ function toggleSession(id){
         `;
 
       });
+
+      }
 
       box.innerHTML = html || "لا بيانات";
 
