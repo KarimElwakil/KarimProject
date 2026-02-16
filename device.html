@@ -11,6 +11,9 @@
 <script>
   let openedSession = null;
 let openedPage = null;
+  let lastData = null;
+let firstDraw = true;
+
 
 
  function goBack(){
@@ -82,9 +85,27 @@ deviceRef.on("child_added", snap=>{
 
 
 function updateDeviceLive(key,data){
+
  if(!key.includes(id)) return;
- drawDevice(key,data);
+
+ // اول تحميل فقط يرسم الصفحة
+ if(firstDraw){
+   drawDevice(key,data);
+   firstDraw = false;
+   lastData = JSON.stringify(data);
+   return;
+ }
+
+ // لو مفيش تغيير حقيقي → متعملش redraw
+ const newData = JSON.stringify(data);
+ if(newData === lastData) return;
+
+ lastData = newData;
+
+ // 🟢 تحديث خفيف بدون مسح الصفحة
+updateLiveOnly(data);
 }
+
 // أول تحميل
 deviceRef.once("value").then(snap=>{
  const devices = snap.val();
@@ -194,6 +215,61 @@ function drawDevice(name,data){
 },300);
 
 }
+
+function updateLiveOnly(data){
+
+ // تحديث حالة الجلسات فقط بدون مسح الصفحة
+ if(!data.browsers) return;
+
+ Object.values(data.browsers).forEach(browser=>{
+  if(!browser.sessions) return;
+
+  Object.keys(browser.sessions).forEach(sid=>{
+    const s = browser.sessions[sid];
+
+    const card = document.querySelector(`[onclick="toggleSession('${sid}')"]`);
+    if(!card) return;
+
+    let online=false;
+    let totalSessionTime=0;
+    let pagesCount=0;
+    let lastSeen="";
+
+    if(s.info){
+      if(s.info.isOnline) online=true;
+      if(s.info.lastActive){
+        lastSeen = new Date(s.info.lastActive).toLocaleString();
+      }
+    }
+
+    if(s.pages){
+      Object.values(s.pages).forEach(p=>{
+        if(p.visits){
+          Object.values(p.visits).forEach(v=>{
+            if(v.durationSec) totalSessionTime+=v.durationSec;
+            pagesCount++;
+          });
+        }
+      });
+    }
+
+    const statusColor = online ? "#00ffc3" : "#666";
+
+    card.style.borderLeft="5px solid "+statusColor;
+
+    card.innerHTML = `
+    <b>🧠 جلسة</b><br>
+    ⏱ الوقت: ${(totalSessionTime/60).toFixed(1)} دقيقة<br>
+    📄 عدد الصفحات: ${pagesCount}<br>
+    👁 آخر ظهور: ${lastSeen || "—"}<br>
+    ${online ? "🟢 نشط الآن" : "⚫ مغلق"}
+    <div id="sess_${sid}" style="display:${openedSession===sid?'block':'none'};margin-top:10px"></div>
+    `;
+  });
+
+ });
+}
+
 function toggleSession(id){
 
  openedSession = id;
