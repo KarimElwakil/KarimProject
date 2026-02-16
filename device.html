@@ -799,7 +799,8 @@ db.ref("analytics/devices").once("value").then(snap=>{
 
   Object.values(device.browsers).forEach(b=>{
    if(!b.sessions) return;
-   if(!b.sessions[sessionId])rue)return;
+  if(!b.sessions[sessionId]) return;
+
 
    const session = b.sessions[sessionId];
    drawPages(box,session);
