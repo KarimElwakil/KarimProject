@@ -64,7 +64,22 @@ const devicePath = "analytics/devices";
 
 let firstLoad = true;
 
-db.ref(devicePath).on("value", snap=>{
+const deviceRef = db.ref("analytics/devices");
+
+deviceRef.on("child_changed", snap=>{
+ updateDeviceLive(snap.key, snap.val());
+});
+
+deviceRef.on("child_added", snap=>{
+ updateDeviceLive(snap.key, snap.val());
+});
+  function updateDeviceLive(key,data){
+
+ if(!key.includes(id)) return;
+
+ drawDevice(key,data);
+  }
+
 
  if(!firstLoad) return; // يمنع اعادة الرسم كل ثانية
  firstLoad = false;
@@ -282,7 +297,7 @@ function toggleSession(id){
 
         ⏱ الوقت: ${(v.durationSec||0)} ثانية<br>
         📜 scroll: ${v.maxScroll||0}%<br>
-        🎨 theme: ${v.theme||"light"}<br>
+       🎨 theme ${v.theme==="dark"?"🌙 Dark":"☀️ Light"}<br>
         📱 ${v.device||""}<br>
         🌐 ${v.browser||""}
         </div>
