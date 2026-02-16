@@ -184,22 +184,38 @@ function drawDevice(name,data){
      const statusColor = online ? "#00ffc3" : "#666";
 
      sessionsHTML += `
-     <div class="card" 
-     style="cursor:pointer;border-left:5px solid ${statusColor}"
-     onclick="toggleSession('${sid}')">
+    <div class="card" 
+style="border-left:5px solid ${statusColor};position:relative">
+
 
      <b>🧠 جلسة ${browser}</b>
 <br>
+<div style="margin-top:10px;display:flex;gap:8px">
 
-<button onclick="showDeviceInfo('${sid}')" style="
-margin-top:8px;
-background:#00ffc3;
+<button onclick="openPages('${sid}')" id="btn_pages_${sid}" style="
+background:#0ea5e9;
 border:none;
 padding:6px 12px;
 border-radius:8px;
 cursor:pointer">
+📄 عرض الصفحات
+</button>
+
+<button onclick="openDeviceInfo('${sid}')" id="btn_info_${sid}" style="
+background:#00ffc3;
+border:none;
+padding:6px 12px;
+border-radius:8px;
+cursor:pointer;
+display:none">
 📱 معلومات الجهاز
 </button>
+
+<div id="sess_${sid}" style="margin-top:10px"></div>
+
+
+</div>
+
 
      ⏱ الوقت: ${(totalSessionTime/60).toFixed(1)} دقيقة<br>
      📄 عدد الصفحات: ${pagesCount}<br>
@@ -739,8 +755,14 @@ function updateLivePagesOnly(session){
  });
 }
 
-function showDeviceInfo(sessionId){
-html += "<hr><b>📦 raw data:</b><pre>"+JSON.stringify(s,null,2)+"</pre>";
+function openDeviceInfo(sessionId){
+
+const box = document.getElementById("sess_"+sessionId);
+const btnPages = document.getElementById("btn_pages_"+sessionId);
+const btnInfo = document.getElementById("btn_info_"+sessionId);
+
+btnInfo.style.display="none";
+btnPages.style.display="inline-block";
 
 const db = firebase.database();
 
@@ -759,49 +781,61 @@ db.ref("analytics/devices").once("value").then(snap=>{
    const s = b.sessions[sessionId];
    const info = s.info || {};
 
-   let html = `
+   box.innerHTML = `
    <div style="
-   position:fixed;
-   top:50%;
-   left:50%;
-   transform:translate(-50%,-50%);
    background:#020617;
-   padding:25px;
-   border-radius:18px;
-   width:420px;
-   max-height:80vh;
-   overflow:auto;
-   z-index:9999;
+   padding:15px;
+   border-radius:12px;
    border:1px solid #0f172a">
 
-   <h3>📱 معلومات الجهاز الكاملة</h3>
-
-   🧠 Device ID: ${info.deviceLabel||""}<br>
+   🧠 Device: ${info.deviceLabel||""}<br>
    🌐 Browser: ${info.browser||""}<br>
    💻 OS: ${info.os||""}<br>
    🖥 Resolution: ${info.screenResolution||""}<br>
    🌍 Country: ${info.country||""}<br>
    🏙 City: ${info.city||""}<br>
    🕒 Timezone: ${info.timezone||""}<br>
-   🗣 Language: ${info.language||""}<br>
    📡 Network: ${info.networkType||""}<br>
    ⚡ Speed: ${info.downlink||""}<br>
-   📱 Touch: ${info.isTouchDevice?"Yes":"No"}<br>
    🎨 Theme: ${info.theme||""}<br>
-
-   <br><button onclick="this.parentElement.remove()" style="
-   background:red;border:none;padding:8px 15px;border-radius:10px;color:#fff;cursor:pointer">
-   اغلاق
-   </button>
 
    </div>
    `;
-
-   document.body.insertAdjacentHTML("beforeend",html);
-
   });
-
  });
+
+});
+}
+
+
+  function openPages(sessionId){
+
+const box = document.getElementById("sess_"+sessionId);
+const btnPages = document.getElementById("btn_pages_"+sessionId);
+const btnInfo = document.getElementById("btn_info_"+sessionId);
+
+btnPages.style.display="none";
+btnInfo.style.display="inline-block";
+
+const db = firebase.database();
+
+db.ref("analytics/devices").once("value").then(snap=>{
+
+ const devices = snap.val();
+ if(!devices) return;
+
+ Object.values(devices).forEach(device=>{
+  if(!device.browsers) return;
+
+  Object.values(device.browsers).forEach(b=>{
+   if(!b.sessions) return;
+   if(!b.sessions[sessionId])rue)return;
+
+   const session = b.sessions[sessionId];
+   drawPages(box,session);
+  });
+ });
+
 });
 }
 
