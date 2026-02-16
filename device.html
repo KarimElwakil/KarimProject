@@ -190,31 +190,41 @@ style="border-left:5px solid ${statusColor};position:relative">
 
      <b>🧠 جلسة ${browser}</b>
 <br>
-<div style="margin-top:10px;display:flex;gap:8px">
+<div style="
+position:absolute;
+left:10px;
+top:10px;
+display:flex;
+gap:6px">
 
-<button onclick="openPages('${sid}')" id="btn_pages_${sid}" style="
+<button onclick="openPages('${sid}')"
+id="btn_pages_${sid}"
+style="
 background:#0ea5e9;
 border:none;
-padding:6px 12px;
-border-radius:8px;
-cursor:pointer">
-📄 عرض الصفحات
+padding:4px 10px;
+border-radius:6px;
+cursor:pointer;
+font-size:12px">
+📄 الصفحات
 </button>
 
-<button onclick="openDeviceInfo('${sid}')" id="btn_info_${sid}" style="
+<button onclick="openDeviceInfo('${sid}')"
+id="btn_info_${sid}"
+style="
 background:#00ffc3;
 border:none;
-padding:6px 12px;
-border-radius:8px;
+padding:4px 10px;
+border-radius:6px;
 cursor:pointer;
+font-size:12px;
 display:none">
-📱 معلومات الجهاز
+📱 الجهاز
 </button>
 
-<div id="sess_${sid}" style="margin-top:10px"></div>
-
-
 </div>
+
+<div id="sess_${sid}" style="margin-top:15px"></div>
 
 
      ⏱ الوقت: ${(totalSessionTime/60).toFixed(1)} دقيقة<br>
@@ -477,8 +487,9 @@ openedPage = stepTime;
       });
 
       const v = closest;
-const isLast = session.info?.isOnline && 
+const isLast = s.info?.isOnline &&
 Math.abs(Date.now() - v.enterTimestamp) < 30000;
+
 
 box.innerHTML = `
 <div style="background:#020617;padding:12px;border-radius:12px">
@@ -736,11 +747,9 @@ const btnInfo = document.getElementById("btn_info_"+sessionId);
 
 btnInfo.style.display="none";
 btnPages.style.display="inline-block";
+box.innerHTML="جاري التحميل...";
 
-const db = firebase.database();
-
-db.ref("analytics/devices").once("value").then(snap=>{
-
+firebase.database().ref("analytics/devices").once("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
@@ -755,25 +764,18 @@ db.ref("analytics/devices").once("value").then(snap=>{
    const info = s.info || {};
 
    box.innerHTML = `
-   <div style="
-   background:#020617;
-   padding:15px;
-   border-radius:12px;
-   border:1px solid #0f172a">
-
-   🧠 Device: ${info.deviceLabel||""}<br>
-   🌐 Browser: ${info.browser||""}<br>
-   💻 OS: ${info.os||""}<br>
-   🖥 Resolution: ${info.screenResolution||""}<br>
-   🌍 Country: ${info.country||""}<br>
-   🏙 City: ${info.city||""}<br>
-   🕒 Timezone: ${info.timezone||""}<br>
-   📡 Network: ${info.networkType||""}<br>
-   ⚡ Speed: ${info.downlink||""}<br>
-   🎨 Theme: ${info.theme||""}<br>
-
-   </div>
-   `;
+   <div style="background:#020617;padding:12px;border-radius:10px">
+   🧠 ${info.deviceLabel||""}<br>
+   🌐 ${info.browser||""}<br>
+   💻 ${info.os||""}<br>
+   📱 ${info.device||""}<br>
+   🖥 ${info.screenResolution||""}<br>
+   🌍 ${info.country||""} - ${info.city||""}<br>
+   🕒 ${info.timezone||""}<br>
+   📡 ${info.networkType||""}<br>
+   ⚡ ${info.downlink||""}<br>
+   🎨 ${info.theme||""}
+   </div>`;
   });
  });
 
@@ -781,7 +783,7 @@ db.ref("analytics/devices").once("value").then(snap=>{
 }
 
 
-  function openPages(sessionId){
+ function openPages(sessionId){
 
 const box = document.getElementById("sess_"+sessionId);
 const btnPages = document.getElementById("btn_pages_"+sessionId);
@@ -789,11 +791,9 @@ const btnInfo = document.getElementById("btn_info_"+sessionId);
 
 btnPages.style.display="none";
 btnInfo.style.display="inline-block";
+box.innerHTML="جاري التحميل...";
 
-const db = firebase.database();
-
-db.ref("analytics/devices").once("value").then(snap=>{
-
+firebase.database().ref("analytics/devices").once("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
@@ -802,8 +802,7 @@ db.ref("analytics/devices").once("value").then(snap=>{
 
   Object.values(device.browsers).forEach(b=>{
    if(!b.sessions) return;
-  if(!b.sessions[sessionId]) return;
-
+   if(!b.sessions[sessionId]) return;
 
    const session = b.sessions[sessionId];
    drawPages(box,session);
