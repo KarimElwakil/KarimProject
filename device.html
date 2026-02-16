@@ -11,8 +11,8 @@
 <script>
   let openedSession = null;
 let openedPage = null;
-  let lastData = null;
-let firstDraw = true;
+  
+
 
 
 
@@ -69,6 +69,49 @@ let firstLoad = true;
 
 const deviceRef = db.ref("analytics/devices");
 
+  let deviceDataCache = null;
+
+// تحميل أول مرة فقط
+deviceRef.once("value").then(snap=>{
+ const devices = snap.val();
+ if(!devices) return;
+
+ Object.keys(devices).forEach(k=>{
+   if(k.includes(id)){
+     deviceDataCache = devices[k];
+     drawDevice(k,devices[k]);
+   }
+ });
+});
+
+// تحديث لايف بدون إعادة رسم
+setInterval(()=>{
+ if(!deviceDataCache) return;
+
+ deviceRef.child(Object.keys(deviceDataCache)[0]);
+
+ deviceRef.once("value").then(snap=>{
+  const devices = snap.val();
+  if(!devices) return;
+
+  Object.keys(devices).forEach(k=>{
+    if(!k.includes(id)) return;
+
+    const newData = devices[k];
+
+    // لو نفس البيانات → تجاهل
+    if(JSON.stringify(newData) === JSON.stringify(deviceDataCache)) return;
+
+    deviceDataCache = newData;
+
+    // تحديث فقط لو الجلسة مفتوحة
+    refreshOpenSession(newData);
+
+  });
+ });
+},2000); // كل ثانيتين
+
+
 let currentDeviceData = null;
 
 // تحميل أول مرة فقط
@@ -84,72 +127,11 @@ deviceRef.once("value").then(snap=>{
  });
 });
 
-// تحديث لايف بدون مسح الصفحة
-deviceRef.on("value", snap=>{
-
- const devices = snap.val();
- if(!devices) return;
-
- Object.keys(devices).forEach(k=>{
-   if(!k.includes(id)) return;
-
-   const newData = devices[k];
-
-   // أول مرة خلاص مترسمتش
-   if(!currentDeviceData){
-     currentDeviceData = newData;
-     drawDevice(k,newData);
-     return;
-   }
-
-   // 🟢 تحديث الجلسة المفتوحة فقط
-   updateOpenedSession(newData);
-
-   currentDeviceData = newData;
- });
-});
-
-  function updateDeviceLive(key,data){
-
- if(!key.includes(id)) return;
-
- drawDevice(key,data);
-  }
 
 
-function updateDeviceLive(key,data){
+ 
 
- if(!key.includes(id)) return;
 
- // اول تحميل فقط يرسم الصفحة
- if(firstDraw){
-   drawDevice(key,data);
-   firstDraw = false;
-   lastData = JSON.stringify(data);
-   return;
- }
-
- // لو مفيش تغيير حقيقي → متعملش redraw
- const newData = JSON.stringify(data);
- if(newData === lastData) return;
-
- lastData = newData;
-
- // 🟢 تحديث خفيف بدون مسح الصفحة
-updateLiveOnly(data);
-}
-
-// أول تحميل
-deviceRef.once("value").then(snap=>{
- const devices = snap.val();
- if(!devices) return;
-
- Object.keys(devices).forEach(k=>{
-   if(k.includes(id)){
-     drawDevice(k, devices[k]);
-   }
- });
-});
 
 
 function drawDevice(name,data){
@@ -249,109 +231,8 @@ function drawDevice(name,data){
 
 }
 
-  function updateOpenedSession(data){
+  
 
- if(!openedSession) return;
-
- if(!data.browsers) return;
-
- Object.values(data.browsers).forEach(browser=>{
-  if(!browser.sessions) return;
-
-  if(!browser.sessions[openedSession]) return;
-
-  const s = browser.sessions[openedSession];
-
-  let totalSessionTime=0;
-  let pagesCount=0;
-  let online=false;
-  let lastSeen="";
-
-  if(s.info){
-    if(s.info.isOnline) online=true;
-    if(s.info.lastActive){
-      lastSeen = new Date(s.info.lastActive).toLocaleString();
-    }
-  }
-
-  if(s.pages){
-    Object.values(s.pages).forEach(p=>{
-      if(p.visits){
-        Object.values(p.visits).forEach(v=>{
-          if(v.durationSec) totalSessionTime+=v.durationSec;
-          pagesCount++;
-        });
-      }
-    });
-  }
-
-  const card = document.querySelector(`[onclick="toggleSession('${openedSession}')"]`);
-  if(!card) return;
-
-  card.innerHTML = `
-  <b>🧠 جلسة</b><br>
-  ⏱ الوقت: ${(totalSessionTime/60).toFixed(1)} دقيقة<br>
-  📄 عدد الصفحات: ${pagesCount}<br>
-  👁 آخر ظهور: ${lastSeen || "—"}<br>
-  ${online ? "🟢 نشط الآن" : "⚫ مغلق"}
-  <div id="sess_${openedSession}" style="display:block;margin-top:10px"></div>
-  `;
-});
-}
-
-function updateLiveOnly(data){
-
- // تحديث حالة الجلسات فقط بدون مسح الصفحة
- if(!data.browsers) return;
-
- Object.values(data.browsers).forEach(browser=>{
-  if(!browser.sessions) return;
-
-  Object.keys(browser.sessions).forEach(sid=>{
-    const s = browser.sessions[sid];
-
-    const card = document.querySelector(`[onclick="toggleSession('${sid}')"]`);
-    if(!card) return;
-
-    let online=false;
-    let totalSessionTime=0;
-    let pagesCount=0;
-    let lastSeen="";
-
-    if(s.info){
-      if(s.info.isOnline) online=true;
-      if(s.info.lastActive){
-        lastSeen = new Date(s.info.lastActive).toLocaleString();
-      }
-    }
-
-    if(s.pages){
-      Object.values(s.pages).forEach(p=>{
-        if(p.visits){
-          Object.values(p.visits).forEach(v=>{
-            if(v.durationSec) totalSessionTime+=v.durationSec;
-            pagesCount++;
-          });
-        }
-      });
-    }
-
-    const statusColor = online ? "#00ffc3" : "#666";
-
-    card.style.borderLeft="5px solid "+statusColor;
-
-    card.innerHTML = `
-    <b>🧠 جلسة</b><br>
-    ⏱ الوقت: ${(totalSessionTime/60).toFixed(1)} دقيقة<br>
-    📄 عدد الصفحات: ${pagesCount}<br>
-    👁 آخر ظهور: ${lastSeen || "—"}<br>
-    ${online ? "🟢 نشط الآن" : "⚫ مغلق"}
-    <div id="sess_${sid}" style="display:${openedSession===sid?'block':'none'};margin-top:10px"></div>
-    `;
-  });
-
- });
-}
 
 function toggleSession(id){
 
@@ -682,6 +563,42 @@ function drawMap(data){
  </iframe>
 
  </div>`;
+}
+
+  function refreshOpenSession(data){
+
+ if(!openedSession) return;
+
+ if(!data.browsers) return;
+
+ Object.values(data.browsers).forEach(browser=>{
+  if(!browser.sessions) return;
+  if(!browser.sessions[openedSession]) return;
+
+  const s = browser.sessions[openedSession];
+
+  let total=0;
+  let pages=0;
+
+  if(s.pages){
+   Object.values(s.pages).forEach(p=>{
+    if(p.visits){
+     Object.values(p.visits).forEach(v=>{
+      if(v.durationSec) total+=v.durationSec;
+      pages++;
+     });
+    }
+   });
+  }
+
+  const box=document.getElementById("sess_"+openedSession);
+  if(!box) return;
+
+  box.querySelectorAll(".liveTime").forEach(el=>{
+    el.innerText=(total/60).toFixed(1);
+  });
+
+ });
 }
 
 
