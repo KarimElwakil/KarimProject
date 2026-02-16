@@ -81,30 +81,20 @@ deviceRef.on("child_added", snap=>{
   }
 
 
- if(!firstLoad) return; // يمنع اعادة الرسم كل ثانية
- firstLoad = false;
-
+function updateDeviceLive(key,data){
+ if(!key.includes(id)) return;
+ drawDevice(key,data);
+}
+// أول تحميل
+deviceRef.once("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
- let deviceData=null;
- let deviceKey=null;
-
  Object.keys(devices).forEach(k=>{
    if(k.includes(id)){
-     deviceData = devices[k];
-     deviceKey = k;
+     drawDevice(k, devices[k]);
    }
  });
-
- if(!deviceData){
-   container.innerHTML="الجهاز غير موجود";
-   return;
- }
-
- // إعادة رسم لحظي
- drawDevice(deviceKey,deviceData);
-
 });
 
 
