@@ -310,6 +310,8 @@ function toggleSession(id){
 
       const session = b.sessions[id];
       drawPages(box,session);
+      startLiveSession(sessionId,id);
+
 
     }
 
@@ -416,7 +418,8 @@ function drawPages(container,session){
    onclick="event.stopPropagation();openVisit('${pageName}','${session.info.start}','${stepTime}')">
 
    <b>${i}️⃣ ${pageName}</b>
-   <div id="${uid}" style="display:none;margin-top:10px"></div>
+  <div id="${uid}" data-page="${pageName}" data-time="${stepTime}" 
+style="display:none;margin-top:10px"></div>
    </div>
    `;
 
@@ -643,17 +646,21 @@ function drawMap(data){
  });
 }
 
-function startLiveSession(sessionId){
 
+ 
+  function startLiveSession(sessionId){
+
+ // اقفل القديم
  if(liveSessionListener){
    liveSessionListener.off();
  }
 
- const deviceRef = firebase.database().ref("analytics/devices");
+ // اسمع على الجلسة فقط
+ const ref = firebase.database().ref("analytics/devices");
 
- liveSessionListener = deviceRef;
+ liveSessionListener = ref;
 
- deviceRef.on("value", snap=>{
+ ref.on("value", snap=>{
 
   const devices = snap.val();
   if(!devices) return;
@@ -667,7 +674,6 @@ function startLiveSession(sessionId){
 
     const session = b.sessions[sessionId];
 
-    // 🟢 تحديث الصفحات بدون مسحها
     updateLivePagesOnly(session);
 
    });
@@ -677,19 +683,18 @@ function startLiveSession(sessionId){
  });
 }
 
-  function updateLivePagesOnly(session){
+function updateLivePagesOnly(session){
 
  if(!openedPage) return;
 
- const pageBoxes = document.querySelectorAll("[id^='flow_']");
+ const boxes = document.querySelectorAll("[id^='flow_']");
 
- pageBoxes.forEach(box=>{
+ boxes.forEach(box=>{
 
    if(box.style.display!=="block") return;
 
-   const stepTime = box.id.replace("flow_","");
-
-   const pageName = box.closest(".card").innerText.trim().split(" ")[1];
+   const pageName = box.getAttribute("data-page");
+   const stepTime = box.getAttribute("data-time");
 
    if(!session.pages || !session.pages[pageName]) return;
 
@@ -710,20 +715,13 @@ function startLiveSession(sessionId){
    const v = closest;
 
    box.innerHTML = `
-   <div style="
-   background:#020617;
-   padding:12px;
-   border-radius:12px;
-   border:1px solid #0f172a">
-
-   ⏱ المدة: ${(v.durationSec||0)} ثانية<br>
+   <div style="background:#020617;padding:12px;border-radius:12px">
+   ⏱ ${(v.durationSec||0)} ثانية<br>
    📜 scroll: ${v.maxScroll||0}%<br>
-   🎨 الثيم: ${v.theme||"light"}<br>
-   📱 الجهاز: ${v.device||""}<br>
-   🌐 المتصفح: ${v.browser||""}
-   </div>
-   `;
-
+   🎨 ${v.theme||"light"}<br>
+   📱 ${v.device||""}<br>
+   🌐 ${v.browser||""}
+   </div>`;
  });
 }
 
