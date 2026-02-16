@@ -643,9 +643,8 @@ function drawMap(data){
  });
 }
 
-  function startLiveSession(sessionId){
+function startLiveSession(sessionId){
 
- // افصل القديم
  if(liveSessionListener){
    liveSessionListener.off();
  }
@@ -668,20 +667,64 @@ function drawMap(data){
 
     const session = b.sessions[sessionId];
 
-    // لو الصفحة مفتوحة حدثها فقط
-    if(openedSession===sessionId){
-      const box = document.getElementById("sess_"+sessionId);
-      if(box){
-        drawPages(box,session);
-      }
-    }
+    // 🟢 تحديث الصفحات بدون مسحها
+    updateLivePagesOnly(session);
 
    });
 
   });
 
  });
+}
 
+  function updateLivePagesOnly(session){
+
+ if(!openedPage) return;
+
+ const pageBoxes = document.querySelectorAll("[id^='flow_']");
+
+ pageBoxes.forEach(box=>{
+
+   if(box.style.display!=="block") return;
+
+   const stepTime = box.id.replace("flow_","");
+
+   const pageName = box.closest(".card").innerText.trim().split(" ")[1];
+
+   if(!session.pages || !session.pages[pageName]) return;
+
+   const visits = Object.values(session.pages[pageName].visits||{});
+   if(!visits.length) return;
+
+   let closest = visits[0];
+   let minDiff = Math.abs(visits[0].enterTimestamp - stepTime);
+
+   visits.forEach(v=>{
+     const diff = Math.abs(v.enterTimestamp - stepTime);
+     if(diff < minDiff){
+       minDiff = diff;
+       closest = v;
+     }
+   });
+
+   const v = closest;
+
+   box.innerHTML = `
+   <div style="
+   background:#020617;
+   padding:12px;
+   border-radius:12px;
+   border:1px solid #0f172a">
+
+   ⏱ المدة: ${(v.durationSec||0)} ثانية<br>
+   📜 scroll: ${v.maxScroll||0}%<br>
+   🎨 الثيم: ${v.theme||"light"}<br>
+   📱 الجهاز: ${v.device||""}<br>
+   🌐 المتصفح: ${v.browser||""}
+   </div>
+   `;
+
+ });
 }
 
 
