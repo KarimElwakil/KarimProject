@@ -9,6 +9,9 @@
   
 
 <script>
+  let openedSession = null;
+let openedPage = null;
+
 
  function goBack(){
   window.location.href="Analytics.html"; // غير الاسم لو مختلف
@@ -167,19 +170,40 @@ function drawDevice(name,data){
  ${sessionsHTML}
  </div>
  `;
-}
 
- function toggleSession(id){
+  setTimeout(()=>{
+
+ if(openedSession){
+   const el = document.querySelector(`[onclick*="${openedSession}"]`);
+   if(el) el.click();
+ }
+
+ if(openedPage){
+   const el2 = document.getElementById("flow_"+openedPage);
+   if(el2){
+     const parent = el2.closest(".card");
+     if(parent) parent.click();
+   }
+ }
+
+},300);
+
+}
+function toggleSession(id){
+
+ openedSession = id;
 
  const box = document.getElementById("sess_"+id);
 
- // فتح وقفل
  if(box.style.display==="block"){
    box.style.display="none";
+   openedSession = null;
    return;
  }
 
  box.style.display="block";
+
+
 
  const db = firebase.database();
 
@@ -316,6 +340,8 @@ function drawPages(container,session){
 }
 
   function openVisit(pageName,start,stepTime){
+openedPage = stepTime;
+
 
  const box = document.getElementById("flow_"+stepTime);
 
