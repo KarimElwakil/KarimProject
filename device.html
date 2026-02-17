@@ -931,6 +931,8 @@ deviceRef.once("value",snap=>{
 
 
 // 🔥 تحديث لايف بدون إعادة رسم الصفحة
+let firstLoadDone = false;
+
 deviceRef.on("value",snap=>{
  const devices = snap.val();
  if(!devices) return;
@@ -940,19 +942,62 @@ deviceRef.on("value",snap=>{
 
    const newData = devices[k];
 
-   if(!currentDeviceData){
-     currentDeviceData = newData;
+   // أول تحميل بس يرسم
+   if(!firstLoadDone){
+     firstLoadDone = true;
+     drawDevice(k,newData);
      return;
    }
 
-   if(JSON.stringify(newData) === JSON.stringify(currentDeviceData)) return;
+   // تحديث لايف بدون إعادة رسم
+   liveUpdateDevice(newData);
 
-   currentDeviceData = newData;
-
-   updateLiveOnly(newData);
  });
 });
 
+  function liveUpdateDevice(data){
+
+ if(!data.browsers) return;
+
+ Object.values(data.browsers).forEach(browser=>{
+  if(!browser.sessions) return;
+
+  Object.keys(browser.sessions).forEach(sid=>{
+    const s = browser.sessions[sid];
+
+    // لو الجلسة مفتوحة عندك سيبها
+    if(openedSession === sid) return;
+
+    const card = document.getElementById("sess_"+safeId(sid))?.closest(".card");
+    if(!card) return;
+
+    let online=false;
+    let lastSeen="";
+
+    const last = s.info?.lastActive || 0;
+
+    // 🔥 ONLINE 15 دقيقة
+    if(Date.now() - last < 900000){
+      online = true;
+    }else{
+      online = false;
+    }
+
+    if(s.info?.lastActive){
+      lastSeen = new Date(s.info.lastActive).toLocaleString();
+    }
+
+    // تحديث فقط النص
+    card.innerHTML = card.innerHTML
+      .replace(/🟢 نشط الآن|⚫ مغلق/g,
+        online ? "🟢 نشط الآن" : "⚫ مغلق")
+      .replace(/👁 آخر ظهور:.*?<br>/,
+        `👁 آخر ظهور: ${lastSeen || "—"}<br>`);
+
+  });
+
+ });
+}
 
   
   function updateLiveOnly(data){
