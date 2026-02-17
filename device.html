@@ -896,7 +896,7 @@ db.ref("analytics/devices").once("value").then(snap=>{
       document.getElementById("btn_device_"+sessionId).style.display="inline-block";
       document.getElementById("btn_close_"+sessionId).style.display="none";
 
-      document.getElementById("sess_"+sessionId).innerHTML =
+     document.getElementById("sess_"+safeId(sessionId)).innerHTML =
       "<div style='color:#888'>تم اغلاق الجلسة</div>";
 
     }
