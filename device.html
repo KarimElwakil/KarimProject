@@ -824,30 +824,30 @@ db.ref("analytics/devices").once("value").then(snap=>{
 
       found = true;
 
-      const info = browser.sessions[sessionId].info || {};
+     const info = s.info || {};
 
-      box.innerHTML = `
-      <div style="
-      background:#020617;
-      padding:15px;
-      border-radius:14px;
-      border:1px solid #0f172a;
-      line-height:1.9">
+box.innerHTML = `
+<div style="
+background:#020617;
+padding:15px;
+border-radius:12px;
+border:1px solid #0f172a">
 
-      🧠 الجهاز: ${info.deviceLabel || "غير معروف"}<br>
-      🌐 المتصفح: ${info.browser || "—"}<br>
-      💻 النظام: ${info.os || "—"}<br>
-      📱 النوع: ${info.deviceType || "—"}<br>
-      🖥 الدقة: ${info.screenResolution || "—"}<br>
-      🌍 الدولة: ${info.country || "—"}<br>
-      🏙 المدينة: ${info.city || "—"}<br>
-      🕒 التوقيت: ${info.timezone || "—"}<br>
-      📡 الشبكة: ${info.networkType || "—"}<br>
-      ⚡ السرعة: ${info.downlink || "—"}<br>
-      🎨 الثيم: ${info.theme || "light"}<br>
+🧠 نوع الجهاز: ${s.device || "غير معروف"}<br>
+🌐 المتصفح: ${s.browser || "غير معروف"}<br>
+💻 النظام: ${s.os || "غير معروف"}<br>
+🌍 الدولة: ${s.country || "غير معروف"}<br>
+🏙 المدينة: ${s.city || "غير معروف"}<br>
+📡 الشبكة: ${s.networkType || "غير معروف"}<br>
+🗣 اللغة: ${s.language || "غير معروف"}<br>
+🎨 الثيم: ${info.theme || "غير معروف"}<br>
+⚡ السرعة: ${s.downlink || "—"}<br>
+🟢 الحالة: ${info.isOnline ? "متصل الآن" : "غير متصل"}<br>
 
-      </div>
-      `;
+</div>
+`;
+
+     
     }
 
   });
