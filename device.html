@@ -29,6 +29,9 @@ databaseURL: "https://searchanalytics-4bbbf-default-rtdb.europe-west1.firebaseda
 projectId: "searchanalytics-4bbbf",
 };
 firebase.initializeApp(firebaseConfig);
+  function safeId(id){
+  return id.replace(/[^a-zA-Z0-9]/g,"_");
+}
 </script>
 
 <style>
@@ -222,7 +225,7 @@ class="switchBtn">
 
 
 <!-- 🔵 المحتوى -->
-<div id="sess_${sid}" style="margin-top:15px"></div>
+<div id="sess_${safeId(sid)}" style="margin-top:15px"></div>
 
 </div>
 `;
@@ -270,7 +273,7 @@ function toggleSession(id){
 
  openedSession = id;
 
- const box = document.getElementById("sess_"+id);
+ const box = document.getElementById("sess_"+safeId(id));
 
  if(box.style.display==="block"){
    box.style.display="none";
@@ -643,7 +646,7 @@ function drawMap(data){
    });
   }
 
-  const box=document.getElementById("sess_"+openedSession);
+  const box=document.getElementById("sess_"+safeId(openedSession));
   if(!box) return;
 
   box.querySelectorAll(".liveTime").forEach(el=>{
@@ -738,7 +741,7 @@ function showPages(id){
 // اقفل أي جلسة مفتوحة
 if(openedSession && openedSession !== id){
 
- document.getElementById("sess_"+openedSession).innerHTML="";
+ document.getElementById("sess_"+safeId(openedSession)).innerHTML="";
 
  document.getElementById("btn_pages_"+openedSession).style.display="inline-block";
  document.getElementById("btn_device_"+openedSession).style.display="inline-block";
@@ -750,7 +753,7 @@ openedSession=id;
 const closeBtn=document.getElementById("btn_close_"+id);
 closeBtn.style.display="inline-block";
 
-const box=document.getElementById("sess_"+id);
+const box=document.getElementById("sess_"+safeId(id));
 const btnPages=document.getElementById("btn_pages_"+id);
 const btnDevice=document.getElementById("btn_device_"+id);
 
@@ -766,7 +769,7 @@ function showDevice(id){
 // اقفل أي جلسة مفتوحة
 if(openedSession && openedSession !== id){
 
- document.getElementById("sess_"+openedSession).innerHTML="";
+ document.getElementById("sess_"+safeId(openedSession)).innerHTML="";
 
  document.getElementById("btn_pages_"+openedSession).style.display="inline-block";
  document.getElementById("btn_device_"+openedSession).style.display="inline-block";
@@ -778,7 +781,7 @@ openedSession=id;
 const closeBtn=document.getElementById("btn_close_"+id);
 closeBtn.style.display="inline-block";
 
-const box=document.getElementById("sess_"+id);
+const box=document.getElementById("sess_"+safeId(id));
 const btnPages=document.getElementById("btn_pages_"+id);
 const btnDevice=document.getElementById("btn_device_"+id);
 
