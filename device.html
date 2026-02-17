@@ -904,9 +904,23 @@ db.ref("analytics/devices").once("value").then(snap=>{
 });
 }
 
-
 let currentDeviceData = null;
 
+// تحميل أول مرة فقط
+deviceRef.once("value",snap=>{
+ const devices = snap.val();
+ if(!devices) return;
+
+ Object.keys(devices).forEach(k=>{
+   if(k.includes(id)){
+     currentDeviceData = devices[k];
+     drawDevice(k,devices[k]);
+   }
+ });
+});
+
+
+// 🔥 تحديث لايف بدون إعادة رسم الصفحة
 deviceRef.on("value",snap=>{
  const devices = snap.val();
  if(!devices) return;
@@ -916,24 +930,21 @@ deviceRef.on("value",snap=>{
 
    const newData = devices[k];
 
-   // أول تحميل فقط
    if(!currentDeviceData){
      currentDeviceData = newData;
-     drawDevice(k,newData);
      return;
    }
 
-   // لو مفيش تغيير حقيقي → تجاهل
    if(JSON.stringify(newData) === JSON.stringify(currentDeviceData)) return;
 
    currentDeviceData = newData;
 
-   // 🔥 تحديث خفيف فقط
    updateLiveOnly(newData);
-
  });
 });
 
+
+  
   function updateLiveOnly(data){
 
 if(!data.browsers) return;
