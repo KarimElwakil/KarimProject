@@ -793,7 +793,7 @@ loadDeviceInfo(id,box);
 
   function loadSessionPages(sessionId,box){
 
-db.ref("analytics/devices").once("value").then(snap=>{
+db.ref("analytics/devices").on("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
@@ -814,7 +814,7 @@ db.ref("analytics/devices").once("value").then(snap=>{
 
  function loadDeviceInfo(sessionId,box){
 
-db.ref("analytics/devices").once("value").then(snap=>{
+db.ref("analytics/devices").on("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
