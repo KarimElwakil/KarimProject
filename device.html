@@ -791,9 +791,13 @@ btnPages.style.display="inline-block";
 loadDeviceInfo(id,box);
 }
 
-  function loadSessionPages(sessionId,box){
+function loadSessionPages(sessionId,box){
 
-db.ref("analytics/devices").on("value").then(snap=>{
+const ref = db.ref("analytics/devices");
+
+ref.off(); // امنع تكرار الليسنر
+
+ref.on("value",snap=>{
  const devices = snap.val();
  if(!devices) return;
 
@@ -812,13 +816,17 @@ db.ref("analytics/devices").on("value").then(snap=>{
 }
 
 
- function loadDeviceInfo(sessionId,box){
+function loadDeviceInfo(sessionId,box){
 
-db.ref("analytics/devices").on("value").then(snap=>{
+const ref = db.ref("analytics/devices");
+
+ref.off();
+
+ref.on("value",snap=>{
  const devices = snap.val();
  if(!devices) return;
 
- let found = false;
+ let found=false;
 
  Object.keys(devices).forEach(deviceKey=>{
 
@@ -827,48 +835,37 @@ db.ref("analytics/devices").on("value").then(snap=>{
 
   Object.keys(device.browsers).forEach(browserKey=>{
 
-    const browser = device.browsers[browserKey];
+    const browser=device.browsers[browserKey];
     if(!browser.sessions) return;
 
     if(browser.sessions[sessionId]){
       const s = browser.sessions[sessionId];
+      found=true;
 
+      const info=s.info||{};
 
-      found = true;
+box.innerHTML=`
+<div style="background:#020617;padding:15px;border-radius:12px;border:1px solid #0f172a">
 
-     const info = s.info || {};
+🧠 نوع الجهاز: ${s.device||"غير معروف"}<br>
+🌐 المتصفح: ${s.browser||"غير معروف"}<br>
+💻 النظام: ${s.os||"غير معروف"}<br>
+🌍 الدولة: ${s.country||"غير معروف"}<br>
+🏙 المدينة: ${s.city||"غير معروف"}<br>
+📡 الشبكة: ${s.networkType||"غير معروف"}<br>
+🗣 اللغة: ${s.language||"غير معروف"}<br>
+🎨 الثيم: ${info.theme||"غير معروف"}<br>
+⚡ السرعة: ${s.downlink||"—"}<br>
+🟢 الحالة: ${info.isOnline?"متصل الآن":"غير متصل"}<br>
 
-box.innerHTML = `
-<div style="
-background:#020617;
-padding:15px;
-border-radius:12px;
-border:1px solid #0f172a">
-
-🧠 نوع الجهاز: ${s.device || "غير معروف"}<br>
-🌐 المتصفح: ${s.browser || "غير معروف"}<br>
-💻 النظام: ${s.os || "غير معروف"}<br>
-🌍 الدولة: ${s.country || "غير معروف"}<br>
-🏙 المدينة: ${s.city || "غير معروف"}<br>
-📡 الشبكة: ${s.networkType || "غير معروف"}<br>
-🗣 اللغة: ${s.language || "غير معروف"}<br>
-🎨 الثيم: ${info.theme || "غير معروف"}<br>
-⚡ السرعة: ${s.downlink || "—"}<br>
-🟢 الحالة: ${info.isOnline ? "متصل الآن" : "غير متصل"}<br>
-
-</div>
-`;
-
-     
+</div>`;
     }
 
   });
 
  });
 
- if(!found){
-   box.innerHTML = "لا توجد بيانات جهاز لهذه الجلسة";
- }
+ if(!found) box.innerHTML="لا توجد بيانات";
 
 });
 }
