@@ -112,32 +112,6 @@ deviceRef.once("value").then(snap=>{
  });
 });
 
-// تحديث لايف بدون إعادة رسم
-setInterval(()=>{
- if(!deviceDataCache) return;
-
- deviceRef.child(Object.keys(deviceDataCache)[0]);
-
- deviceRef.once("value").then(snap=>{
-  const devices = snap.val();
-  if(!devices) return;
-
-  Object.keys(devices).forEach(k=>{
-    if(!k.includes(id)) return;
-
-    const newData = devices[k];
-
-    // لو نفس البيانات → تجاهل
-    if(JSON.stringify(newData) === JSON.stringify(deviceDataCache)) return;
-
-    deviceDataCache = newData;
-
-    // تحديث فقط لو الجلسة مفتوحة
-    refreshOpenSession(newData);
-
-  });
- });
-},2000); // كل ثانيتين
 
 
 let currentDeviceData = null;
@@ -900,19 +874,17 @@ border:1px solid #0f172a">
 });
 }
 
-  function closeSession(sessionId){
+ function closeSession(sessionId){
 
 db.ref("analytics/devices").once("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
  Object.keys(devices).forEach(deviceKey=>{
-
   const device = devices[deviceKey];
   if(!device.browsers) return;
 
   Object.keys(device.browsers).forEach(browserKey=>{
-
     const browser = device.browsers[browserKey];
     if(!browser.sessions) return;
 
@@ -920,21 +892,40 @@ db.ref("analytics/devices").once("value").then(snap=>{
 
       db.ref(`analytics/devices/${deviceKey}/browsers/${browserKey}/sessions/${sessionId}/info/isOnline`).set(false);
 
-      // اخفاء الزرار بعد الاغلاق
-      const btn = document.getElementById("btn_close_"+sessionId);
-      if(btn) btn.style.display="none";
+      // رجع الزراير
+      document.getElementById("btn_pages_"+sessionId).style.display="inline-block";
+      document.getElementById("btn_device_"+sessionId).style.display="inline-block";
+      document.getElementById("btn_close_"+sessionId).style.display="none";
 
-      const box = document.getElementById("sess_"+sessionId);
-      if(box) box.innerHTML = "<div style='color:#888'>تم اغلاق الجلسة</div>";
+      document.getElementById("sess_"+sessionId).innerHTML =
+      "<div style='color:#888'>تم اغلاق الجلسة</div>";
 
     }
 
   });
 
  });
+});
+}
+
+
+  function startDeviceLive(){
+
+deviceRef.on("value",snap=>{
+ const devices = snap.val();
+ if(!devices) return;
+
+ Object.keys(devices).forEach(k=>{
+   if(!k.includes(id)) return;
+
+   const newData = devices[k];
+   drawDevice(k,newData);
+ });
 
 });
 }
+
+startDeviceLive();
 
 
 
