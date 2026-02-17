@@ -231,6 +231,17 @@ top:15px;
 display:flex;
 gap:8px">
 
+<button onclick="closeSession('${sid}')" 
+style="
+background:#ff3b3b;
+border:none;
+padding:8px 16px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold">
+⛔ اغلاق الجلسة
+</button>
+
 <button onclick="showPages('${sid}')" 
 id="btn_pages_${sid}" 
 class="switchBtn">
@@ -244,6 +255,7 @@ class="switchBtn">
 </button>
 
 </div>
+
 
 <!-- 🔵 المحتوى -->
 <div id="sess_${sid}" style="margin-top:15px"></div>
@@ -758,6 +770,12 @@ function updateLivePagesOnly(session){
 
 function showPages(id){
 
+if(openedSession && openedSession !== id){
+ document.getElementById("sess_"+openedSession).innerHTML="";
+}
+openedSession = id;
+
+
  const box = document.getElementById("sess_"+id);
  const btnPages = document.getElementById("btn_pages_"+id);
  const btnDevice = document.getElementById("btn_device_"+id);
@@ -770,6 +788,12 @@ function showPages(id){
 }
 
 function showDevice(id){
+
+  if(openedSession && openedSession !== id){
+ document.getElementById("sess_"+openedSession).innerHTML="";
+}
+openedSession = id;
+
 
  const box = document.getElementById("sess_"+id);
  const btnPages = document.getElementById("btn_pages_"+id);
@@ -821,6 +845,8 @@ db.ref("analytics/devices").once("value").then(snap=>{
     if(!browser.sessions) return;
 
     if(browser.sessions[sessionId]){
+      const s = browser.sessions[sessionId];
+
 
       found = true;
 
@@ -857,6 +883,39 @@ border:1px solid #0f172a">
  if(!found){
    box.innerHTML = "لا توجد بيانات جهاز لهذه الجلسة";
  }
+
+});
+}
+
+  function closeSession(sessionId){
+
+if(!confirm("هل تريد اغلاق الجلسة؟")) return;
+
+db.ref("analytics/devices").once("value").then(snap=>{
+ const devices = snap.val();
+ if(!devices) return;
+
+ Object.keys(devices).forEach(deviceKey=>{
+
+  const device = devices[deviceKey];
+  if(!device.browsers) return;
+
+  Object.keys(device.browsers).forEach(browserKey=>{
+
+    const browser = device.browsers[browserKey];
+    if(!browser.sessions) return;
+
+    if(browser.sessions[sessionId]){
+
+      db.ref(`analytics/devices/${deviceKey}/browsers/${browserKey}/sessions/${sessionId}/info/isOnline`).set(false);
+
+      alert("تم اغلاق الجلسة");
+      location.reload();
+    }
+
+  });
+
+ });
 
 });
 }
