@@ -440,7 +440,11 @@ style="display:none;margin-top:10px"></div>
    i++;
  });
 
- container.innerHTML = html;
+if(!container.dataset.loaded){
+  container.innerHTML = html;
+  container.dataset.loaded = "true";
+}
+
 }
 
   function openVisit(pageName,start,stepTime){
@@ -670,6 +674,9 @@ function drawMap(data){
  
   function startLiveSession(sessionId){
 
+    if(!openedPage) return;
+
+
  // اقفل القديم
  if(liveSessionListener){
    liveSessionListener.off();
@@ -805,9 +812,9 @@ function loadSessionPages(sessionId,box){
 
 const ref = db.ref("analytics/devices");
 
-ref.off(); // امنع تكرار الليسنر
 
-ref.on("value",snap=>{
+
+ref.once("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
@@ -1032,6 +1039,9 @@ if(now - last < 900000){
 
      if(s.info.lastActive){
        lastSeen=new Date(s.info.lastActive).toLocaleString();
+        if(Date.now() - s.info.lastActive < 15000){
+    online = true;
+  }
      }
    }
 
