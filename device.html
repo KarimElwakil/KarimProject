@@ -947,7 +947,7 @@ Object.values(data.browsers).forEach(browser=>{
  Object.keys(browser.sessions).forEach(sid=>{
    const s = browser.sessions[sid];
 
-   const card = document.querySelector(`#sess_${sid}`)?.closest(".card");
+  const card = document.getElementById("sess_"+safeId(sid))?.closest(".card");
    if(!card) return;
 
    let online=false;
