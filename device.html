@@ -44,6 +44,22 @@ font-weight:bold;
 font-size:14px;
 }
 
+  .switchBtn{
+background:#0ea5e9;
+border:none;
+padding:7px 16px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+font-size:13px;
+transition:.2s;
+}
+
+.switchBtn:hover{
+transform:scale(1.05);
+}
+
+
 </style>
 </head>
 <body>
@@ -193,45 +209,48 @@ function drawDevice(name,data){
 
      const statusColor = online ? "#00ffc3" : "#666";
 
-     sessionsHTML += `
-    <div class="card" 
-style="border-left:5px solid ${statusColor};position:relative">
+sessionsHTML += `
+<div class="card" style="border-left:5px solid ${statusColor};position:relative">
 
+<!-- 🔵 تفاصيل الجلسة فوق -->
+<div style="margin-bottom:12px">
 
-     <b>🧠 جلسة ${browser}</b>
-<br>
+<b>🧠 جلسة ${browser}</b><br>
+⏱ الوقت: ${(totalSessionTime/60).toFixed(1)} دقيقة<br>
+📄 عدد الصفحات: ${pagesCount}<br>
+👁 آخر ظهور: ${lastSeen || "—"}<br>
+${online ? "🟢 نشط الآن" : "⚫ مغلق"}
 
-<div style="display:flex;gap:10px;margin-bottom:10px">
+</div>
+
+<!-- 🔵 الزرارين شمال -->
+<div style="
+position:absolute;
+left:15px;
+top:15px;
+display:flex;
+gap:8px">
 
 <button onclick="showPages('${sid}')" 
-id="btn_pages_${sid}"
-class="toggleBtn">
+id="btn_pages_${sid}" 
+class="switchBtn">
 📄 الصفحات
 </button>
 
 <button onclick="showDevice('${sid}')" 
-id="btn_device_${sid}"
-class="toggleBtn">
+id="btn_device_${sid}" 
+class="switchBtn">
 📱 معلومات الجهاز
 </button>
 
 </div>
 
-<div id="sess_${sid}" style="margin-top:10px"></div>
-
-
-</div>
-
+<!-- 🔵 المحتوى -->
 <div id="sess_${sid}" style="margin-top:15px"></div>
 
+</div>
+`;
 
-     ⏱ الوقت: ${(totalSessionTime/60).toFixed(1)} دقيقة<br>
-     📄 عدد الصفحات: ${pagesCount}<br>
-     👁 آخر ظهور: ${lastSeen || "—"}<br>
-     ${online ? "🟢 نشط الآن" : "⚫ مغلق"}
-     
-    
-     </div>`;
    });
 
  });
@@ -743,6 +762,7 @@ function showPages(id){
  const btnPages = document.getElementById("btn_pages_"+id);
  const btnDevice = document.getElementById("btn_device_"+id);
 
+ // اخفاء زر الصفحات نفسه
  btnPages.style.display="none";
  btnDevice.style.display="inline-block";
 
@@ -761,7 +781,7 @@ function showDevice(id){
  loadDeviceInfo(id,box);
 }
 
-function loadSessionPages(sessionId,box){
+  function loadSessionPages(sessionId,box){
 
 db.ref("analytics/devices").once("value").then(snap=>{
  const devices = snap.val();
@@ -780,6 +800,46 @@ db.ref("analytics/devices").once("value").then(snap=>{
 
 });
 }
+
+
+  function loadDeviceInfo(sessionId,box){
+
+db.ref("analytics/devices").once("value").then(snap=>{
+ const devices = snap.val();
+ if(!devices) return;
+
+ Object.values(devices).forEach(device=>{
+  if(!device.browsers) return;
+
+  Object.values(device.browsers).forEach(b=>{
+   if(!b.sessions) return;
+   if(!b.sessions[sessionId]) return;
+
+   const info = b.sessions[sessionId].info || {};
+
+   box.innerHTML = `
+   <div style="
+   background:#020617;
+   padding:14px;
+   border-radius:12px;
+   border:1px solid #0f172a">
+
+   🧠 ${info.deviceLabel||""}<br>
+   🌐 ${info.browser||""}<br>
+   💻 ${info.os||""}<br>
+   🖥 ${info.screenResolution||""}<br>
+   🌍 ${info.country||""} - ${info.city||""}<br>
+   🕒 ${info.timezone||""}<br>
+   📶 ${info.networkType||""}<br>
+   🎨 ${info.theme||""}
+
+   </div>`;
+  });
+ });
+
+});
+}
+
 
 
 </script>
