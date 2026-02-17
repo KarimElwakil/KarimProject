@@ -119,6 +119,27 @@ const browserRef = deviceRef.child("browsers").child(browserName);
 // مسار الجلسة داخل المتصفح
 const sessionRef = browserRef.child("sessions").child(sessionId);
 
+  // 🔥 نظام online حقيقي realtime
+const presenceRef = sessionRef.child("info");
+
+// أول دخول
+presenceRef.update({
+  isOnline: true,
+  lastActive: Date.now()
+});
+
+// لو قفل الصفحة أو النت فصل
+presenceRef.child("isOnline").onDisconnect().set(false);
+
+// heartbeat كل نص ثانية
+setInterval(()=>{
+  presenceRef.update({
+    isOnline: true,
+    lastActive: Date.now()
+  });
+},500);
+
+
 
 // فتح الجلسة لو أول مرة
 sessionRef.child("info").update({
@@ -127,10 +148,6 @@ sessionRef.child("info").update({
   device: navigator.userAgent
 });
 
-// تحديث النشاط كل 5 ثواني (ده اللي هيخلي الجلسة لايف)
-setInterval(()=>{
-  sessionRef.child("info/lastActive").set(Date.now());
-},5000);
 
 
 /* ===============================
@@ -682,6 +699,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
