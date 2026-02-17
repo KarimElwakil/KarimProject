@@ -34,6 +34,16 @@ firebase.initializeApp(firebaseConfig);
 <style>
 body{background:#0b0f14;color:#fff;font-family:Arial;padding:20px}
 .card{background:#111827;padding:15px;border-radius:12px;margin:10px 0}
+  .toggleBtn{
+background:#0ea5e9;
+border:none;
+padding:8px 18px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+font-size:14px;
+}
+
 </style>
 </head>
 <body>
@@ -190,37 +200,25 @@ style="border-left:5px solid ${statusColor};position:relative">
 
      <b>🧠 جلسة ${browser}</b>
 <br>
-<div style="
-position:absolute;
-left:10px;
-top:10px;
-display:flex;
-gap:6px">
 
-<button onclick="openPages('${sid}')"
+<div style="display:flex;gap:10px;margin-bottom:10px">
+
+<button onclick="showPages('${sid}')" 
 id="btn_pages_${sid}"
-style="
-background:#0ea5e9;
-border:none;
-padding:4px 10px;
-border-radius:6px;
-cursor:pointer;
-font-size:12px">
+class="toggleBtn">
 📄 الصفحات
 </button>
 
-<button onclick="openDeviceInfo('${sid}')"
-id="btn_info_${sid}"
-style="
-background:#00ffc3;
-border:none;
-padding:4px 10px;
-border-radius:6px;
-cursor:pointer;
-font-size:12px;
-display:none">
-📱 الجهاز
+<button onclick="showDevice('${sid}')" 
+id="btn_device_${sid}"
+class="toggleBtn">
+📱 معلومات الجهاز
 </button>
+
+</div>
+
+<div id="sess_${sid}" style="margin-top:10px"></div>
+
 
 </div>
 
@@ -739,61 +737,33 @@ function updateLivePagesOnly(session){
  });
 }
 
-function openDeviceInfo(sessionId){
+function showPages(id){
 
-const box = document.getElementById("sess_"+sessionId);
-const btnPages = document.getElementById("btn_pages_"+sessionId);
-const btnInfo = document.getElementById("btn_info_"+sessionId);
+ const box = document.getElementById("sess_"+id);
+ const btnPages = document.getElementById("btn_pages_"+id);
+ const btnDevice = document.getElementById("btn_device_"+id);
 
-btnInfo.style.display="none";
-btnPages.style.display="inline-block";
-box.innerHTML="جاري التحميل...";
+ btnPages.style.display="none";
+ btnDevice.style.display="inline-block";
 
-firebase.database().ref("analytics/devices").once("value").then(snap=>{
- const devices = snap.val();
- if(!devices) return;
-
- Object.values(devices).forEach(device=>{
-  if(!device.browsers) return;
-
-  Object.values(device.browsers).forEach(b=>{
-   if(!b.sessions) return;
-   if(!b.sessions[sessionId]) return;
-
-   const s = b.sessions[sessionId];
-   const info = s.info || {};
-
-   box.innerHTML = `
-   <div style="background:#020617;padding:12px;border-radius:10px">
-   🧠 ${info.deviceLabel||""}<br>
-   🌐 ${info.browser||""}<br>
-   💻 ${info.os||""}<br>
-   📱 ${info.device||""}<br>
-   🖥 ${info.screenResolution||""}<br>
-   🌍 ${info.country||""} - ${info.city||""}<br>
-   🕒 ${info.timezone||""}<br>
-   📡 ${info.networkType||""}<br>
-   ⚡ ${info.downlink||""}<br>
-   🎨 ${info.theme||""}
-   </div>`;
-  });
- });
-
-});
+ loadSessionPages(id,box);
 }
 
+function showDevice(id){
 
- function openPages(sessionId){
+ const box = document.getElementById("sess_"+id);
+ const btnPages = document.getElementById("btn_pages_"+id);
+ const btnDevice = document.getElementById("btn_device_"+id);
 
-const box = document.getElementById("sess_"+sessionId);
-const btnPages = document.getElementById("btn_pages_"+sessionId);
-const btnInfo = document.getElementById("btn_info_"+sessionId);
+ btnDevice.style.display="none";
+ btnPages.style.display="inline-block";
 
-btnPages.style.display="none";
-btnInfo.style.display="inline-block";
-box.innerHTML="جاري التحميل...";
+ loadDeviceInfo(id,box);
+}
 
-firebase.database().ref("analytics/devices").once("value").then(snap=>{
+function loadSessionPages(sessionId,box){
+
+db.ref("analytics/devices").once("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
@@ -804,8 +774,7 @@ firebase.database().ref("analytics/devices").once("value").then(snap=>{
    if(!b.sessions) return;
    if(!b.sessions[sessionId]) return;
 
-   const session = b.sessions[sessionId];
-   drawPages(box,session);
+   drawPages(box,b.sessions[sessionId]);
   });
  });
 
