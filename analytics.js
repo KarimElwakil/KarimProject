@@ -127,22 +127,11 @@ sessionRef.child("info").update({
   device: navigator.userAgent
 });
 
-// تحديث اخر نشاط كل 10 ثواني
+// تحديث النشاط كل 5 ثواني (ده اللي هيخلي الجلسة لايف)
 setInterval(()=>{
-  localStorage.setItem("lastSeen", Date.now());
   sessionRef.child("info/lastActive").set(Date.now());
-sessionRef.child("info/isOnline").set(true);
+},5000);
 
-},10000);
-
-// عند الخروج
-window.addEventListener("beforeunload",()=>{
-  sessionRef.child("info/isOnline").set(false);
-sessionRef.child("info/closedAt").set(Date.now());
-
-});
-
-sessionRef.child("info/isOnline").set(true);
 
 /* ===============================
    THEME TRACKING PRO
@@ -328,7 +317,7 @@ fetch("https://ipapi.co/json/")
   });
 
 
-sessionRef.child("isOnline").onDisconnect().set(false);
+
 
 /* ==============================
    DEVICE GLOBAL STATS
@@ -539,7 +528,7 @@ document.addEventListener("click",(e)=>{
 
 
 
-visitRef.child("isOnline").onDisconnect().set(false);
+
 
 
 
@@ -693,6 +682,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
