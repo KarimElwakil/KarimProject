@@ -802,40 +802,61 @@ db.ref("analytics/devices").once("value").then(snap=>{
 }
 
 
-  function loadDeviceInfo(sessionId,box){
+ function loadDeviceInfo(sessionId,box){
 
 db.ref("analytics/devices").once("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
- Object.values(devices).forEach(device=>{
+ let found = false;
+
+ Object.keys(devices).forEach(deviceKey=>{
+
+  const device = devices[deviceKey];
   if(!device.browsers) return;
 
-  Object.values(device.browsers).forEach(b=>{
-   if(!b.sessions) return;
-   if(!b.sessions[sessionId]) return;
+  Object.keys(device.browsers).forEach(browserKey=>{
 
-   const info = b.sessions[sessionId].info || {};
+    const browser = device.browsers[browserKey];
+    if(!browser.sessions) return;
 
-   box.innerHTML = `
-   <div style="
-   background:#020617;
-   padding:14px;
-   border-radius:12px;
-   border:1px solid #0f172a">
+    if(browser.sessions[sessionId]){
 
-   🧠 ${info.deviceLabel||""}<br>
-   🌐 ${info.browser||""}<br>
-   💻 ${info.os||""}<br>
-   🖥 ${info.screenResolution||""}<br>
-   🌍 ${info.country||""} - ${info.city||""}<br>
-   🕒 ${info.timezone||""}<br>
-   📶 ${info.networkType||""}<br>
-   🎨 ${info.theme||""}
+      found = true;
 
-   </div>`;
+      const info = browser.sessions[sessionId].info || {};
+
+      box.innerHTML = `
+      <div style="
+      background:#020617;
+      padding:15px;
+      border-radius:14px;
+      border:1px solid #0f172a;
+      line-height:1.9">
+
+      🧠 الجهاز: ${info.deviceLabel || "غير معروف"}<br>
+      🌐 المتصفح: ${info.browser || "—"}<br>
+      💻 النظام: ${info.os || "—"}<br>
+      📱 النوع: ${info.deviceType || "—"}<br>
+      🖥 الدقة: ${info.screenResolution || "—"}<br>
+      🌍 الدولة: ${info.country || "—"}<br>
+      🏙 المدينة: ${info.city || "—"}<br>
+      🕒 التوقيت: ${info.timezone || "—"}<br>
+      📡 الشبكة: ${info.networkType || "—"}<br>
+      ⚡ السرعة: ${info.downlink || "—"}<br>
+      🎨 الثيم: ${info.theme || "light"}<br>
+
+      </div>
+      `;
+    }
+
   });
+
  });
+
+ if(!found){
+   box.innerHTML = "لا توجد بيانات جهاز لهذه الجلسة";
+ }
 
 });
 }
