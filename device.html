@@ -483,8 +483,7 @@ openedPage = stepTime;
       });
 
       const v = closest;
-const isLast = s.info?.isOnline &&
-Math.abs(Date.now() - v.enterTimestamp) < 30000;
+const isLast = s.info?.isOnline 
 
 
 box.innerHTML = `
@@ -955,7 +954,9 @@ Object.values(data.browsers).forEach(browser=>{
  Object.keys(browser.sessions).forEach(sid=>{
    const s = browser.sessions[sid];
 
-  const card = document.getElementById("sess_"+safeId(sid))?.closest(".card");
+ if(openedSession === sid) return;
+const card = document.getElementById("sess_"+safeId(sid))?.closest(".card");
+
    if(!card) return;
 
    let online=false;
