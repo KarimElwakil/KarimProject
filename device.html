@@ -150,7 +150,14 @@ function drawDevice(name,data){
      let lastSeen="";
 
      if(s.info){
-       if(s.info.isOnline) online=true;
+      const now = Date.now();
+const last = s.info?.lastActive || 0;
+
+if(now - last < 900000){
+ online = true;
+}else{
+ online = false;
+}
        if(s.info.lastActive){
          lastSeen = new Date(s.info.lastActive).toLocaleString();
        }
@@ -483,7 +490,11 @@ openedPage = stepTime;
       });
 
       const v = closest;
-const isLast = s.info?.isOnline 
+const now = Date.now();
+const last = s.info?.lastActive || 0;
+const isLast = (now - last < 900000);
+
+
 
 
 box.innerHTML = `
@@ -965,7 +976,15 @@ const card = document.getElementById("sess_"+safeId(sid))?.closest(".card");
    let pages=0;
 
    if(s.info){
-     if(s.info.isOnline) online=true;
+     const now = Date.now();
+const last = s.info?.lastActive || 0;
+
+if(now - last < 900000){
+ online = true;
+}else{
+ online = false;
+}
+
      if(s.info.lastActive){
        lastSeen=new Date(s.info.lastActive).toLocaleString();
      }
