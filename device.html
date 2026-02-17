@@ -114,20 +114,6 @@ deviceRef.once("value").then(snap=>{
 
 
 
-let currentDeviceData = null;
-
-// تحميل أول مرة فقط
-deviceRef.once("value").then(snap=>{
- const devices = snap.val();
- if(!devices) return;
-
- Object.keys(devices).forEach(k=>{
-   if(k.includes(id)){
-     currentDeviceData = devices[k];
-     drawDevice(k,devices[k]);
-   }
- });
-});
 
 
 
@@ -746,50 +732,60 @@ function updateLivePagesOnly(session){
  });
 }
 
+
 function showPages(id){
 
- const closeBtn = document.getElementById("btn_close_"+id);
+// اقفل أي جلسة مفتوحة
+if(openedSession && openedSession !== id){
+
+ document.getElementById("sess_"+openedSession).innerHTML="";
+
+ document.getElementById("btn_pages_"+openedSession).style.display="inline-block";
+ document.getElementById("btn_device_"+openedSession).style.display="inline-block";
+ document.getElementById("btn_close_"+openedSession).style.display="none";
+}
+
+openedSession=id;
+
+const closeBtn=document.getElementById("btn_close_"+id);
 closeBtn.style.display="inline-block";
 
+const box=document.getElementById("sess_"+id);
+const btnPages=document.getElementById("btn_pages_"+id);
+const btnDevice=document.getElementById("btn_device_"+id);
 
+btnPages.style.display="none";
+btnDevice.style.display="inline-block";
 
-if(openedSession && openedSession !== id){
- document.getElementById("sess_"+openedSession).innerHTML="";
-}
-openedSession = id;
-
-
- const box = document.getElementById("sess_"+id);
- const btnPages = document.getElementById("btn_pages_"+id);
- const btnDevice = document.getElementById("btn_device_"+id);
-
- // اخفاء زر الصفحات نفسه
- btnPages.style.display="none";
- btnDevice.style.display="inline-block";
-
- loadSessionPages(id,box);
+loadSessionPages(id,box);
 }
 
+  
 function showDevice(id){
 
-  const closeBtn = document.getElementById("btn_close_"+id);
+// اقفل أي جلسة مفتوحة
+if(openedSession && openedSession !== id){
+
+ document.getElementById("sess_"+openedSession).innerHTML="";
+
+ document.getElementById("btn_pages_"+openedSession).style.display="inline-block";
+ document.getElementById("btn_device_"+openedSession).style.display="inline-block";
+ document.getElementById("btn_close_"+openedSession).style.display="none";
+}
+
+openedSession=id;
+
+const closeBtn=document.getElementById("btn_close_"+id);
 closeBtn.style.display="inline-block";
 
+const box=document.getElementById("sess_"+id);
+const btnPages=document.getElementById("btn_pages_"+id);
+const btnDevice=document.getElementById("btn_device_"+id);
 
-  if(openedSession && openedSession !== id){
- document.getElementById("sess_"+openedSession).innerHTML="";
-}
-openedSession = id;
+btnDevice.style.display="none";
+btnPages.style.display="inline-block";
 
-
- const box = document.getElementById("sess_"+id);
- const btnPages = document.getElementById("btn_pages_"+id);
- const btnDevice = document.getElementById("btn_device_"+id);
-
- btnDevice.style.display="none";
- btnPages.style.display="inline-block";
-
- loadDeviceInfo(id,box);
+loadDeviceInfo(id,box);
 }
 
   function loadSessionPages(sessionId,box){
@@ -909,7 +905,7 @@ db.ref("analytics/devices").once("value").then(snap=>{
 }
 
 
-  function startDeviceLive(){
+let currentDeviceData = null;
 
 deviceRef.on("value",snap=>{
  const devices = snap.val();
@@ -919,13 +915,74 @@ deviceRef.on("value",snap=>{
    if(!k.includes(id)) return;
 
    const newData = devices[k];
-   drawDevice(k,newData);
- });
 
+   // أول تحميل فقط
+   if(!currentDeviceData){
+     currentDeviceData = newData;
+     drawDevice(k,newData);
+     return;
+   }
+
+   // لو مفيش تغيير حقيقي → تجاهل
+   if(JSON.stringify(newData) === JSON.stringify(currentDeviceData)) return;
+
+   currentDeviceData = newData;
+
+   // 🔥 تحديث خفيف فقط
+   updateLiveOnly(newData);
+
+ });
+});
+
+  function updateLiveOnly(data){
+
+if(!data.browsers) return;
+
+Object.values(data.browsers).forEach(browser=>{
+ if(!browser.sessions) return;
+
+ Object.keys(browser.sessions).forEach(sid=>{
+   const s = browser.sessions[sid];
+
+   const card = document.querySelector(`#sess_${sid}`)?.closest(".card");
+   if(!card) return;
+
+   let online=false;
+   let lastSeen="";
+   let total=0;
+   let pages=0;
+
+   if(s.info){
+     if(s.info.isOnline) online=true;
+     if(s.info.lastActive){
+       lastSeen=new Date(s.info.lastActive).toLocaleString();
+     }
+   }
+
+   if(s.pages){
+     Object.values(s.pages).forEach(p=>{
+       if(p.visits){
+         Object.values(p.visits).forEach(v=>{
+           if(v.durationSec) total+=v.durationSec;
+           pages++;
+         });
+       }
+     });
+   }
+
+   // تحديث النص فقط
+   card.querySelectorAll(".liveOnline").forEach(e=>{
+     e.innerHTML = online ? "🟢 نشط الآن" : "⚫ مغلق";
+   });
+
+   card.querySelectorAll(".liveLast").forEach(e=>{
+     e.innerHTML = lastSeen;
+   });
+
+ });
 });
 }
 
-startDeviceLive();
 
 
 
