@@ -119,27 +119,20 @@ const browserRef = deviceRef.child("browsers").child(browserName);
 // مسار الجلسة داخل المتصفح
 const sessionRef = browserRef.child("sessions").child(sessionId);
 
-/* ===== ONLINE SYSTEM STABLE ===== */
+/* ===== ONLINE SYSTEM ORIGINAL ===== */
 
 // أول دخول
 sessionRef.child("info/isOnline").set(true);
 
-// heartbeat كل 10 ثواني فقط
-setInterval(()=>{
-  sessionRef.child("info/isOnline").set(true);
-  sessionRef.child("info/lastActive").set(Date.now());
-},1000);
-
-// لما تقفل التاب
+// لو قفل التاب
 window.addEventListener("beforeunload",()=>{
   sessionRef.child("info/isOnline").set(false);
 });
 
-// لو النت فصل فجأة
+// لو النت فصل أو قفل فجأة
 sessionRef.child("info/isOnline").onDisconnect().set(false);
 
-
-
+  
 // فتح الجلسة لو أول مرة
 sessionRef.child("info").update({
   start: Date.now(),
@@ -698,6 +691,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
