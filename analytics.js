@@ -138,10 +138,7 @@ sessionRef.child("info/isOnline").onDisconnect().set(false);
 
 
 
-  start: Date.now(),
-  readableStart: new Date().toLocaleString(),
-  device: navigator.userAgent
-});
+ 
 
 
 
@@ -711,6 +708,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
