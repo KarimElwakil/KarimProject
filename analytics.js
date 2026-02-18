@@ -120,16 +120,22 @@ const browserRef = deviceRef.child("browsers").child(browserName);
 const sessionRef = browserRef.child("sessions").child(sessionId);
 
   
-// فتح الجلسة لو أول مرة
+// فتح الجلسة أول مرة
 sessionRef.child("info").update({
-isOnline:true
+  isOnline: true,
+  start: Date.now(),
+  readableStart: new Date().toLocaleString(),
+  device: navigator.userAgent
+});
+
 // لما يقفل الموقع
 window.addEventListener("beforeunload",()=>{
   sessionRef.child("info/isOnline").set(false);
 });
 
-// لو النت فصل
+// لو النت فصل فجأة
 sessionRef.child("info/isOnline").onDisconnect().set(false);
+
 
 
   start: Date.now(),
@@ -705,6 +711,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
