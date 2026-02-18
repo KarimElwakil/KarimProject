@@ -477,6 +477,27 @@ sessionRef.child("flow").push({
 window.currentVisitRef = visitRef;
 window.pageEnterTime = Date.now();
 
+/* ===== PAGE ONLINE SYSTEM ===== */
+
+// أول ما الصفحة تفتح
+visitRef.child("isOnline").set(true);
+
+// لو خرج من الصفحة أو راح صفحة تانية
+window.addEventListener("beforeunload",()=>{
+  visitRef.child("isOnline").set(false);
+});
+
+// لو غير التاب
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="hidden"){
+    visitRef.child("isOnline").set(false);
+  }
+});
+
+// لو النت فصل فجأة
+visitRef.child("isOnline").onDisconnect().set(false);
+
+
 
 visitRef.set({
   mouseMoves:[],
@@ -691,6 +712,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
