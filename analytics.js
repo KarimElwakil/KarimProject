@@ -119,22 +119,19 @@ const browserRef = deviceRef.child("browsers").child(browserName);
 // مسار الجلسة داخل المتصفح
 const sessionRef = browserRef.child("sessions").child(sessionId);
 
-/* ===== ONLINE SYSTEM ORIGINAL ===== */
-
-// أول دخول
-sessionRef.child("info/isOnline").set(true);
-
-// لو قفل التاب
+  
+// فتح الجلسة لو أول مرة
+sessionRef.child("info").update({
+isOnline:true
+// لما يقفل الموقع
 window.addEventListener("beforeunload",()=>{
   sessionRef.child("info/isOnline").set(false);
 });
 
-// لو النت فصل أو قفل فجأة
+// لو النت فصل
 sessionRef.child("info/isOnline").onDisconnect().set(false);
 
-  
-// فتح الجلسة لو أول مرة
-sessionRef.child("info").update({
+
   start: Date.now(),
   readableStart: new Date().toLocaleString(),
   device: navigator.userAgent
@@ -479,23 +476,19 @@ window.pageEnterTime = Date.now();
 
 /* ===== PAGE ONLINE SYSTEM ===== */
 
-// أول ما الصفحة تفتح
+// أول دخول
 visitRef.child("isOnline").set(true);
 
-// لو خرج من الصفحة أو راح صفحة تانية
+// لما يخرج من الصفحة
 window.addEventListener("beforeunload",()=>{
   visitRef.child("isOnline").set(false);
 });
 
-// لو غير التاب
-document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState==="hidden"){
-    visitRef.child("isOnline").set(false);
-  }
-});
 
-// لو النت فصل فجأة
+
+// لو النت فصل
 visitRef.child("isOnline").onDisconnect().set(false);
+
 
 
 
@@ -712,6 +705,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
