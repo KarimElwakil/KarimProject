@@ -122,7 +122,7 @@ const sessionRef = browserRef.child("sessions").child(sessionId);
   
 // فتح الجلسة أول مرة
 sessionRef.child("info").update({
-  isOnline: true,
+  isOnline:true,
   start: Date.now(),
   readableStart: new Date().toLocaleString(),
   device: navigator.userAgent
@@ -286,7 +286,7 @@ deviceLabel:
   os: detectOS(),
   startTime: formatDateTime(sessionStart),
   startTimestamp: sessionStart,
-  isOnline: true
+ 
 };
 
 let source = document.referrer
@@ -708,6 +708,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
