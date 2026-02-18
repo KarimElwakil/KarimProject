@@ -149,15 +149,9 @@ function drawDevice(name,data){
      let online=false;
      let lastSeen="";
 
-     if(s.info){
-      const now = Date.now();
-const last = s.info?.lastActive || 0;
+     
+      online = s.info?.isOnline === true;
 
-if(now - last < 900000){
- online = true;
-}else{
- online = false;
-}
        if(s.info.lastActive){
          lastSeen = new Date(s.info.lastActive).toLocaleString();
        }
@@ -981,14 +975,8 @@ deviceRef.on("value",snap=>{
     let online=false;
     let lastSeen="";
 
-    const last = s.info?.lastActive || 0;
+   online = s.info?.isOnline === true;
 
-    // 🔥 ONLINE 15 دقيقة
-    if(Date.now() - last < 900000){
-      online = true;
-    }else{
-      online = false;
-    }
 
     if(s.info?.lastActive){
       lastSeen = new Date(s.info.lastActive).toLocaleString();
@@ -1027,15 +1015,8 @@ const card = document.getElementById("sess_"+safeId(sid))?.closest(".card");
    let total=0;
    let pages=0;
 
-   if(s.info){
-     const now = Date.now();
-const last = s.info?.lastActive || 0;
-
-if(now - last < 900000){
- online = true;
-}else{
- online = false;
-}
+ 
+   online = s.info?.isOnline === true;
 
      if(s.info.lastActive){
        lastSeen=new Date(s.info.lastActive).toLocaleString();
