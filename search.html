@@ -1785,15 +1785,20 @@ body,
   background:rgba(255,255,255,.07);
 }
 
-  /* يخفي النظام في الكمبيوتر */
+ /* ===== الكمبيوتر ===== */
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
 .mobile-menu-wrap{
   display:none;
 }
 
-/* ===== موبايل فقط ===== */
+/* ===== الموبايل ===== */
 @media (max-width:600px){
 
-  /* اخفاء الأزرار الأصلية */
   .top-actions{
     display:none !important;
   }
@@ -1801,19 +1806,18 @@ body,
   .mobile-menu-wrap{
     display:flex;
     align-items:center;
-    gap:10px;
     position:relative;
   }
 
   .mobile-menu-btn{
-    width:36px;
-    height:36px;
+    width:38px;
+    height:38px;
+    border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
-    border-radius:50%;
-    background:rgba(0,0,0,.06);
     font-size:20px;
+    background:rgba(0,0,0,.06);
     cursor:pointer;
   }
 
@@ -1822,36 +1826,37 @@ body,
     color:#fff;
   }
 
+  /* القائمة */
   .mobile-menu{
-  position:absolute;
-  top:48px;
-  right:0;
+    position:absolute;
+    top:52px;
+    right:0;
 
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
 
-  background:var(--bar);
-  padding:14px;
-  border-radius:16px;
-  box-shadow:0 20px 40px rgba(0,0,0,.25);
+    background:var(--bar);
+    padding:14px;
+    border-radius:18px;
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
 
-  opacity:0;
-  transform:translateY(-10px);
-  pointer-events:none;
-  transition:.35s;
-  z-index:999;
-}
+    opacity:0;
+    transform:translateY(-8px);
+    pointer-events:none;
+    transition:.35s;
+    z-index:999;
+  }
 
-.mobile-menu.open{
-  opacity:1;
-  transform:translateY(0);
-  pointer-events:auto;
-}
+  .mobile-menu.open{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
 
   .mobile-menu a{
-    width:36px;
-    height:36px;
+    width:38px;
+    height:38px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -1862,20 +1867,6 @@ body,
   [data-theme="dark"] .mobile-menu a{
     background:rgba(255,255,255,.12);
     color:#fff;
-  }
-}
-
-/* الكمبيوتر */
-.top-actions{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-/* الموبايل يخفيها */
-@media (max-width:600px){
-  .top-actions{
-    display:none !important;
   }
 }
 /* =============================================================================== ===== */
@@ -1892,18 +1883,14 @@ body,
 
 
 <header class="topbar">
-  <div class="topbar-inner">
+ <div class="topbar-inner">
 
-
- <!-- شمال -->
+  <!-- الشمال: السويتش -->
   <div class="switch" id="themeSwitch">
     <div class="knob" id="knob">☀️</div>
   </div>
 
-
-
-
-    <!-- النص (العنوان فقط) -->
+  <!-- النص -->
   <div class="title-slot">
     <div class="title-wrap">
       <div class="title-frame">
@@ -1913,40 +1900,44 @@ body,
     </div>
   </div>
 
+  <!-- اليمين كمبيوتر -->
+  <div class="top-actions">
 
-<div class="mobile-menu-wrap">
+    <div class="tooltip-wrap">
+      <a href="profile.html" class="profile-btn">👤</a>
+      <div class="tooltip-text">الملف التعريفي</div>
+    </div>
 
-  <!-- زر القائمة -->
-  <div class="tooltip-wrap">
-    <div class="mobile-menu-btn" id="mobileMenuBtn">☰</div>
-    <div class="tooltip-text">القائمة</div>
-  </div>
+    <div class="tooltip-wrap">
+      <a href="about.html" class="profile-btn">ℹ️</a>
+      <div class="tooltip-text">عن البحث</div>
+    </div>
 
-  <!-- القائمة المنسدلة -->
-  <div class="mobile-menu" id="mobileMenu">
-
-    <div class="top-actions">
-
-      <div class="tooltip-wrap">
-        <a href="profile.html" class="profile-btn">👤</a>
-        <div class="tooltip-text">الملف التعريفي</div>
-      </div>
-
-      <div class="tooltip-wrap">
-        <a href="about.html" class="profile-btn">ℹ️</a>
-        <div class="tooltip-text">عن البحث</div>
-      </div>
-
-      <div class="tooltip-wrap">
-        <a href="guide.html" class="profile-btn">❓</a>
-        <div class="tooltip-text">دليل المستخدم</div>
-      </div>
-
+    <div class="tooltip-wrap">
+      <a href="guide.html" class="profile-btn">❓</a>
+      <div class="tooltip-text">دليل المستخدم</div>
     </div>
 
   </div>
-</div>
+
+  <!-- زر الموبايل -->
+  <div class="mobile-menu-wrap">
+
+    <div class="tooltip-wrap">
+      <div class="mobile-menu-btn" id="mobileMenuBtn">☰</div>
+      <div class="tooltip-text">القائمة</div>
+    </div>
+
+    <!-- القائمة المنسدلة -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="profile.html" class="profile-btn">👤</a>
+      <a href="about.html" class="profile-btn">ℹ️</a>
+      <a href="guide.html" class="profile-btn">❓</a>
+    </div>
+
   </div>
+
+</div>
 </header>
 
  
@@ -3056,21 +3047,21 @@ if (aboutBtn && window.innerWidth <= 600) {
 }
 
 
-  const mobileBtn  = document.getElementById("mobileMenuBtn");
+const mobileBtn  = document.getElementById("mobileMenuBtn");
 const mobileMenu = document.getElementById("mobileMenu");
 
 if(mobileBtn){
-mobileBtn.onclick = ()=>{
+  mobileBtn.onclick = ()=>{
 
-  mobileMenu.classList.toggle("open");
+    mobileMenu.classList.toggle("open");
 
-  if(mobileMenu.classList.contains("open")){
-    mobileBtn.textContent = "✕";
-  }else{
-    mobileBtn.textContent = "☰";
-  }
+    if(mobileMenu.classList.contains("open")){
+      mobileBtn.textContent = "✕";
+    }else{
+      mobileBtn.textContent = "☰";
+    }
 
-};
+  };
 }
 
 
@@ -3105,6 +3096,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
