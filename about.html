@@ -1512,6 +1512,96 @@ html.theme-switching body {
 }
 
 
+/* ===== MOBILE MENU FIX FINAL ===== */
+
+/* الكمبيوتر */
+.mobile-menu-wrap{
+  display:none;
+}
+
+/* الموبايل فقط */
+@media (max-width:600px){
+
+  /* اخفاء ازرار الكمبيوتر */
+  .top-actions{
+    display:none !important;
+  }
+
+  /* اظهار زر الموبايل */
+  .mobile-menu-wrap{
+    display:flex;
+    align-items:center;
+    position:relative;
+  }
+
+}
+
+  /* زر القائمة */
+  .mobile-menu-btn{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    background:rgba(0,0,0,.06);
+    cursor:pointer;
+    transition:.3s;
+  }
+
+  [data-theme="dark"] .mobile-menu-btn{
+    background:rgba(255,255,255,.12);
+    color:#fff;
+  }
+
+  /* القائمة */
+  .mobile-menu{
+    position:absolute;
+    top:60px; /* مسافة من التوب بار */
+    right:0;
+
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+
+    opacity:0;
+    transform:translateY(-15px);
+    pointer-events:none;
+
+    transition:.35s ease;
+  }
+
+  .mobile-menu.open{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+
+  /* الازرار بدون برواز */
+  .mobile-menu a{
+    width:42px;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:rgba(0,0,0,.06);
+    transition:.25s;
+  }
+
+  .mobile-menu a:hover{
+    transform:scale(1.08);
+  }
+
+  [data-theme="dark"] .mobile-menu a{
+    background:rgba(255,255,255,.12);
+    color:#fff;
+  }
+}
+
+  
+
 /* =============================================================================== ===== */
 </style>
 </head>
@@ -1563,6 +1653,21 @@ html.theme-switching body {
   <a href="guide.html" class="profile-btn">❓</a>
   <div class="tooltip-text">دليل المستخدم</div>
 </div>
+
+  <!-- زر الموبايل -->
+  <div class="mobile-menu-wrap">
+
+    <div class="tooltip-wrap">
+      <div class="mobile-menu-btn" id="mobileMenuBtn">✈️</div>
+      <div class="tooltip-text">القائمة</div>
+    </div>
+
+    <!-- القائمة المنسدلة -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="profile.html" class="profile-btn">👤</a>
+      <a href="about.html" class="profile-btn">ℹ️</a>
+      <a href="guide.html" class="profile-btn">❓</a>
+    </div>
 
 
 
@@ -1861,6 +1966,38 @@ window.addEventListener("resize", updateAboutTitleSmart);
 window.addEventListener("load", updateAboutTitleSmart);
 
 
+const mobileBtn  = document.getElementById("mobileMenuBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+
+if(mobileBtn){
+
+  function closeMenu(){
+    mobileMenu.classList.remove("open");
+    mobileBtn.textContent = "✈️";
+  }
+
+  mobileBtn.onclick = (e)=>{
+    e.stopPropagation();
+
+    mobileMenu.classList.toggle("open");
+
+    if(mobileMenu.classList.contains("open")){
+      mobileBtn.textContent = "✕";
+    }else{
+      mobileBtn.textContent = "✈️";
+    }
+  };
+
+  /* قفل بالضغط خارج */
+  document.addEventListener("click",(e)=>{
+    if(!mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)){
+      closeMenu();
+    }
+  });
+
+  /* قفل بالاسكرول */
+  window.addEventListener("scroll", closeMenu);
+}
 
 
 </script>
@@ -1892,6 +2029,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
