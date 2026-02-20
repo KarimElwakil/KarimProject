@@ -1785,18 +1785,7 @@ body,
   background:rgba(255,255,255,.07);
 }
 
- /* ===== الكمبيوتر ===== */
-.top-actions{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.mobile-menu-wrap{
-  display:none;
-}
-
-/* ===== الموبايل ===== */
+  /* اخفاء ازرار الكمبيوتر في الموبايل */
 @media (max-width:600px){
 
   .top-actions{
@@ -1809,6 +1798,7 @@ body,
     position:relative;
   }
 
+  /* زر القائمة */
   .mobile-menu-btn{
     width:38px;
     height:38px;
@@ -1819,6 +1809,7 @@ body,
     font-size:20px;
     background:rgba(0,0,0,.06);
     cursor:pointer;
+    transition:.3s;
   }
 
   [data-theme="dark"] .mobile-menu-btn{
@@ -1829,23 +1820,18 @@ body,
   /* القائمة */
   .mobile-menu{
     position:absolute;
-    top:52px;
+    top:60px; /* مسافة من التوب بار */
     right:0;
 
     display:flex;
     flex-direction:column;
-    gap:12px;
-
-    background:var(--bar);
-    padding:14px;
-    border-radius:18px;
-    box-shadow:0 20px 40px rgba(0,0,0,.25);
+    gap:14px;
 
     opacity:0;
-    transform:translateY(-8px);
+    transform:translateY(-15px);
     pointer-events:none;
-    transition:.35s;
-    z-index:999;
+
+    transition:.35s ease;
   }
 
   .mobile-menu.open{
@@ -1854,14 +1840,20 @@ body,
     pointer-events:auto;
   }
 
+  /* الازرار بدون برواز */
   .mobile-menu a{
-    width:38px;
-    height:38px;
+    width:42px;
+    height:42px;
     display:flex;
     align-items:center;
     justify-content:center;
     border-radius:50%;
     background:rgba(0,0,0,.06);
+    transition:.25s;
+  }
+
+  .mobile-menu a:hover{
+    transform:scale(1.08);
   }
 
   [data-theme="dark"] .mobile-menu a{
@@ -3046,12 +3038,18 @@ if (aboutBtn && window.innerWidth <= 600) {
   });
 }
 
-
 const mobileBtn  = document.getElementById("mobileMenuBtn");
 const mobileMenu = document.getElementById("mobileMenu");
 
 if(mobileBtn){
-  mobileBtn.onclick = ()=>{
+
+  function closeMenu(){
+    mobileMenu.classList.remove("open");
+    mobileBtn.textContent = "☰";
+  }
+
+  mobileBtn.onclick = (e)=>{
+    e.stopPropagation();
 
     mobileMenu.classList.toggle("open");
 
@@ -3060,8 +3058,17 @@ if(mobileBtn){
     }else{
       mobileBtn.textContent = "☰";
     }
-
   };
+
+  /* قفل بالضغط خارج */
+  document.addEventListener("click",(e)=>{
+    if(!mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)){
+      closeMenu();
+    }
+  });
+
+  /* قفل بالاسكرول */
+  window.addEventListener("scroll", closeMenu);
 }
 
 
@@ -3096,6 +3103,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
