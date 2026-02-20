@@ -1822,32 +1822,32 @@ body,
     color:#fff;
   }
 
-  /* القائمة */
   .mobile-menu{
-    position:absolute;
-    top:48px;
-    right:0;
+  position:absolute;
+  top:48px;
+  right:0;
 
-    display:flex;
-    flex-direction:column;
-    gap:10px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 
-    background:var(--bar);
-    padding:14px;
-    border-radius:16px;
-    box-shadow:0 20px 40px rgba(0,0,0,.25);
+  background:var(--bar);
+  padding:14px;
+  border-radius:16px;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
 
-    opacity:0;
-    transform:translateY(-10px);
-    pointer-events:none;
-    transition:.35s;
-  }
+  opacity:0;
+  transform:translateY(-10px);
+  pointer-events:none;
+  transition:.35s;
+  z-index:999;
+}
 
-  .mobile-menu.open{
-    opacity:1;
-    transform:translateY(0);
-    pointer-events:auto;
-  }
+.mobile-menu.open{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
 
   .mobile-menu a{
     width:36px;
@@ -1865,7 +1865,19 @@ body,
   }
 }
 
+/* الكمبيوتر */
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
 
+/* الموبايل يخفيها */
+@media (max-width:600px){
+  .top-actions{
+    display:none !important;
+  }
+}
 /* =============================================================================== ===== */
 </style>
 </head>
@@ -1904,39 +1916,36 @@ body,
 
 <div class="mobile-menu-wrap">
 
-  <!-- الأزرار المخفية -->
-  <div class="mobile-menu" id="mobileMenu">
-<!-- الزر الرئيسي -->
+  <!-- زر القائمة -->
   <div class="tooltip-wrap">
     <div class="mobile-menu-btn" id="mobileMenuBtn">☰</div>
     <div class="tooltip-text">القائمة</div>
   </div>
-    
-  <!-- مجموعة أزرار اليمين -->
-<div class="top-actions">
 
-  <div class="tooltip-wrap">
-  <a href="profile.html" class="profile-btn">👤</a>
-  <div class="tooltip-text">الملف التعريفي لصاحب المشروع</div>
+  <!-- القائمة المنسدلة -->
+  <div class="mobile-menu" id="mobileMenu">
+
+    <div class="top-actions">
+
+      <div class="tooltip-wrap">
+        <a href="profile.html" class="profile-btn">👤</a>
+        <div class="tooltip-text">الملف التعريفي</div>
+      </div>
+
+      <div class="tooltip-wrap">
+        <a href="about.html" class="profile-btn">ℹ️</a>
+        <div class="tooltip-text">عن البحث</div>
+      </div>
+
+      <div class="tooltip-wrap">
+        <a href="guide.html" class="profile-btn">❓</a>
+        <div class="tooltip-text">دليل المستخدم</div>
+      </div>
+
+    </div>
+
+  </div>
 </div>
-
-
- <div class="tooltip-wrap">
-  <a href="about.html" class="profile-btn">ℹ️</a>
-  <div class="tooltip-text">عن البحث</div>
-</div>
-  
-<div class="tooltip-wrap">
-  <a href="guide.html" class="profile-btn">❓</a>
-  <div class="tooltip-text">دليل المستخدم</div>
-</div>
-
-
-</div>
- </div>
-
-</div>
-
   </div>
 </header>
 
@@ -3096,6 +3105,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
