@@ -1785,6 +1785,86 @@ body,
   background:rgba(255,255,255,.07);
 }
 
+  /* يخفي النظام في الكمبيوتر */
+.mobile-menu-wrap{
+  display:none;
+}
+
+/* ===== موبايل فقط ===== */
+@media (max-width:600px){
+
+  /* اخفاء الأزرار الأصلية */
+  .top-actions{
+    display:none !important;
+  }
+
+  .mobile-menu-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    position:relative;
+  }
+
+  .mobile-menu-btn{
+    width:36px;
+    height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:rgba(0,0,0,.06);
+    font-size:20px;
+    cursor:pointer;
+  }
+
+  [data-theme="dark"] .mobile-menu-btn{
+    background:rgba(255,255,255,.12);
+    color:#fff;
+  }
+
+  /* القائمة */
+  .mobile-menu{
+    position:absolute;
+    top:48px;
+    right:0;
+
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+
+    background:var(--bar);
+    padding:14px;
+    border-radius:16px;
+    box-shadow:0 20px 40px rgba(0,0,0,.25);
+
+    opacity:0;
+    transform:translateY(-10px);
+    pointer-events:none;
+    transition:.35s;
+  }
+
+  .mobile-menu.open{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+
+  .mobile-menu a{
+    width:36px;
+    height:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:rgba(0,0,0,.06);
+  }
+
+  [data-theme="dark"] .mobile-menu a{
+    background:rgba(255,255,255,.12);
+    color:#fff;
+  }
+}
+
 
 /* =============================================================================== ===== */
 </style>
@@ -2963,6 +3043,22 @@ if (aboutBtn && window.innerWidth <= 600) {
 }
 
 
+  const mobileBtn  = document.getElementById("mobileMenuBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+
+if(mobileBtn){
+mobileBtn.onclick = ()=>{
+
+  mobileMenu.classList.toggle("open");
+
+  if(mobileMenu.classList.contains("open")){
+    mobileBtn.textContent = "✕";
+  }else{
+    mobileBtn.textContent = "☰";
+  }
+
+};
+}
 
 
 
@@ -2996,6 +3092,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
