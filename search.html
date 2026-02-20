@@ -1785,13 +1785,8 @@ body,
   background:rgba(255,255,255,.07);
 }
 
-  /* اخفاء ازرار الكمبيوتر في الموبايل */
-@media (max-width:600px){
+/* ===== MOBILE MENU FIX FINAL ===== */
 
-  .top-actions{
-    display:none !important;
-  }
-  
 /* الكمبيوتر */
 .mobile-menu-wrap{
   display:none;
@@ -1800,15 +1795,16 @@ body,
 /* الموبايل فقط */
 @media (max-width:600px){
 
+  /* اخفاء ازرار الكمبيوتر */
+  .top-actions{
+    display:none !important;
+  }
+
+  /* اظهار زر الموبايل */
   .mobile-menu-wrap{
     display:flex;
     align-items:center;
     position:relative;
-  }
-
-  /* اخفاء ازرار الكمبيوتر */
-  .top-actions{
-    display:none !important;
   }
 
 }
@@ -3118,6 +3114,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
