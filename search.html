@@ -1767,7 +1767,24 @@ body,
   box-shadow:0 10px 25px rgba(0,0,0,.25);
 }
 
+.refs{
+  list-style:none;
+  padding:0;
+  margin-top:10px;
+}
 
+.refs li{
+  margin-bottom:18px;
+  padding:14px 18px;
+  border-radius:14px;
+  background:rgba(0,0,0,.04);
+  font-size:17px;
+  line-height:1.9;
+}
+
+[data-theme="dark"] .refs li{
+  background:rgba(255,255,255,.07);
+}
 
 
 /* =============================================================================== ===== */
@@ -2498,21 +2515,51 @@ body,
       </p>
     </div>
 
-    <section class="slide">
-<div class="slide-content">
-<div class="section-title">
-<h2>المراجع</h2>
-</div>
+ <section class="slide">
+  <div class="slide-content">
 
-<div class="article">
-<p>
-تم الاعتماد في إعداد هذا البحث على مجموعة من المصادر العلمية والمقالات
-التثقيفية حول تأثير التكنولوجيا والإدمان الرقمي، إضافة إلى معلومات
-من مواقع علم النفس والتربية الحديثة.
-</p>
-</div>
+    <div class="section-title">
+      <h2>المراجع</h2>
+    </div>
 
-</div>
+    <div class="article">
+
+      <ul class="refs">
+
+        <li>
+          American Psychological Association.  
+          Digital Addiction and Mental Health.  
+          APA Publishing, 2022.
+        </li>
+
+        <li>
+          World Health Organization (WHO).  
+          Public Health Implications of Excessive Screen Use.  
+          WHO Reports, 2021.
+        </li>
+
+        <li>
+          National Institute of Mental Health.  
+          The Brain and Dopamine Reward System.  
+          NIMH Publications.
+        </li>
+
+        <li>
+          Common Sense Media.  
+          Teens, Social Media and Technology Report.  
+          2023.
+        </li>
+
+        <li>
+          مقالات ومصادر تعليمية من مواقع علم النفس والتربية الحديثة
+          حول تأثير التكنولوجيا والإدمان الرقمي.
+        </li>
+
+      </ul>
+
+    </div>
+
+  </div>
 </section>
 
 <div class="end-message">
@@ -2950,6 +2997,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
