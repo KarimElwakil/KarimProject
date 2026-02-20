@@ -1927,8 +1927,7 @@ body,
   <div class="mobile-menu-wrap">
 
     <div class="tooltip-wrap">
-      <div class="mobile-menu-btn" id="mobileMenuBtn">☰</div>
-      <div class="tooltip-text">القائمة</div>
+      <div class="mobile-menu-btn" id="mobileMenuBtn">✈️</div>
     </div>
 
     <!-- القائمة المنسدلة -->
@@ -3056,7 +3055,7 @@ if(mobileBtn){
 
   function closeMenu(){
     mobileMenu.classList.remove("open");
-    mobileBtn.textContent = "☰";
+    mobileBtn.textContent = "✈️";
   }
 
   mobileBtn.onclick = (e)=>{
@@ -3067,7 +3066,7 @@ if(mobileBtn){
     if(mobileMenu.classList.contains("open")){
       mobileBtn.textContent = "✕";
     }else{
-      mobileBtn.textContent = "☰";
+      mobileBtn.textContent = "✈️";
     }
   };
 
@@ -3114,6 +3113,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
