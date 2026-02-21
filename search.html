@@ -441,6 +441,35 @@ body{
   z-index:998;
 }
 
+  /* ===== تثبيت هيدر قائمة المحتويات ===== */
+.toc-title-wrap{
+  position: sticky;
+  top: 0;
+  z-index: 5;
+
+  padding-top: 6px;
+  padding-bottom: 10px;
+
+  background: var(--bar);
+  backdrop-filter: blur(12px);
+
+   box-shadow: 0 6px 18px rgba(0,0,0,.12);
+}
+
+  [data-theme="dark"] .toc-title-wrap{
+  box-shadow: 0 8px 22px rgba(0,0,0,.6);
+}
+
+/* زر X ثابت */
+.toc-close{
+  position: sticky;
+  top: 10px;
+  right: 10px;
+  z-index: 6;
+}
+
+
+
 .toc-panel.open{
   transform: translateX(0);
 }
@@ -3113,6 +3142,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
