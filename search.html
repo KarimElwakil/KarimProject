@@ -901,7 +901,7 @@ body{
   text-align:center !important;
   white-space:normal !important;
 
-  font-size: clamp(26px, 2.4vw, 18px);
+  
   font-weight:900;
   line-height:1.6;
 
@@ -1700,7 +1700,7 @@ body{
   padding: 12px 26px;
   margin-bottom: 22px;
 
-  font-size: clamp(20px, 2.4vw, 24px);
+
   font-weight: 900;
   letter-spacing: .3px;
 
@@ -3220,39 +3220,38 @@ const db = firebase.database();
 <script src="memory.js"></script>
 
 <script>
-function fitOneLineTitles(){
+function autoFitTitles(){
 
-  const titles = document.querySelectorAll(".section-title h2");
+  const titles = document.querySelectorAll(
+    ".section-title h2, .article h3"
+  );
 
-  titles.forEach(title => {
+  titles.forEach(el => {
 
-    // رجّع الحجم الطبيعي كل مرة
-    title.style.fontSize = "";
-    title.style.whiteSpace = "nowrap";
+    el.style.whiteSpace = "nowrap";
 
-    let max = 28;   // أكبر حجم
-    let min = 12;   // أصغر حجم
-    let size = max;
+    let size = 26; // بداية حجم
+    if(el.classList.contains("article-title")) size = 20;
 
-    title.style.fontSize = size + "px";
+    el.style.fontSize = size + "px";
 
-    // صغر لحد ما يبقى سطر واحد
-    while(title.scrollWidth > title.clientWidth && size > min){
+    while(el.scrollWidth > el.clientWidth && size > 13){
       size--;
-      title.style.fontSize = size + "px";
+      el.style.fontSize = size + "px";
     }
 
   });
 
 }
 
-window.addEventListener("load", fitOneLineTitles);
-window.addEventListener("resize", fitOneLineTitles);
+window.addEventListener("load", autoFitTitles);
+window.addEventListener("resize", autoFitTitles);
 </script>
 
   
 </body>
 </html>
+
 
 
 
