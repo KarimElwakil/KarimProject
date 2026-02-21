@@ -1322,7 +1322,29 @@ html.theme-switching body {
 
 
 
+const ONE_HOUR = 60 * 60 * 1000;
 
+window.addEventListener("DOMContentLoaded", () => {
+
+  const lastPage = localStorage.getItem("lastPage");
+  const lastTime = localStorage.getItem("lastVisitTime");
+
+  if (!lastPage || !lastTime) return;
+
+  const diff = Date.now() - parseInt(lastTime);
+
+  // عدى ساعة → reset
+  if (diff > ONE_HOUR) {
+    localStorage.clear();
+    return;
+  }
+
+  // لو آخر صفحة مش index → روح لها
+  if (!lastPage.includes("index")) {
+    window.location.href = lastPage;
+  }
+
+});
 
 
 
@@ -1580,6 +1602,7 @@ if(mobileBtn){
 
 </body>
 </html>
+
 
 
 
