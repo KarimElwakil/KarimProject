@@ -441,81 +441,63 @@ body{
   z-index:998;
 }
 
-/* ===== TOP FIXED HEADER INSIDE TOC ===== */
+/* ===== CLEAN STICKY TOC HEADER ===== */
+
 .toc-panel{
-  padding-top:80px; /* مساحة للهيدر الثابت */
+  padding:0;              /* مفيش فراغ فوق */
+  overflow-y:auto;
 }
 
-/* الهيدر الثابت بالكامل */
-.toc-panel::before{
-  content:"";
-  position:sticky;
-  top:0;
-  display:block;
-  height:0;
-}
-
-/* هيدر فعلي */
+/* الهيدر */
 .toc-header{
   position:sticky;
   top:0;
-  z-index:20;
+  z-index:10;
 
+  height:70px;
   display:flex;
   align-items:center;
   justify-content:center;
 
-  height:72px;
-  margin-top:-80px;
-  margin-bottom:10px;
-
-  background:var(--bar);
-  backdrop-filter:blur(14px);
-
+  background:var(--bar);     /* نفس لون الثيم */
   border-bottom:1px solid var(--border);
 }
 
 /* العنوان */
 .toc-title{
   margin:0;
+  font-weight:900;
 }
 
-/* زر X */
+/* زرار X */
 .toc-close{
   position:absolute;
-  right:14px;
-  top:50%;
-  transform:translateY(-50%);
-
+  right:16px;
   width:36px;
   height:36px;
-  border-radius:50%;
-  border:none;
 
-  background:rgba(0,0,0,.08);
+  border:none;
+  border-radius:50%;
   cursor:pointer;
-  font-size:18px;
-  font-weight:900;
-  transition:.25s;
+
+  background:rgba(0,0,0,.06);
+  transition:.2s;
 }
 
 .toc-close:hover{
   background:var(--primary);
   color:#fff;
-  transform:translateY(-50%) rotate(90deg);
 }
 
 /* دارك مود */
 [data-theme="dark"] .toc-header{
-  background:rgba(18,20,26,.95);
-  border-bottom:1px solid rgba(255,255,255,.08);
+  background:var(--card-bg);
 }
 
 [data-theme="dark"] .toc-close{
-  background:rgba(255,255,255,.12);
+  background:rgba(255,255,255,.1);
   color:#fff;
 }
-
 
 .toc-panel.open{
   transform: translateX(0);
@@ -3188,6 +3170,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
