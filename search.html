@@ -2061,28 +2061,6 @@ html[data-theme="dark"] body{
 }
 
 
-/* ===== FIX نهائي عناوين الموبايل ===== */
-@media (max-width:600px){
-
-  .section-title{
-    padding-inline:10px;
-  }
-
-  .section-title h2{
-    width:100%;
-    max-width:100% !important;
-
-    white-space:nowrap;      /* سطر واحد */
-    overflow:hidden;
-    text-overflow:ellipsis;
-
-    padding:12px 18px;       /* قلل البادينج */
-    font-size: clamp(14px,4.3vw,18px);
-
-    line-height:1.4;
-  }
-
-}
 
 /* =============================================================================== ===== */
 </style>
@@ -3242,9 +3220,33 @@ const db = firebase.database();
 
 <script src="memory.js"></script>
 
+<script>
+function autoFitTitles(){
 
+  const titles = document.querySelectorAll(".section-title h2");
+
+  titles.forEach(title => {
+
+    let maxFont = 26;   // أكبر حجم
+    let minFont = 12;   // أصغر حجم
+
+    title.style.whiteSpace = "nowrap";
+
+    while(title.scrollWidth > title.clientWidth && maxFont > minFont){
+      maxFont--;
+      title.style.fontSize = maxFont + "px";
+    }
+
+  });
+
+}
+
+window.addEventListener("load", autoFitTitles);
+window.addEventListener("resize", autoFitTitles);
+</script>
   
 </body>
 </html>
+
 
 
