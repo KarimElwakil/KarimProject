@@ -441,31 +441,35 @@ body{
   z-index:998;
 }
 
-/* ===== TOC HEADER FINAL CLEAN ===== */
+/* ===== TOC HEADER FINAL CLEAN ZERO GAP ===== */
 
 .toc-panel{
   padding-top:0;
   overflow-y:auto;
 }
 
-/* الهيدر */
+/* الهيدر الثابت */
 .toc-header{
   position:sticky;
-  top:12px;                /* ⬅️ نازلة سنة مش لازقة */
+  top:0;                 /* ❌ بدون أي فراغ */
   z-index:20;
 
-  margin:0 12px 10px;      /* ⬅️ مفيش فراغ فوق */
-  padding:12px 16px;
+  padding:14px 16px;
+  margin:0;              /* ❌ بدون أي فراغ */
 
-  border-radius:18px;
   display:flex;
   align-items:center;
   justify-content:center;
 
-  background:#eef2f7;      /* لايت مود */
-  border:1px solid rgba(0,0,0,.08);
+  border-bottom:1px solid rgba(0,0,0,.06);
 
-  box-shadow:0 8px 22px rgba(0,0,0,.08);
+  background:#f1f3f7;   /* لايت مود هادي */
+}
+
+/* دارك مود */
+[data-theme="dark"] .toc-header{
+  background:#1c1f26;   /* اسود فاتح بسيط */
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 /* العنوان */
@@ -486,24 +490,16 @@ body{
 
   background:rgba(0,0,0,.08);
   cursor:pointer;
-  transition:.2s;
-}
-
-.toc-close:hover{
-  background:#2563eb;
-  color:#fff;
-}
-
-/* ===== DARK MODE ===== */
-[data-theme="dark"] .toc-header{
-  background:#1f2430;   /* اسود فاتح */
-  border:1px solid rgba(255,255,255,.08);
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
 }
 
 [data-theme="dark"] .toc-close{
   background:rgba(255,255,255,.12);
   color:#fff;
+}
+
+/* ===== مسافة بعد الهيدر قبل العناوين ===== */
+.toc-panel ul{
+  margin-top:14px;   /* ⬅️ يخلي أول عنوان مش لازق */
 }
   
 .toc-panel.open{
@@ -3177,6 +3173,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
