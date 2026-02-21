@@ -1535,40 +1535,35 @@ body,
 /* زر إغلاق قائمة المحتويات */
 .toc-close{
   position:absolute;
-  top:16px;
-  right:16px;
+  right:18px;
+  top:50%;
+  transform:translateY(-50%);
 
-  width:34px;
-  height:34px;
+  width:30px;
+  height:30px;
+  font-size:15px;
 
   border:none;
   border-radius:50%;
-  background:rgba(0,0,0,.08);
-
-  font-size:18px;
-  font-weight:900;
+  background:rgba(0,0,0,.07);
   cursor:pointer;
 
   display:flex;
   align-items:center;
   justify-content:center;
-
-  transition:.25s ease;
-  z-index:10;
+  transition:.25s;
 }
 
-
-/* Hover */
 .toc-close:hover{
   background:var(--primary);
   color:#fff;
 }
 
-/* Dark mode */
 [data-theme="dark"] .toc-close{
-  background:rgba(255,255,255,.12);
+  background:rgba(255,255,255,.14);
   color:#fff;
 }
+
 
 .toc-title-wrap{
   display:flex;
@@ -3214,6 +3209,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
