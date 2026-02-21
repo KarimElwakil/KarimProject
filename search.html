@@ -2061,16 +2061,25 @@ html[data-theme="dark"] body{
 }
 
 
-  /* ===== MOBILE – SMART ONE LINE TITLES ===== */
+/* ===== FIX نهائي عناوين الموبايل ===== */
 @media (max-width:600px){
 
-  .section-title h2{
-    white-space: nowrap;          /* يمنع الكسر */
-    overflow: hidden;
-    text-overflow: ellipsis;      /* لو طويل جدًا يقطع بشكل أنيق */
+  .section-title{
+    padding-inline:10px;
+  }
 
-    font-size: clamp(15px, 4.2vw, 20px);
-    padding: 12px 22px;
+  .section-title h2{
+    width:100%;
+    max-width:100% !important;
+
+    white-space:nowrap;      /* سطر واحد */
+    overflow:hidden;
+    text-overflow:ellipsis;
+
+    padding:12px 18px;       /* قلل البادينج */
+    font-size: clamp(14px,4.3vw,18px);
+
+    line-height:1.4;
   }
 
 }
@@ -3237,4 +3246,5 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
