@@ -441,77 +441,73 @@ body{
   z-index:998;
 }
 
-/* ===== TOC HEADER — نسخة مطابقة للتوب بار ===== */
+/* ===== TOC HEADER FINAL CLEAN ===== */
 
 .toc-header{
   position: sticky;
-  top: 14px;
+  top: 16px;
   z-index: 50;
 
-  width: calc(100% - 28px);
-  margin: 0 auto 18px auto;
-  padding: 16px 20px;
+  width: calc(100% - 40px);     /* يقلل العرض شوية */
+  max-width: 520px;             /* يخليه أشيك */
+  margin: 0 auto 22px auto;
 
+  padding: 20px 22px;           /* كبر البار */
   display:flex;
   align-items:center;
   justify-content:center;
 
-  border-radius:28px;
-
+  border-radius:30px;
   background: var(--bar);
   border:1px solid var(--border);
   box-shadow:0 12px 30px rgba(0,0,0,.15);
 }
 
-/* دارك مود نفس التوب بار */
+/* دارك */
 [data-theme="dark"] .toc-header{
-  background: rgba(20,22,28,.95);
+  background: rgba(28,30,36,.95);
   border:1px solid rgba(255,255,255,.08);
-  box-shadow:0 14px 40px rgba(0,0,0,.8);
+  box-shadow:0 16px 45px rgba(0,0,0,.85);
 }
 
 /* كلمة محتويات البحث */
 .toc-header-title{
   font-weight:900;
-  font-size:17px;
-  padding:12px 32px;
+  font-size:15px;           /* أصغر */
+  padding:10px 26px;
   border-radius:999px;
 
   background:rgba(255,255,255,.95);
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.8),
-    0 6px 18px rgba(0,0,0,.18);
+    0 6px 16px rgba(0,0,0,.18);
 }
 
 /* دارك */
 [data-theme="dark"] .toc-header-title{
-  background:rgba(28,30,36,.95);
+  background:rgba(18,20,26,.9);
   color:#fff;
-  box-shadow:
-    inset 0 1px 2px rgba(255,255,255,.06),
-    0 10px 25px rgba(0,0,0,.7);
 }
 
 /* زرار X */
 .toc-close{
   position:absolute;
-  right:16px;
+  right:20px;               /* بعيد عن النص */
   top:50%;
   transform:translateY(-50%);
 
-  width:42px;
-  height:42px;
+  width:40px;
+  height:40px;
   border-radius:50%;
   border:none;
 
   background:rgba(0,0,0,.06);
-  font-size:20px;
+  font-size:18px;
   cursor:pointer;
 
   display:flex;
   align-items:center;
   justify-content:center;
-
   transition:.25s;
 }
 
@@ -526,14 +522,9 @@ body{
   color:#fff;
 }
 
-/* خلفية القائمة نفسها */
-.toc-panel{
-  background: var(--bg);
-}
-
-/* مسافة بعد التوب */
+/* مسافة أول عنوان */
 .toc-panel ul{
-  margin-top:18px;
+  margin-top:20px;
 }
   
 .toc-panel.open{
@@ -3207,6 +3198,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
