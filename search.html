@@ -1,11 +1,50 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+
+<script>
+/* حفظ مكان الاسكرول قبل أي تغيير */
+let savedScroll = 0;
+
+function keepScroll(){
+  savedScroll = window.scrollY || window.pageYOffset;
+}
+
+function restoreScroll(){
+  window.scrollTo(0, savedScroll);
+}
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الإدمان الرقمي</title>
 
 <style>
+
+html{
+  background:#f6f7fb;
+}
+
+html[data-theme="dark"]{
+  background:#0f1115;
+}
+
+
+
+/* منع الفلاش أثناء تغيير الثيم */
+.theme-switching,
+.theme-switching *{
+  transition: none !important;
+  animation: none !important;
+}
+
+
+
+.no-anim,
+.no-anim *{
+  transition:none !important;
+  animation:none !important;
+}
+
 <link rel="preload" as="image" href="brain-dopamine.jpg.png">
 html, body{
   overflow-x: hidden;
@@ -105,10 +144,7 @@ section.slide{
   font-family:system-ui;
 }
 
-body{
-  background:var(--bg);
-  color:var(--text);
-}
+
 
 /* ===== Global Reading Typography ===== */
 body{
@@ -1451,7 +1487,6 @@ body{
 
 /* ===== SLIDE CLEAN BACKGROUND (NO BOOK EFFECT) ===== */
 .slide{
-  background: var(--bg);
   box-shadow: none;
   padding-bottom: 120px; /* مسافة مريحة بس مش مبالغ فيها */
 }
@@ -1460,13 +1495,15 @@ body{
   transition: background .4s ease;
 }
 
-/* ===== FORCE ONE COLOR BACKGROUND ===== */
-html,
-body,
-.slide,
-.slide-content {
+body{
   background: var(--bg) !important;
+  transition: background .25s ease;
 }
+
+.slide{
+  background: transparent !important;
+}
+
 
 /* ===== REMOVE BOOK / CARD FEEL COMPLETELY ===== */
 .slide,
@@ -1485,12 +1522,8 @@ body,
   --bg: #0f1115;
 }
 
-/* ===== PREVENT THEME FLASH ===== */
-.theme-lock,
-.theme-lock * {
-  transition: none !important;
-  animation: none !important;
-}
+
+
 
 /* ===== Mobile TOC – حجم مريح ===== */
 /* ===== Mobile TOC – SIDE PANEL (FINAL FIX) ===== */
@@ -1991,7 +2024,43 @@ body,
   }
 
 }
-  
+
+html{
+  scroll-behavior:auto !important;
+}
+
+
+
+  /* 🔥 FORCE DARK BACKGROUND FINAL */
+html[data-theme="dark"],
+html[data-theme="dark"] body{
+  background:#0f1115 !important;
+}
+
+/* أي عنصر ممكن يبيض الصفحة */
+html[data-theme="dark"] .slide,
+html[data-theme="dark"] .slide-content,
+html[data-theme="dark"] .article,
+html[data-theme="dark"] section{
+  background:transparent !important;
+}
+
+/* الباك جراوند الوحيد */
+html[data-theme="dark"] body{
+  background:#0f1115 !important;
+}
+
+/* 🔥 لون عناصر محتويات البحث في الدارك مود */
+[data-theme="dark"] .toc-panel li{
+  color:#ffffff !important;
+}
+
+/* العنصر النشط يفضل أبيض */
+[data-theme="dark"] .toc-panel li.active{
+  color:#ffffff !important;
+}
+
+
 /* =============================================================================== ===== */
 </style>
 </head>
@@ -2807,63 +2876,37 @@ body,
 
 
 
-
-
-const body = document.body;
 const switchBtn = document.getElementById("themeSwitch");
 const knob = document.getElementById("knob");
 
-
-
-
-
-/* الوضع المحفوظ */
 const savedTheme = localStorage.getItem("theme") || "light";
-body.dataset.theme = savedTheme;
+document.documentElement.dataset.theme = savedTheme;
 knob.textContent = savedTheme === "dark" ? "🌙" : "☀️";
 
-
-
-
-/* زرار الدارك مود */
 switchBtn.onclick = () => {
-  // اقفل الأنيميشن مؤقتًا
-  body.classList.add("theme-lock");
 
-  const newTheme = body.dataset.theme === "dark" ? "light" : "dark";
-  body.dataset.theme = newTheme;
+  keepScroll(); // حفظ مكان الاسكرول
+
+  const html = document.documentElement;
+
+  /* 🔥 منع أي transition لحظة التغيير */
+  html.classList.add("theme-switching");
+
+  const newTheme = html.dataset.theme === "dark" ? "light" : "dark";
+  html.dataset.theme = newTheme;
   localStorage.setItem("theme", newTheme);
   knob.textContent = newTheme === "dark" ? "🌙" : "☀️";
 
-  // افتح الأنيميشن تاني بعد فريم
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      body.classList.remove("theme-lock");
-    }, 60);
+  requestAnimationFrame(()=>{
+    restoreScroll();
+
+    /* رجوع الانيميشن بعد التغيير */
+    setTimeout(()=>{
+      html.classList.remove("theme-switching");
+    },50);
   });
+
 };
-
-
-
-
-
-/* ===== جدول المحتويات ===== */
-
-
-
-
-
-// تفعيل العنوان الحالي في محتويات البحث
-
-
-
-
-
-
-
-
-// قفل قائمة المحتويات عند الضغط خارجها
-
 
 
 /* ===== زر قائمة العناوين (☰) ===== */
@@ -3180,4 +3223,3 @@ const db = firebase.database();
   
 </body>
 </html>
-
