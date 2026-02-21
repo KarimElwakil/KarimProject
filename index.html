@@ -1,6 +1,38 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<style>
+html{visibility:hidden;}
+</style>
+  <script>
+const ONE_HOUR = 60*60*1000;
+
+const lastPage = localStorage.getItem("lastPage");
+const lastTime = localStorage.getItem("lastVisitTime");
+
+if(lastPage && lastTime){
+
+  const diff = Date.now() - parseInt(lastTime);
+
+  // ⛔ عدى ساعة → ابدأ جديد
+  if(diff > ONE_HOUR){
+    localStorage.clear();
+    document.documentElement.style.visibility = "visible";
+  }
+
+  // 🔥 أقل من ساعة → روح لآخر صفحة
+  else if(!lastPage.includes("index")){
+    location.replace(lastPage); 
+  }
+
+  else{
+    document.documentElement.style.visibility = "visible";
+  }
+
+}else{
+  document.documentElement.style.visibility = "visible";
+}
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>الإدمان الرقمي</title>
@@ -1322,29 +1354,7 @@ html.theme-switching body {
 
 
 
-const ONE_HOUR = 60 * 60 * 1000;
 
-window.addEventListener("DOMContentLoaded", () => {
-
-  const lastPage = localStorage.getItem("lastPage");
-  const lastTime = localStorage.getItem("lastVisitTime");
-
-  if (!lastPage || !lastTime) return;
-
-  const diff = Date.now() - parseInt(lastTime);
-
-  // عدى ساعة → reset
-  if (diff > ONE_HOUR) {
-    localStorage.clear();
-    return;
-  }
-
-  // لو آخر صفحة مش index → روح لها
-  if (!lastPage.includes("index")) {
-    window.location.href = lastPage;
-  }
-
-});
 
 
 
@@ -1602,6 +1612,7 @@ if(mobileBtn){
 
 </body>
 </html>
+
 
 
 
