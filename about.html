@@ -381,23 +381,38 @@ html[data-theme="dark"] .topbar{
   min-width:unset;      /* ⬅️ مهم */
 }
 
-/* موبايل */
 @media (max-width:600px){
- .footer-text{
-    font-size:14px;
+
+  .site-footer{
+    padding: 32px 16px;
   }
 
   .footer-grid{
-    align-items:center;
-    text-align:center;
+    flex-direction: column;
+    gap: 28px;
+    align-items: center;
   }
 
   .footer-col{
+    width:100%;
     align-items:center;
+    text-align:center;
+    gap:10px;
   }
 
+  .footer-text{
+    font-size:14px;
+    font-weight:600;
+    line-height:1.6;
   }
 
+  .footer-btn.small{
+    padding:10px 22px;
+    font-size:14px;
+    border-radius:999px;
+  }
+
+}
 
 @keyframes fadeUp {
   from {
@@ -1944,4 +1959,5 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
