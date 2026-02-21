@@ -323,55 +323,6 @@ h1{
 </div>
 <script>
 
-/* ================================
-   GLOBAL PAGE MEMORY SYSTEM
-================================ */
-
-const ONE_HOUR = 60 * 60 * 1000;
-const currentPage = window.location.pathname;
-const now = Date.now();
-
-/* ---------- 1️⃣ حفظ الحالة ---------- */
-
-function savePageState() {
-  localStorage.setItem("lastPage", currentPage);
-  localStorage.setItem("lastVisitTime", now);
-  localStorage.setItem("scroll_" + currentPage, window.scrollY);
-}
-
-window.addEventListener("scroll", () => {
-  localStorage.setItem("scroll_" + currentPage, window.scrollY);
-});
-
-window.addEventListener("beforeunload", savePageState);
-
-
-/* ---------- 2️⃣ استرجاع المكان ---------- */
-
-window.addEventListener("DOMContentLoaded", () => {
-
-  const lastTime = localStorage.getItem("lastVisitTime");
-
-  if (!lastTime) return;
-
-  if (Date.now() - parseInt(lastTime) > ONE_HOUR) {
-    return; // عدى ساعة → نبدأ من الأول
-  }
-
-  const savedScroll =
-    localStorage.getItem("scroll_" + currentPage);
-
-  if (!savedScroll) return;
-
-  const scrollValue = parseInt(savedScroll);
-
-  if (scrollValue > 0) {
-    setTimeout(() => {
-      window.scrollTo(0, scrollValue);
-    }, 100);
-  }
-
-});
 
 
 const savedTheme = localStorage.getItem("theme");
@@ -525,27 +476,9 @@ const db = firebase.database();
 
 <script src="analytics.js"></script>
 
-
+<script src="memory.js"></script>
   
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
