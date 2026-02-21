@@ -441,49 +441,50 @@ body{
   z-index:998;
 }
 
-/* ===== TOC HEADER FULL WIDTH CLEAN ===== */
+/* ===== FIX نهائي بدون أي فراغ ===== */
 
+/* امسح padding البانل */
 .toc-panel{
-  padding-top:0;
+  padding:0 !important;
+  overflow-y:auto;
 }
 
 /* الهيدر */
 .toc-header{
   position:sticky;
   top:0;
-  z-index:50;
+  z-index:100;
 
   width:100%;
-  left:0;
-  right:0;
-
   margin:0;
-  padding:16px 0;   /* بدون padding جانبي */
+  padding:16px 0;
 
   display:flex;
   justify-content:center;
   align-items:center;
 
-  background:#eef1f6;   /* فاتح هادي */
+  background:#eef1f6;
   border-bottom:1px solid rgba(0,0,0,.05);
 }
 
 /* دارك مود */
 [data-theme="dark"] .toc-header{
-  background:#20232b;   /* غامق بسيط مش تقيل */
-  border-bottom:1px solid rgba(255,255,255,.06);
+  background:#1f222a;
+  border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-/* عنوان */
+/* العنوان */
 .toc-title{
   font-weight:900;
   font-size:18px;
 }
 
-/* زرار X */
+/* زرار X ثابت */
 .toc-close{
   position:absolute;
   right:14px;
+  top:50%;
+  transform:translateY(-50%);
 
   width:36px;
   height:36px;
@@ -498,9 +499,10 @@ body{
   color:#fff;
 }
 
-/* مسافة بعد الهيدر */
+/* مسافة للعناوين */
 .toc-panel ul{
-  margin-top:18px;
+  padding:20px 18px 30px;
+  margin:0;
 }
   
 .toc-panel.open{
@@ -3174,6 +3176,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
