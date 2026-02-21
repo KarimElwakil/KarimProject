@@ -1321,36 +1321,6 @@ html.theme-switching body {
 <script>
 
 
-/* ================================
-   INDEX AUTO REDIRECT SYSTEM
-================================ */
-
-const ONE_HOUR = 60 * 60 * 1000;
-const lastPage = localStorage.getItem("lastPage");
-const lastTime = localStorage.getItem("lastVisitTime");
-const now = Date.now();
-
-// نخفي الصفحة مؤقتًا لمنع الفلاش
-document.documentElement.style.visibility = "hidden";
-
-if (lastPage && lastTime && (now - parseInt(lastTime) < ONE_HOUR)) {
-
-  if (!window.location.pathname.includes(lastPage)) {
-    window.location.href = lastPage;
-  } else {
-    document.documentElement.style.visibility = "visible";
-  }
-
-} else {
-
-  // أول مرة أو عدى ساعة
-  document.documentElement.style.visibility = "visible";
-
-}
-
-
-
-
 
 
 
@@ -1396,46 +1366,6 @@ switchBtn.onclick = () => {
       document.documentElement.classList.remove("theme-switching");
     }, 80);
   });
-};
-
-
-
-
-
-
-
-/* ===== جدول المحتويات ===== */
-
-
-
-
-
-// تفعيل العنوان الحالي في محتويات البحث
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
 
 
 
@@ -1443,12 +1373,6 @@ switchBtn.onclick = () => {
 
 
 const topbar = document.querySelector(".topbar");
-
-
-
-
-
-
 
 
 
@@ -1666,31 +1590,9 @@ const db = firebase.database();
 
 <script src="analytics.js"></script>
 
-  
+<script src="memory.js"></script>  
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
