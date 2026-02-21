@@ -441,49 +441,43 @@ body{
   z-index:998;
 }
 
-/* ===============================
-   TOC TOP BAR — نفس شكل التوب بار
-================================ */
+/* ===== TOC HEADER — نسخة مطابقة للتوب بار ===== */
 
-/* التوب بار العلوي لمحتويات البحث */
 .toc-header{
   position: sticky;
-  top: 10px;                 /* مسافة بسيطة فوق */
+  top: 14px;
   z-index: 50;
 
-  width: calc(100% - 20px);
+  width: calc(100% - 28px);
   margin: 0 auto 18px auto;
-  padding: 12px 18px;
+  padding: 16px 20px;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  border-radius: 26px;
+  border-radius:28px;
 
   background: var(--bar);
   border:1px solid var(--border);
-
   box-shadow:0 12px 30px rgba(0,0,0,.15);
 }
 
 /* دارك مود نفس التوب بار */
 [data-theme="dark"] .toc-header{
-  background: rgba(28,30,36,.95);
+  background: rgba(20,22,28,.95);
   border:1px solid rgba(255,255,255,.08);
-  box-shadow:
-    inset 0 1px 2px rgba(255,255,255,.05),
-    0 18px 45px rgba(0,0,0,.85);
+  box-shadow:0 14px 40px rgba(0,0,0,.8);
 }
 
-/* عنوان محتويات البحث */
+/* كلمة محتويات البحث */
 .toc-header-title{
   font-weight:900;
-  font-size:18px;
-  padding:10px 26px;
+  font-size:17px;
+  padding:12px 32px;
   border-radius:999px;
 
-  background:rgba(255,255,255,.9);
+  background:rgba(255,255,255,.95);
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.8),
     0 6px 18px rgba(0,0,0,.18);
@@ -491,24 +485,27 @@ body{
 
 /* دارك */
 [data-theme="dark"] .toc-header-title{
-  background:rgba(18,20,26,.9);
+  background:rgba(28,30,36,.95);
   color:#fff;
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.06),
+    0 10px 25px rgba(0,0,0,.7);
 }
 
-/* زر X */
+/* زرار X */
 .toc-close{
   position:absolute;
-  right:14px;
+  right:16px;
   top:50%;
   transform:translateY(-50%);
 
-  width:38px;
-  height:38px;
+  width:42px;
+  height:42px;
   border-radius:50%;
-
   border:none;
-  background:rgba(0,0,0,.08);
-  font-size:18px;
+
+  background:rgba(0,0,0,.06);
+  font-size:20px;
   cursor:pointer;
 
   display:flex;
@@ -521,23 +518,22 @@ body{
 .toc-close:hover{
   background:var(--primary);
   color:#fff;
-  transform:translateY(-50%) scale(1.05);
+  transform:translateY(-50%) scale(1.08);
 }
 
-/* دارك */
 [data-theme="dark"] .toc-close{
   background:rgba(255,255,255,.12);
   color:#fff;
 }
 
-/* خلفية قائمة العناوين نفسها */
+/* خلفية القائمة نفسها */
 .toc-panel{
   background: var(--bg);
 }
 
-/* مسافة أول عنوان */
+/* مسافة بعد التوب */
 .toc-panel ul{
-  margin-top:10px;
+  margin-top:18px;
 }
   
 .toc-panel.open{
@@ -3211,6 +3207,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
