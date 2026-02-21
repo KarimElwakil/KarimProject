@@ -1961,6 +1961,20 @@ body,
     color:#fff;
   }
 }
+
+  /* تعطيل أنيميشن الزرار العام لزر الإغلاق */
+.toc-close{
+  transition: background .25s ease, transform .25s ease;
+}
+
+.toc-close:hover{
+  transform: translateY(-50%) scale(1.08) !important;
+}
+
+.toc-close:active{
+  transform: translateY(-50%) scale(.95) !important;
+}
+  
 /* =============================================================================== ===== */
 </style>
 </head>
@@ -3201,6 +3215,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
