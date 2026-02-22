@@ -52,7 +52,7 @@ html[data-theme="dark"] .topbar-inner{
 }
 
 :root{
-  --light-card-bg: #f1f5fb;      /* أزرق فاتح جدًا */
+  --light-card-bg: #f1f5fb;     
   --light-card-border: rgba(37,99,235,.12);
   --light-card-shadow:
     inset 0 1px 2px rgba(255,255,255,.9),
@@ -72,10 +72,10 @@ html[data-theme="dark"]{
  --bg:#0f1115;
   --text:#fff;
 
-  /* 🔥 لون موحّد لكل البراويز */
+  
   --card-bg: rgba(28,30,38,.95);
 
-  /* ✨ Shadow ناعم وراقي */
+
   --card-shadow:
     inset 0 1px 2px rgba(255,255,255,.06),
     0 14px 40px rgba(0,0,0,.75);
@@ -112,7 +112,7 @@ body{
 }
 
 
-/* ===== Global Reading Typography ===== */
+
 body{
   font-size: 18px;
   line-height: 1.95;
@@ -120,12 +120,12 @@ body{
 }
 
 
-/* منع التحديد */
+
 .topbar, button, .lang, .lang-item, .switch, h1, h2{
   user-select:none;
 }
 
-/* ===== TOP BAR ===== */
+
 .topbar{
   position:fixed;
   top:20px;
@@ -178,7 +178,7 @@ html[data-theme="dark"] .title-frame{
 
   white-space:nowrap;
   overflow:hidden;
-  text-overflow:ellipsis;  /* ← ذكي مش وحش */
+  text-overflow:ellipsis; 
 }
 
 
@@ -206,7 +206,7 @@ html[data-theme="dark"] .profile-btn{
 
 
 
-/* ===== CONTROLS ===== */
+
 .profile-btn{
   width:36px;
   height:36px;
@@ -230,7 +230,7 @@ html[data-theme="dark"] .profile-btn{
   gap:16px;
 }
 
-/* ===== SWITCH ===== */
+
 .switch{
   
   width:54px;
@@ -267,18 +267,18 @@ html[data-theme="dark"] .topbar{
 
 
 
-/* ===== SLIDES ===== */
+
 .slide{
   min-height:100vh;
   padding-top:60px;
-  padding-bottom:120px; /* مسافة كبيرة وواضحة */
+  padding-bottom:120px; 
 }
 
 
 .slide-content{
   max-width:720px;
    padding-inline: clamp(12px, 4vw, 20px);
-  margin-top:0;   /* مهم */
+  margin-top:0;   
   line-height:1.9;
 }
 
@@ -288,7 +288,7 @@ html[data-theme="dark"] .topbar{
   font-size: clamp(18px, 2.4vw, 18px);
   margin-bottom:22px;
 }
-/* ===== FOOTER ===== */
+
 .site-footer{
   margin-top:-40px;
   padding:50px 20px;
@@ -347,7 +347,7 @@ html[data-theme="dark"] .topbar{
   display: flex;
 }
 
-/* GRID الفوتر */
+
 .footer-grid{
   display:flex;
   justify-content:space-between;
@@ -358,27 +358,26 @@ html[data-theme="dark"] .topbar{
 .footer-col{
   display:flex;
   flex-direction:column;
-  align-items:center;   /* 👈 أهم سطر */
+  align-items:center;  
   text-align:center;
   gap:12px;
 }
 
-/* يمين */
+
 .footer-col.right{
   text-align:right;
 }
 
-/* شمال */
+
 .footer-col.left{
   text-align:left;
 }
 
-/* تصغير الأزرار */
 .footer-btn.small{
   padding:10px 26px;
   font-size:16px;
-  width:auto;           /* ⬅️ مهم */
-  min-width:unset;      /* ⬅️ مهم */
+  width:auto;          
+  min-width:unset;     
 }
 
 @media (max-width:600px){
@@ -431,7 +430,7 @@ html[data-theme="dark"] .topbar{
 
 
 
-/* ===== Slide Animation ===== */
+
 
 .topbar{
   animation: dropBar 1s ease forwards;
@@ -461,6 +460,7 @@ html[data-theme="dark"] .topbar{
     opacity:1;
   }
 }
+  
 #progress-bar{
   position:fixed;
   top:0;
@@ -488,18 +488,18 @@ html[data-theme="dark"] .topbar{
 
 
 
-/* الفقرات ترجع طبيعية */
+
 .slide-content{
   text-align: right;
 }
 
 
-/* الكلام يرجع طبيعي تحت العنوان */
+
 .slide-content p{
   text-align: right;
 }
 
-/* ===== Dark Mode ===== */
+
 html[data-theme="dark"] .slide h2{
   background: rgba(18,20,26,.9);
   color: #fff;
@@ -509,7 +509,7 @@ html[data-theme="dark"] .slide h2{
     0 10px 35px rgba(0,0,0,.8);
 }
 
-/* حاوية العنوان */
+
 .section-title{
   text-align: center;
   margin-bottom: 18px;
@@ -520,7 +520,7 @@ html[data-theme="dark"] .slide h2{
 
   
 
-/* دارك مود */
+
 html[data-theme="dark"] .section-title h2{
   background: rgba(18,20,26,.9);
   color: #fff;
@@ -530,7 +530,7 @@ html[data-theme="dark"] .section-title h2{
     0 10px 35px rgba(0,0,0,.8);
 }
 
-/* النص يرجع طبيعي */
+
 .slide-content{
   text-align: right;
 }
@@ -551,7 +551,7 @@ html[data-theme="dark"] .section-title h2{
 
 
 
-/* ===== أنيميشن عام لكل الأزرار ===== */
+
 button,
 .profile-btn,
 .switch,
@@ -583,7 +583,7 @@ button:hover,
 
 
 
-/* ===== عنوان السلايد (نسخة نهائية) ===== */
+
 .section-title{
   text-align:center;
   margin-bottom:80px;
@@ -591,7 +591,7 @@ button:hover,
 
 
 
-/* دارك مود */
+
 html[data-theme="dark"] .section-title h2{
   background:rgba(18,20,26,.9);
   color:#fff;
@@ -600,7 +600,7 @@ html[data-theme="dark"] .section-title h2{
     0 10px 35px rgba(0,0,0,.8);
 }
 
-/* === FIX نهائي لعناوين السلايد === */
+
 .section-title{
   width:100%;
   display:flex;
@@ -612,7 +612,7 @@ html[data-theme="dark"] .section-title h2{
 
 
 
-/* === FIX نهائي لأول سلايد === */
+
 body{
   padding-top:140px;
 }
@@ -621,7 +621,7 @@ body{
   min-height: calc(100vh - 140px);
 }
 
-/* ===== FIX نهائي للعناوين ===== */
+
 .section-title{
   width:100%;
   display:flex;
@@ -652,13 +652,13 @@ body{
     0 10px 30px rgba(0,0,0,.18);
 }
 
-/* دارك مود */
+
 html[data-theme="dark"] .section-title h2{
   background:rgba(18,20,26,.9);
   color:#fff;
 }
 
-/* ===== FORCE FIX للعناوين ===== */
+
 .section-title{
   width:100%;
   display:flex;
@@ -714,6 +714,7 @@ html[data-theme="dark"] .section-title h2{
   opacity:.25;
   pointer-events:none;
 }
+  
 html[data-theme="dark"] .section-title h2::before{
   background:
     linear-gradient(
@@ -724,7 +725,7 @@ html[data-theme="dark"] .section-title h2::before{
 }
 
 
-/* ===== Tooltip عام ===== */
+
 .tooltip-wrap{
   position: relative;
   display: inline-flex;
@@ -734,17 +735,17 @@ html[data-theme="dark"] .section-title h2::before{
 
 .tooltip-text{
   position: absolute;
-  bottom: -34px;              /* أقرب للزر */
+  bottom: -34px;             
   right: 50%;
   transform: translateX(50%) translateY(4px);
 
   background: rgba(0,0,0,.75);
   color: #fff;
 
-  padding: 4px 10px;          /* ⬅️ أصغر */
+  padding: 4px 10px;        
   border-radius: 999px;
 
-  font-size: 11px;            /* ⬅️ أصغر */
+  font-size: 11px;            
   font-weight: 600;
   line-height: 1.4;
 
@@ -757,7 +758,7 @@ html[data-theme="dark"] .section-title h2::before{
   box-shadow: 0 6px 16px rgba(0,0,0,.25);
 }
 
-/* سهم صغير */
+
 .tooltip-text::after{
   content:"";
   position:absolute;
@@ -773,7 +774,7 @@ html[data-theme="dark"] .section-title h2::before{
   transform: translateX(50%) translateY(0);
 }
 
-/* دارك مود */
+
 html[data-theme="dark"] .tooltip-text{
   background: rgba(255,255,255,.15);
   color:#fff;
@@ -868,10 +869,10 @@ html[data-theme="dark"] .current-topic{
   padding-bottom:120px;
 }
 
-/* ===== نظام السلايد الجديد ===== */
 
 
-/* توسيط المحتوى */
+
+
 .slide-content{
   max-width:720px;
   margin-inline:auto;
@@ -902,7 +903,7 @@ html[data-theme="dark"] .current-topic{
   }
 }
 
-/* ===== TITLE FRAME (FINAL FIX) ===== */
+
 .title-frame{
   display:inline-flex;
   width:auto !important;
@@ -924,19 +925,19 @@ html[data-theme="dark"] .title-frame{
 
 .profile-btn,
 .switch{
-  flex-shrink:0;   /* ❌ ممنوع ينكمش */
+  flex-shrink:0;  
 }
 
 .title-slot{
-  flex:1;                /* ياخد المساحة المتاحة فقط */
+  flex:1;                
   display:flex;
   justify-content:center;
-  min-width:0;           /* مهم جدًا */
+  min-width:0;           
 }
 
 @media (max-width: 600px){
 
-  /* ===== Mobile Subtitle – LIKE INDEX ===== */
+  
 .mobile-subtitle{
   display:none;
 
@@ -962,7 +963,7 @@ html[data-theme="dark"] .title-frame{
   text-overflow:ellipsis;
 }
 
-/* دارك مود */
+
 html[data-theme="dark"] .mobile-subtitle{
   background:rgba(28,30,36,.95);
   color:#fff;
@@ -1009,8 +1010,8 @@ html[data-theme="dark"] .mobile-subtitle{
   line-height:1.5;
 
   text-align:center;
-  white-space:normal;     /* ✅ يلف الكلام */
-  word-break:break-word; /* ✅ مفيش خنق */
+  white-space:normal;    
+  word-break:break-word;
 }
 
 html[data-theme="dark"] .title-frame,
@@ -1080,7 +1081,7 @@ html[data-theme="dark"] .mobile-subtitle{
   z-index: 2;
 }
 
-/* ===== DARK MODE – GLOBAL CARD STYLE ===== */
+
 html[data-theme="dark"] .topbar,
 html[data-theme="dark"] .title-frame,
 html[data-theme="dark"] .section-title h2,
@@ -1099,25 +1100,25 @@ html[data-theme="dark"] .section-title h2{
     transform .3s ease;
 }
 
-/* ===== DARK MODE FIX – SWITCH VISIBILITY ===== */
+
 html[data-theme="dark"] .switch{
-  background: rgba(255,255,255,.12);   /* أفتح من الخلفية */
+  background: rgba(255,255,255,.12);   
   border: 1px solid rgba(255,255,255,.25);
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.15),
     0 6px 18px rgba(0,0,0,.6);
 }
 
-/* الـ knob (القمر) */
+
 html[data-theme="dark"] .knob{
-  background: #111;          /* يبان أكتر */
+  background: #111;         
   color: #fff;
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.2),
     0 4px 10px rgba(0,0,0,.6);
 }
 
-/* ===== Dark Mode Unified Frames ===== */
+
 html[data-theme="dark"] .title-frame,
 html[data-theme="dark"] .section-title h2,
 html[data-theme="dark"] .site-footer,
@@ -1129,7 +1130,7 @@ html[data-theme="dark"] .mobile-subtitle {
 }
 
 
-/* ===== TITLE SOFT REVEAL ANIMATION ===== */
+
 @keyframes titleReveal {
   from {
     opacity: 0;
@@ -1179,7 +1180,7 @@ html[data-theme="dark"] .section-title h2{
 
 
 
-/* ===== SECTION TITLE – CLEAR ANIMATION ===== */
+
 .section-title h2{
   opacity: 0;
   transform: translateY(25px);
@@ -1189,13 +1190,13 @@ html[data-theme="dark"] .section-title h2{
     box-shadow .8s ease;
 }
 
-/* لما يدخل الشاشة */
+
 .section-title h2.in-view{
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ===== LIGHT MODE – READING FEEDBACK ===== */
+
 html[data-theme="light"] .slide.reading{
   background: rgba(255,255,255,.55);
   border-radius: 24px;
@@ -1216,18 +1217,18 @@ html[data-theme="dark"] .section-title h2.in-view{
   animation: darkShadowPulse 4s ease-in-out infinite;
 }
 
-/* ===== SLIDE CLEAN BACKGROUND (NO BOOK EFFECT) ===== */
+
 .slide{
   background: var(--bg);
   box-shadow: none;
-  padding-bottom: 120px; /* مسافة مريحة بس مش مبالغ فيها */
+  padding-bottom: 120px;
 }
 
 .slide{
   transition: background .4s ease;
 }
 
-/* ===== FORCE ONE COLOR BACKGROUND ===== */
+
 html,
 body,
 .slide,
@@ -1235,7 +1236,7 @@ body,
   background: var(--bg) !important;
 }
 
-/* ===== REMOVE BOOK / CARD FEEL COMPLETELY ===== */
+
 .slide,
 .slide-content,
 .slide-end {
@@ -1243,7 +1244,7 @@ body,
   border-radius: 0 !important;
 }
 
-/* ===== ABSOLUTE COLOR LOCK ===== */
+
 html[data-theme="light"] {
   --bg: #f6f7fb;
 }
@@ -1252,7 +1253,7 @@ html[data-theme="dark"] {
   --bg: #0f1115;
 }
 
-/* ===== PREVENT THEME FLASH ===== */
+
 .theme-lock,
 .theme-lock * {
   transition: none !important;
@@ -1270,8 +1271,7 @@ html[data-theme="dark"] {
 
 
 
-/* ===== ARTICLE – CLEAN FRAME ===== */
-/* ===== ARTICLE – TOPBAR STYLE FRAME ===== */
+
 .article{
   position: relative;
 
@@ -1296,13 +1296,11 @@ html[data-theme="dark"] {
     box-shadow .6s ease;
 }
 
-/* ===============================
-   ARTICLE – FINAL CLEAN LIGHT MODE
-================================= */
 
-/* ===== ARTICLE – READING MODE ===== */
+
+
 html[data-theme="light"] .article{
-  background: #ffffff; /* أبيض صافي للقراءة */
+  background: #ffffff;
   border: 1px solid rgba(0,0,0,.05);
 
   border-radius: 26px;
@@ -1319,7 +1317,7 @@ html[data-theme="light"] .article{
 }
 
 
-/* دارك مود */
+
 html[data-theme="dark"] .article{
   background: rgba(28,30,38,.95);
 
@@ -1330,7 +1328,7 @@ html[data-theme="dark"] .article{
 
 
 
-/* Hover */
+
 .article:hover{
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.7),
@@ -1341,8 +1339,7 @@ html[data-theme="dark"] .article{
 
 
 
-/* ===== ARTICLE TITLE ===== */
-/* ===== ARTICLE SUB TITLE (STRONG) ===== */
+
 .article h3{
   display: inline-block;
 
@@ -1367,7 +1364,7 @@ html[data-theme="light"] .article h3{
 }
 
 
-/* دارك مود */
+
 html[data-theme="dark"] .article h3{
   color:#eaf1ff;
   background: rgba(96,165,250,.22);
@@ -1393,7 +1390,7 @@ html[data-theme="dark"] .article:hover{
 
 
 
-/* ===== ARTICLE REVEAL ANIMATION ===== */
+
 .article{
   opacity: 1;
   transform: none;
@@ -1450,7 +1447,7 @@ html[data-theme="light"] .article:hover{
     0 18px 40px rgba(0,0,0,.12);
 }
 
-/* ===== Article Text (Readable & Professional) ===== */
+
 .article p{
   font-size: clamp(18px, 2.2vw, 20px);
   line-height: 2;
@@ -1458,7 +1455,7 @@ html[data-theme="light"] .article:hover{
   color: #222;
 }
 
-/* ===== DARK MODE – ARTICLE TEXT FIX ===== */
+
 html[data-theme="dark"] .article p{
   color: #e5e7eb;   /* رمادي فاتح مريح للعين */
 }
@@ -1514,35 +1511,34 @@ html[data-theme="dark"] .section-title h2{
   box-sizing: border-box;
 }
 
-/* ===== PREVENT SCROLL JUMP ON THEME CHANGE ===== */
+
 html.theme-switching,
 html.theme-switching body {
   overflow-anchor: none !important;
 }
 
-/* ===== Disable transitions during theme switch ===== */
+
 .theme-switching *,
 .theme-switching {
   transition: none !important;
 }
 
 
-/* ===== MOBILE MENU FIX FINAL ===== */
 
-/* الكمبيوتر */
+
+
 .mobile-menu-wrap{
   display:none;
 }
 
-/* الموبايل فقط */
+
 @media (max-width:600px){
 
-  /* اخفاء ازرار الكمبيوتر */
   .top-actions{
     display:none !important;
   }
 
-  /* اظهار زر الموبايل */
+  
   .mobile-menu-wrap{
     display:flex;
     align-items:center;
@@ -1551,7 +1547,7 @@ html.theme-switching body {
 
 }
 
-  /* زر القائمة */
+ 
   .mobile-menu-btn{
     width:38px;
     height:38px;
@@ -1570,10 +1566,10 @@ html.theme-switching body {
     color:#fff;
   }
 
-  /* القائمة */
+  
   .mobile-menu{
     position:absolute;
-    top:60px; /* مسافة من التوب بار */
+    top:60px; 
     right:0;
 
     display:flex;
@@ -1593,7 +1589,7 @@ html.theme-switching body {
     pointer-events:auto;
   }
 
-  /* الازرار بدون برواز */
+ 
   .mobile-menu a{
     width:42px;
     height:42px;
@@ -1623,7 +1619,7 @@ html.theme-switching body {
 
 <body>
 
-  <!-- Analytics hidden containers -->
+ 
 <div id="statsRow1" style="display:none"></div>
 <div id="statsRow2" style="display:none"></div>
 
@@ -1640,7 +1636,7 @@ html.theme-switching body {
 
 
 
-    <!-- النص (العنوان فقط) -->
+   
   <div class="title-slot">
   <div class="title-frame">
     <span id="topTitleMain" class="title-main">عن البحث</span>
@@ -1650,7 +1646,7 @@ html.theme-switching body {
 <div class="mobile-subtitle" id="mobileTitle"></div>
 
 
-  <!-- مجموعة أزرار اليمين -->
+
 <div class="top-actions">
 
   <div class="tooltip-wrap">
@@ -1670,7 +1666,7 @@ html.theme-switching body {
 </div>
 </div>
     
-  <!-- زر الموبايل -->
+ 
   <div class="mobile-menu-wrap">
 
     <div class="tooltip-wrap">
@@ -1803,14 +1799,14 @@ const html = document.documentElement;
 const switchBtn = document.getElementById("themeSwitch");
 const knob = document.getElementById("knob");
 
-/* تحميل الثيم */
+
 const savedTheme = localStorage.getItem("theme") || "light";
 html.dataset.theme = savedTheme;
 updateKnob(savedTheme);
 
 switchBtn.onclick = () => {
 
-  /* 1️⃣ وقف الترانزيشن مؤقتًا */
+ 
   html.classList.add("theme-switching");
 
   const newTheme =
@@ -1820,7 +1816,7 @@ switchBtn.onclick = () => {
   localStorage.setItem("theme", newTheme);
   updateKnob(newTheme);
 
-  /* 2️⃣ رجّع الترانزيشن بعد فريم */
+  
   requestAnimationFrame(() => {
     setTimeout(() => {
       html.classList.remove("theme-switching");
@@ -1850,7 +1846,7 @@ const articleObserver = new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting){
       entry.target.classList.add("show");
-      articleObserver.unobserve(entry.target); // 👈 المفتاح
+      articleObserver.unobserve(entry.target);
     }
   });
 },{
@@ -1866,22 +1862,22 @@ const mobileTitle = document.getElementById("mobileTitle");
 const mainAboutTitle = document.getElementById("aboutMainTitle");
 
 const BASE_TITLE = "عن البحث";
-const TOPBAR_OFFSET = 140; // نفس padding-top
+const TOPBAR_OFFSET = 140; 
 
 function updateAboutTitleSmart() {
   const rect = mainAboutTitle.getBoundingClientRect();
   const isFullyHidden = rect.bottom <= TOPBAR_OFFSET;
 
-  // دايمًا خلي العنوان الأساسي
+
   topTitle.textContent = BASE_TITLE;
 
   if (isFullyHidden) {
-    // كمبيوتر
+  
     if (window.innerWidth > 600) {
       topTitle.textContent = `${BASE_TITLE} — ${mainAboutTitle.textContent}`;
       mobileTitle.style.display = "none";
     }
-    // موبايل
+    
     else {
       mobileTitle.textContent = mainAboutTitle.textContent;
       mobileTitle.style.display = "inline-flex";
@@ -1918,14 +1914,14 @@ if(mobileBtn){
     }
   };
 
-  /* قفل بالضغط خارج */
+  
   document.addEventListener("click",(e)=>{
     if(!mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)){
       closeMenu();
     }
   });
 
-  /* قفل بالاسكرول */
+
   window.addEventListener("scroll", closeMenu);
 }
 
@@ -1959,6 +1955,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
