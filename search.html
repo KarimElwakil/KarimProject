@@ -3173,20 +3173,27 @@ window.addEventListener("load", updateTopBarSmart);
 
 
 function updateTOCActiveSmart() {
-  const viewportCenter = window.innerHeight / 2;
+
   let activeSlide = null;
-  let closestDistance = Infinity;
+  let minDistance = Infinity;
 
   slides.forEach(slide => {
     const rect = slide.getBoundingClientRect();
-    const slideCenter = rect.top + rect.height / 2;
-    const distance = Math.abs(slideCenter - viewportCenter);
 
-    if (distance < closestDistance) {
-      closestDistance = distance;
-      activeSlide = slide;
+    // لو السلايد داخل الشاشة
+    if (rect.top <= window.innerHeight * 0.35 && rect.bottom >= 120) {
+      const distance = Math.abs(rect.top);
+      if (distance < minDistance) {
+        minDistance = distance;
+        activeSlide = slide;
+      }
     }
   });
+
+  // 🔥 FIX آخر سلايد (الخاتمة)
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 80) {
+    activeSlide = slides[slides.length - 1];
+  }
 
   if (!activeSlide) return;
 
@@ -3197,18 +3204,18 @@ function updateTOCActiveSmart() {
   );
 
   if (activeItem) {
-  tocItems.forEach(item => item.classList.remove("active"));
-  activeItem.classList.add("active");
-  localStorage.setItem("activeSlide", activeSlide.id);
+    activeItem.classList.add("active");
+    localStorage.setItem("activeSlide", activeSlide.id);
 
-  // ✅ Scroll تلقائي جوه قائمة المحتويات
-  activeItem.scrollIntoView({
-    behavior: "smooth",
-    block: "center"
-  });
-}
+    activeItem.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
 }
 
+window.addEventListener("scroll", updateTOCActiveSmart);
+window.addEventListener("load", updateTOCActiveSmart);
 window.addEventListener("scroll", updateTOCActiveSmart);
 window.addEventListener("load", updateTOCActiveSmart);
 
@@ -3324,6 +3331,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
