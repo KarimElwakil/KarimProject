@@ -1699,88 +1699,87 @@ html[data-theme="dark"] .feature-box{
   }
 }
 
-/* يخفيه من الكمبيوتر */
-@media (min-width:900px){
-  .mobile-only{
-    display:none;
-  }
-}
-
-/* الحاوية */
-.demo-mobile-wrap{
+/* ===== MOBILE MENU FINAL PRO ===== */
+.mobile-menu-wrap{
   position:relative;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
 }
 
-/* زر الطيارة */
-.demo-mobile-btn{
-  width:56px;
-  height:56px;
+/* زر الطيارة الأساسي */
+.mobile-menu-btn{
+  width:48px;
+  height:48px;
   border-radius:50%;
-  background:#e5e7eb;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:26px;
-  cursor:pointer;
-  transition:.35s;
-}
-
-/* شكل الاكس */
-.demo-mobile-btn.open{
-  font-size:28px;
-  transform:rotate(180deg);
-}
-
-/* القائمة */
-.demo-mobile-menu{
-  margin-top:22px; /* نفس المسافة اللي عندك بالمللي */
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-
-  max-height:0;
-  overflow:hidden;
-  opacity:0;
-
-  transition:.4s ease;
-}
-
-/* لما تفتح */
-.demo-mobile-menu.show{
-  max-height:400px;
-  opacity:1;
-}
-
-/* الايقونات */
-.demo-icon{
-  width:56px;
-  height:56px;
-  border-radius:50%;
-  background:#e5e7eb;
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:22px;
 
-  transform:translateY(-15px);
-  opacity:0;
+  background:rgba(0,0,0,.06);
+  cursor:pointer;
   transition:.35s;
 }
 
-/* انيميشن الظهور */
-.demo-mobile-menu.show .demo-icon{
-  transform:translateY(0);
-  opacity:1;
+[data-theme="dark"] .mobile-menu-btn{
+  background:rgba(255,255,255,.12);
+  color:#fff;
 }
 
-/* تأخير نزول كل زر */
-.demo-mobile-menu.show .demo-icon:nth-child(1){transition-delay:.05s}
-.demo-mobile-menu.show .demo-icon:nth-child(2){transition-delay:.12s}
-.demo-mobile-menu.show .demo-icon:nth-child(3){transition-delay:.19s}
-.demo-mobile-menu.show .demo-icon:nth-child(4){transition-delay:.26s}
+/* القائمة */
+.mobile-menu{
+  position:absolute;
+  top:68px;
+  right:0;
+
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+
+  opacity:0;
+  transform:translateY(-15px);
+  pointer-events:none;
+  transition:.35s ease;
+}
+
+/* لما تفتح */
+.mobile-menu.open{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+
+/* زرار X */
+.mobile-menu-btn.open{
+  font-size:26px;
+}
+
+/* الأزرار الدائرية */
+.mobile-menu a{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(0,0,0,.06);
+  font-size:18px;
+
+  pointer-events:none; /* ❌ غير قابلة للضغط */
+  cursor:default;
+
+  transition:.25s;
+}
+
+/* دارك مود */
+[data-theme="dark"] .mobile-menu a{
+  background:rgba(255,255,255,.12);
+  color:#fff;
+}
+
+/* انيميشن لمسة زر */
+.mobile-menu a:active{
+  transform:scale(.92);
+}
 
 
 /* =============================================================================== ===== */
@@ -2221,33 +2220,39 @@ const db = firebase.database();
 
 <script src="memory.js"></script>
 
-<script>
+const mobileBtn  = document.getElementById("mobileMenuBtn");
+const mobileMenu = document.getElementById("mobileMenu");
 
-const demoBtn  = document.getElementById("demoMenuBtn");
-const demoMenu = document.getElementById("demoMenu");
+if(mobileBtn){
 
-if(demoBtn){
+  mobileBtn.onclick = (e)=>{
+    e.stopPropagation();
 
-  demoBtn.onclick = ()=>{
+    mobileMenu.classList.toggle("open");
+    mobileBtn.classList.toggle("open");
 
-    demoMenu.classList.toggle("show");
-
-    if(demoMenu.classList.contains("show")){
-      demoBtn.textContent = "✕";
-      demoBtn.classList.add("open");
+    if(mobileMenu.classList.contains("open")){
+      mobileBtn.textContent = "✕";
+      document.body.style.overflow="hidden"; // منع سكرول
     }else{
-      demoBtn.textContent = "✈️";
-      demoBtn.classList.remove("open");
+      mobileBtn.textContent = "✈️";
+      document.body.style.overflow="";
     }
-
   };
 
-}
+  document.addEventListener("click",(e)=>{
+    if(!mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)){
+      mobileMenu.classList.remove("open");
+      mobileBtn.textContent="✈️";
+      document.body.style.overflow="";
+    }
+  });
 
-</script>
+}
     
 </body>
 </html>
+
 
 
 
