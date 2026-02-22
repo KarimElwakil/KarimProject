@@ -1755,9 +1755,18 @@ html[data-theme="dark"] .feature-box{
   font-size:18px;
 
   background:rgba(0,0,0,.06);
+  cursor:pointer;
+
   transition:.2s ease;
 }
 
+/* حركة hover */
+.demo-icon:hover{
+  transform:translateY(-3px) scale(1.08);
+  box-shadow:0 8px 18px rgba(0,0,0,.2);
+}
+
+/* حركة الضغط */
 .demo-icon:active{
   transform:scale(.92);
 }
@@ -1769,6 +1778,14 @@ html[data-theme="dark"] .feature-box{
 }
 
 
+/* منع التحديد على الديمو */
+.demo-mobile-wrap,
+.demo-mobile-wrap *{
+  user-select:none;
+  -webkit-user-select:none;
+  -ms-user-select:none;
+}
+  
 /* =============================================================================== ===== */
 </style>
 </head>
@@ -2227,6 +2244,7 @@ if(demoBtn){
     
 </body>
 </html>
+
 
 
 
