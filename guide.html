@@ -1611,112 +1611,37 @@ html[data-theme="dark"] .feature-box{
   transition: none !important;
 }
 
-/* ===== MOBILE MENU FIX FINAL ===== */
+/* ===============================
+   MOBILE MENU – REAL BUTTON
+================================ */
 
 .mobile-menu-wrap{
+  position:relative;
   display:none;
 }
 
-/* يظهر موبايل بس */
 @media (max-width:700px){
   .mobile-menu-wrap{
     display:flex;
     align-items:center;
   }
-}
 
-/* الموبايل فقط */
-@media (max-width:600px){
-
-  /* اخفاء ازرار الكمبيوتر */
   .top-actions{
     display:none !important;
   }
-
 }
 
-  /* زر القائمة */
-  .mobile-menu-btn{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:20px;
-    background:rgba(0,0,0,.06);
-    cursor:pointer;
-    transition:.3s;
-  }
-
-  [data-theme="dark"] .mobile-menu-btn{
-    background:rgba(255,255,255,.12);
-    color:#fff;
-  }
-
-  /* القائمة */
-  .mobile-menu{
-    position:absolute;
-    top:60px; /* مسافة من التوب بار */
-    right:0;
-
-    display:flex;
-    flex-direction:column;
-    gap:14px;
-
-    opacity:0;
-    transform:translateY(-15px);
-    pointer-events:none;
-
-    transition:.35s ease;
-  }
-
-  .mobile-menu.open{
-    opacity:1;
-    transform:translateY(0);
-    pointer-events:auto;
-  }
-
-  /* الازرار بدون برواز */
-  .mobile-menu a{
-    width:42px;
-    height:42px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:50%;
-    background:rgba(0,0,0,.06);
-    transition:.25s;
-  }
-
-  .mobile-menu a:hover{
-    transform:scale(1.08);
-  }
-
-  [data-theme="dark"] .mobile-menu a{
-    background:rgba(255,255,255,.12);
-    color:#fff;
-  }
-}
-
-/* ===== MOBILE MENU FINAL PRO ===== */
-.mobile-menu-wrap{
-  position:relative;
-}
-
-/* زر الطيارة الأساسي */
 .mobile-menu-btn{
-  width:48px;
-  height:48px;
+  width:50px;
+  height:50px;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
   font-size:22px;
-
   background:rgba(0,0,0,.06);
   cursor:pointer;
-  transition:.35s;
+  transition:.3s ease;
 }
 
 [data-theme="dark"] .mobile-menu-btn{
@@ -1724,61 +1649,124 @@ html[data-theme="dark"] .feature-box{
   color:#fff;
 }
 
-/* القائمة */
 .mobile-menu{
   position:absolute;
-  top:68px;
-  right:0;
+  top:70px;
+  right:6px;
 
   display:flex;
   flex-direction:column;
-  gap:18px;
+  align-items:center;
+  gap:16px;
 
   opacity:0;
   transform:translateY(-15px);
   pointer-events:none;
-  transition:.35s ease;
+  transition:.3s ease;
 }
 
-/* لما تفتح */
 .mobile-menu.open{
   opacity:1;
   transform:translateY(0);
   pointer-events:auto;
 }
 
-/* زرار X */
-.mobile-menu-btn.open{
-  font-size:26px;
-}
-
-/* الأزرار الدائرية */
 .mobile-menu a{
-  width:40px;
-  height:40px;
+  width:42px;
+  height:42px;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-
-  background:rgba(0,0,0,.06);
   font-size:18px;
 
-  pointer-events:none; /* ❌ غير قابلة للضغط */
-  cursor:default;
-
-  transition:.25s;
+  background:rgba(0,0,0,.06);
+  transition:.2s ease;
 }
 
-/* دارك مود */
+.mobile-menu a:hover{
+  transform:scale(1.08);
+}
+
+.mobile-menu a:active{
+  transform:scale(.92);
+}
+
 [data-theme="dark"] .mobile-menu a{
   background:rgba(255,255,255,.12);
   color:#fff;
 }
 
-/* انيميشن لمسة زر */
-.mobile-menu a:active{
+  /* ===============================
+   MOBILE MENU – DEMO VERSION
+================================ */
+
+.demo-mobile-wrap{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.demo-mobile-btn{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  background:rgba(0,0,0,.06);
+  cursor:pointer;
+  transition:.3s ease;
+}
+
+.demo-mobile-btn:active{
+  transform:scale(.95);
+}
+
+.demo-mobile-menu{
+  position:absolute;
+  top:70px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+
+  opacity:0;
+  transform:translateY(-12px);
+  pointer-events:none;
+  transition:.3s ease;
+}
+
+.demo-mobile-menu.open{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+
+.demo-icon{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+
+  background:rgba(0,0,0,.06);
+  transition:.2s ease;
+}
+
+.demo-icon:active{
   transform:scale(.92);
+}
+
+[data-theme="dark"] .demo-mobile-btn,
+[data-theme="dark"] .demo-icon{
+  background:rgba(255,255,255,.12);
+  color:#fff;
 }
 
 
@@ -2220,10 +2208,27 @@ const db = firebase.database();
 
 <script src="memory.js"></script>
 
+    <script>
+const demoBtn = document.getElementById("demoMenuBtn");
+const demoMenu = document.getElementById("demoMenu");
+
+if(demoBtn){
+  demoBtn.onclick = () => {
+    demoMenu.classList.toggle("open");
+
+    if(demoMenu.classList.contains("open")){
+      demoBtn.textContent = "✕";
+    }else{
+      demoBtn.textContent = "✈️";
+    }
+  };
+}
+</script>
 
     
 </body>
 </html>
+
 
 
 
