@@ -3,7 +3,7 @@
 <head>
 
 <script>
-/* حفظ مكان الاسكرول قبل أي تغيير */
+
 let savedScroll = 0;
 
 function keepScroll(){
@@ -31,7 +31,7 @@ html[data-theme="dark"]{
 
 
 
-/* منع الفلاش أثناء تغيير الثيم */
+
 .theme-switching,
 .theme-switching *{
   transition: none !important;
@@ -92,7 +92,7 @@ section.slide{
 }
 
 :root{
-  --light-card-bg: #f1f5fb;      /* أزرق فاتح جدًا */
+  --light-card-bg: #f1f5fb;      
   --light-card-border: rgba(37,99,235,.12);
   --light-card-shadow:
     inset 0 1px 2px rgba(255,255,255,.9),
@@ -112,10 +112,10 @@ section.slide{
  --bg:#0f1115;
   --text:#fff;
 
-  /* 🔥 لون موحّد لكل البراويز */
+ 
   --card-bg: rgba(28,30,38,.95);
 
-  /* ✨ Shadow ناعم وراقي */
+
   --card-shadow:
     inset 0 1px 2px rgba(255,255,255,.06),
     0 14px 40px rgba(0,0,0,.75);
@@ -147,7 +147,7 @@ section.slide{
 
 
 
-/* ===== Global Reading Typography ===== */
+
 body{
   font-size: 18px;
   line-height: 1.95;
@@ -155,12 +155,12 @@ body{
 }
 
 
-/* منع التحديد */
+
 .topbar, button, .lang, .lang-item, .switch, h1, h2{
   user-select:none;
 }
 
-/* ===== TOP BAR ===== */
+
 .topbar{
   position:fixed;
   top:20px;
@@ -213,7 +213,7 @@ body{
 
   white-space:nowrap;
   overflow:hidden;
-  text-overflow:ellipsis;  /* ← ذكي مش وحش */
+  text-overflow:ellipsis;  
 }
 
 
@@ -241,7 +241,7 @@ body{
 
 
 
-/* ===== CONTROLS ===== */
+
 .profile-btn{
   width:36px;
   height:36px;
@@ -265,7 +265,7 @@ body{
   gap:16px;
 }
 
-/* ===== SWITCH ===== */
+
 .switch{
   
   width:54px;
@@ -302,18 +302,18 @@ body{
 
 
 
-/* ===== SLIDES ===== */
+
 .slide{
   min-height:100vh;
   padding-top:60px;
-  padding-bottom:120px; /* مسافة كبيرة وواضحة */
+  padding-bottom:120px;
 }
 
 
 .slide-content{
   max-width:720px;
    padding-inline: clamp(12px, 4vw, 20px);
-  margin-top:0;   /* مهم */
+  margin-top:0;   
   line-height:1.9;
 }
 
@@ -323,7 +323,7 @@ body{
   font-size: clamp(18px, 2.4vw, 18px);
   margin-bottom:22px;
 }
-/* ===== FOOTER ===== */
+
 .site-footer{
   margin-top:-40px;
   padding:50px 20px;
@@ -381,7 +381,7 @@ body{
 
 
 
-/* ===== Slide Animation ===== */
+
 
 .topbar{
   animation: dropBar 1s ease forwards;
@@ -422,10 +422,10 @@ body{
   transition:width .1s linear;
 }
 
-/* === FIX نهائي لزر قائمة العناوين === */
 
 
-/* Tooltip */
+
+
 .toc-toggle .tooltip{
   position: absolute;
   bottom: 70px;
@@ -457,7 +457,7 @@ body{
 
 
 
-/* صندوق المحتويات */
+
 
 .toc-panel{
   position:fixed;
@@ -478,19 +478,19 @@ body{
   z-index:998;
 }
 
-/* ===== TOC HEADER CLEAN FINAL ===== */
+
 
 .toc-header{
   position: sticky;
   top: 16px;
   z-index: 50;
 
-  /* أعرض من الجانبين */
+  
   width: 94%;
   max-width: 650px;
   margin: 0 auto 22px auto;
 
-  /* ارتفاع أقل */
+  
   padding: 14px 20px;
 
   display:flex;
@@ -503,14 +503,14 @@ body{
   box-shadow:0 10px 28px rgba(0,0,0,.15);
 }
 
-/* دارك مود */
+
 [data-theme="dark"] .toc-header{
   background: rgba(28,30,36,.95);
   border:1px solid rgba(255,255,255,.08);
   box-shadow:0 14px 40px rgba(0,0,0,.7);
 }
 
-/* كلمة محتويات البحث */
+
 .toc-header-title{
   font-weight:900;
   font-size:15px;
@@ -523,22 +523,22 @@ body{
     0 4px 10px rgba(0,0,0,.15);
 }
 
-/* دارك */
+
 [data-theme="dark"] .toc-header-title{
   background:rgba(18,20,26,.9);
   color:#fff;
 }
 
-/* زر الإغلاق */
+
 .toc-close{
   position:absolute;
   right:16px;
   top:50%;
   transform:translateY(-50%);
 
-  width:32px;      /* كان 40 */
-  height:32px;     /* كان 40 */
-  font-size:16px;  /* كان 20 */
+  width:32px;      
+  height:32px;    
+  font-size:16px;  
 
   border-radius:50%;
   border:none;
@@ -562,7 +562,6 @@ body{
   color:#fff;
 }
 
-/* مسافة بعد البار */
 .toc-panel ul{
   margin-top:20px;
 }
@@ -592,18 +591,17 @@ body{
 }
 
 
-/* الفقرات ترجع طبيعية */
 .slide-content{
   text-align: right;
 }
 
 
-/* الكلام يرجع طبيعي تحت العنوان */
+
 .slide-content p{
   text-align: right;
 }
 
-/* ===== Dark Mode ===== */
+
 [data-theme="dark"] .slide h2{
   background: rgba(18,20,26,.9);
   color: #fff;
@@ -613,7 +611,7 @@ body{
     0 10px 35px rgba(0,0,0,.8);
 }
 
-/* حاوية العنوان */
+
 .section-title{
   text-align: center;
   margin-bottom: 18px;
@@ -624,7 +622,7 @@ body{
 
   
 
-/* دارك مود */
+
 [data-theme="dark"] .section-title h2{
   background: rgba(18,20,26,.9);
   color: #fff;
@@ -634,12 +632,12 @@ body{
     0 10px 35px rgba(0,0,0,.8);
 }
 
-/* النص يرجع طبيعي */
+
 .slide-content{
   text-align: right;
 }
 
-/* ===== صندوق محتويات البحث ===== */
+
 .toc-box{
   max-width:720px;
   margin:120px auto 60px;
@@ -649,7 +647,7 @@ body{
   box-shadow:0 20px 40px rgba(0,0,0,.15);
 }
 
-/* عنوان محتويات البحث */
+
 .toc-title{
   text-align:center;
   font-weight:900;
@@ -669,7 +667,7 @@ body{
   color:#fff;
 }
 
-/* ليستة العناوين */
+
 .toc-list{
   list-style:none;
   padding:0;
@@ -707,7 +705,7 @@ body{
 
 
 
-/* ===== أنيميشن عام لكل الأزرار ===== */
+
 button,
 .profile-btn,
 .switch,
@@ -731,7 +729,7 @@ button:active,
   transform:scale(.95);
 }
 
-/* ===== عنوان محتويات البحث ===== */
+
 .toc-title{
   text-align:center;
   font-weight:900;
@@ -753,7 +751,7 @@ button:active,
   color:#fff;
 }
 
-/* ===== عناصر محتويات البحث ===== */
+
 .toc-panel li{
   padding:10px 12px;
   border-radius:10px;
@@ -766,19 +764,19 @@ button:active,
   transform:translateX(-4px);
 }
 
-/* العنصر النشط في محتويات البحث */
+
 .toc-panel li.active{
   background:var(--primary);
   color:#fff;
 }
 
-/* ===== Scroll لقائمة محتويات البحث ===== */
+
 .toc-panel{
-  overflow-y: auto;      /* يفتح اسكرول */
+  overflow-y: auto;      
   overscroll-behavior: contain;
 }
 
-/* شكل الاسكرول */
+
 .toc-panel::-webkit-scrollbar{
   width:6px;
 }
@@ -809,7 +807,7 @@ button:active,
 
 
 
-/* ===== عنوان السلايد (نسخة نهائية) ===== */
+
 .section-title{
   text-align:center;
   margin-bottom:80px;
@@ -817,7 +815,7 @@ button:active,
 
 
 
-/* دارك مود */
+
 [data-theme="dark"] .section-title h2{
   background:rgba(18,20,26,.9);
   color:#fff;
@@ -826,7 +824,7 @@ button:active,
     0 10px 35px rgba(0,0,0,.8);
 }
 
-/* === FIX نهائي لعناوين السلايد === */
+
 .section-title{
   width:100%;
   display:flex;
@@ -838,7 +836,7 @@ button:active,
 
 
 
-/* === FIX نهائي لأول سلايد === */
+
 body{
   padding-top:140px;
 }
@@ -866,13 +864,13 @@ body{
 
 
 
-/* دارك مود */
+
 [data-theme="dark"] .section-title h2{
   background:rgba(18,20,26,.9);
   color:#fff;
 }
 
-/* ===== FORCE FIX للعناوين ===== */
+
 .section-title{
   width:100%;
   display:flex;
@@ -938,7 +936,7 @@ body{
 }
 
 
-/* ===== Tooltip عام ===== */
+
 .tooltip-wrap{
   position: relative;
   display: inline-flex;
@@ -948,17 +946,17 @@ body{
 
 .tooltip-text{
   position: absolute;
-  bottom: -34px;              /* أقرب للزر */
+  bottom: -34px;             
   right: 50%;
   transform: translateX(50%) translateY(4px);
 
   background: rgba(0,0,0,.75);
   color: #fff;
 
-  padding: 4px 10px;          /* ⬅️ أصغر */
+  padding: 4px 10px;         
   border-radius: 999px;
 
-  font-size: 11px;            /* ⬅️ أصغر */
+  font-size: 11px;            
   font-weight: 600;
   line-height: 1.4;
 
@@ -971,7 +969,7 @@ body{
   box-shadow: 0 6px 16px rgba(0,0,0,.25);
 }
 
-/* سهم صغير */
+
 .tooltip-text::after{
   content:"";
   position:absolute;
@@ -987,7 +985,7 @@ body{
   transform: translateX(50%) translateY(0);
 }
 
-/* دارك مود */
+
 [data-theme="dark"] .tooltip-text{
   background: rgba(255,255,255,.15);
   color:#fff;
@@ -996,7 +994,7 @@ body{
   border-bottom-color: rgba(255,255,255,.15);
 }
 
-/* === Animation مضبوط لزر القائمة === */
+
 .toc-toggle{
   position: fixed !important;
   bottom: 32px;
@@ -1132,10 +1130,10 @@ body{
   padding-bottom:120px;
 }
 
-/* ===== نظام السلايد الجديد ===== */
 
 
-/* توسيط المحتوى */
+
+
 .slide-content{
   max-width:720px;
   margin-inline:auto;
@@ -1182,14 +1180,14 @@ body{
   }
 }
 
-/* ===== TITLE FRAME (FINAL FIX) ===== */
+
 .title-frame{
   display:flex;
   align-items:center;
   justify-content:center;
 
   padding:10px 26px;
-  margin-top:0.5px;              /* ✅ حل اللزق */
+  margin-top:0.5px;             
   border-radius:999px;
 
   background:rgba(255,255,255,.9);
@@ -1207,14 +1205,14 @@ body{
 
 .profile-btn,
 .switch{
-  flex-shrink:0;   /* ❌ ممنوع ينكمش */
+  flex-shrink:0;  
 }
 
 .title-slot{
-  flex:1;                /* ياخد المساحة المتاحة فقط */
+  flex:1;               
   display:flex;
   justify-content:center;
-  min-width:0;           /* مهم جدًا */
+  min-width:0;          
 }
 
 @media (max-width: 1024px){
@@ -1223,9 +1221,9 @@ body{
     display: block;
     max-width: 100%;
 
-    white-space: nowrap;        /* ❌ ممنوع سطرين */
-    overflow: hidden;           /* ❌ ممنوع خروج */
-    text-overflow: ellipsis;    /* … قص ذكي */
+    white-space: nowrap;        
+    overflow: hidden;          
+    text-overflow: ellipsis;   
 
     font-size: 13px;
     font-weight: 700;
@@ -1287,8 +1285,8 @@ body{
   line-height:1.5;
 
   text-align:center;
-  white-space:normal;     /* ✅ يلف الكلام */
-  word-break:break-word; /* ✅ مفيش خنق */
+  white-space:normal;     
+  word-break:break-word; 
 }
 
 [data-theme="dark"] .title-frame,
@@ -1334,7 +1332,7 @@ body{
   z-index: 2;
 }
 
-/* ===== DARK MODE – GLOBAL CARD STYLE ===== */
+
 [data-theme="dark"] .topbar,
 [data-theme="dark"] .title-frame,
 [data-theme="dark"] .section-title h2,
@@ -1356,25 +1354,25 @@ body{
     transform .3s ease;
 }
 
-/* ===== DARK MODE FIX – SWITCH VISIBILITY ===== */
+
 [data-theme="dark"] .switch{
-  background: rgba(255,255,255,.12);   /* أفتح من الخلفية */
+  background: rgba(255,255,255,.12);  
   border: 1px solid rgba(255,255,255,.25);
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.15),
     0 6px 18px rgba(0,0,0,.6);
 }
 
-/* الـ knob (القمر) */
+
 [data-theme="dark"] .knob{
-  background: #111;          /* يبان أكتر */
+  background: #111;         
   color: #fff;
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.2),
     0 4px 10px rgba(0,0,0,.6);
 }
 
-/* ===== Dark Mode Unified Frames ===== */
+
 [data-theme="dark"] .title-frame,
 [data-theme="dark"] .section-title h2,
 [data-theme="dark"] .toc-panel,
@@ -1387,7 +1385,6 @@ body{
 }
 
 
-/* ===== TITLE SOFT REVEAL ANIMATION ===== */
 @keyframes titleReveal {
   from {
     opacity: 0;
@@ -1437,7 +1434,7 @@ body{
 
 
 
-/* ===== SECTION TITLE – CLEAR ANIMATION ===== */
+
 .section-title h2{
   opacity: 0;
   transform: translateY(25px);
@@ -1447,13 +1444,13 @@ body{
     box-shadow .8s ease;
 }
 
-/* لما يدخل الشاشة */
+
 .section-title h2.in-view{
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ===== LIGHT MODE – READING FEEDBACK ===== */
+
 [data-theme="light"] .slide.reading{
   background: rgba(255,255,255,.55);
   border-radius: 24px;
@@ -1474,10 +1471,10 @@ body{
   animation: darkShadowPulse 4s ease-in-out infinite;
 }
 
-/* ===== SLIDE CLEAN BACKGROUND (NO BOOK EFFECT) ===== */
+
 .slide{
   box-shadow: none;
-  padding-bottom: 120px; /* مسافة مريحة بس مش مبالغ فيها */
+  padding-bottom: 120px; 
 }
 
 .slide{
@@ -1494,7 +1491,7 @@ body{
 }
 
 
-/* ===== REMOVE BOOK / CARD FEEL COMPLETELY ===== */
+
 .slide,
 .slide-content,
 .slide-end {
@@ -1502,7 +1499,7 @@ body{
   border-radius: 0 !important;
 }
 
-/* ===== ABSOLUTE COLOR LOCK ===== */
+
 [data-theme="light"] {
   --bg: #f6f7fb;
 }
@@ -1514,8 +1511,7 @@ body{
 
 
 
-/* ===== Mobile TOC – حجم مريح ===== */
-/* ===== Mobile TOC – SIDE PANEL (FINAL FIX) ===== */
+
 @media (max-width: 600px){
 
   .toc-panel{
@@ -1523,11 +1519,11 @@ body{
     right: 0;
     position:fixed;
 
-    width: 78vw;          /* ⬅️ حجم مريح */
+    width: 78vw;         
     max-width: 320px;
     height: 100vh;
 
-    transform: translateX(100%); /* ❌ مخفية */
+    transform: translateX(100%);
     transition: transform .35s ease;
 
     border-radius: 0 0 0 28px;
@@ -1537,7 +1533,7 @@ body{
   }
 
   .toc-panel.open{
-    transform: translateX(0);   /* ✅ تطلع من اليمين */
+    transform: translateX(0);   
   }
 
   .toc-title{
@@ -1553,8 +1549,7 @@ body{
   }
 }
 
-/* ===== TOC CLOSE BUTTON ===== */
-/* زر إغلاق قائمة المحتويات */
+
 .toc-close{
   position:absolute;
   right:18px;
@@ -1594,7 +1589,7 @@ body{
 }
 
 .toc-title{
-  display:inline-block;      /* 🔑 المفتاح */
+  display:inline-block;      
   padding:12px 28px;
   border-radius:999px;
   font-weight:900;
@@ -1611,8 +1606,7 @@ body{
   color:#fff;
 }
 
-/* ===== ARTICLE – CLEAN FRAME ===== */
-/* ===== ARTICLE – TOPBAR STYLE FRAME ===== */
+
 .article{
   position: relative;
 
@@ -1637,13 +1631,9 @@ body{
     box-shadow .6s ease;
 }
 
-/* ===============================
-   ARTICLE – FINAL CLEAN LIGHT MODE
-================================= */
 
-/* ===== ARTICLE – READING MODE ===== */
 [data-theme="light"] .article{
-  background: #ffffff; /* أبيض صافي للقراءة */
+  background: #ffffff; 
   border: 1px solid rgba(0,0,0,.05);
 
   border-radius: 26px;
@@ -1660,7 +1650,7 @@ body{
 }
 
 
-/* دارك مود */
+
 [data-theme="dark"] .article{
   background: rgba(28,30,38,.95);
 
@@ -1671,7 +1661,7 @@ body{
 
 
 
-/* Hover */
+
 .article:hover{
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.7),
@@ -1682,8 +1672,7 @@ body{
 
 
 
-/* ===== ARTICLE TITLE ===== */
-/* ===== ARTICLE SUB TITLE (STRONG) ===== */
+
 .article h3{
   display: inline-block;
 
@@ -1708,7 +1697,7 @@ body{
 }
 
 
-/* دارك مود */
+
 [data-theme="dark"] .article h3{
   color:#eaf1ff;
   background: rgba(96,165,250,.22);
@@ -1734,7 +1723,7 @@ body{
 
 
 
-/* ===== ARTICLE REVEAL ANIMATION ===== */
+
 .article{
   opacity: 0;
   transform: translateY(24px);
@@ -1792,7 +1781,7 @@ body{
     0 18px 40px rgba(0,0,0,.12);
 }
 
-/* ===== Article Text (Readable & Professional) ===== */
+
 .article p{
   font-size: clamp(18px, 2.2vw, 20px);
   line-height: 2;
@@ -1800,13 +1789,13 @@ body{
   color: #222;
 }
 
-/* ===== DARK MODE – ARTICLE TEXT FIX ===== */
+
 [data-theme="dark"] .article p{
-  color: #e5e7eb;   /* رمادي فاتح مريح للعين */
+  color: #e5e7eb;   
 }
 
 
-/* ===== Reading Progress Bar ===== */
+
 #reading-progress{
   position: fixed;
   top: 0;
@@ -1818,7 +1807,7 @@ body{
   transition: width .15s linear;
 }
 
-/* دارك مود */
+
 [data-theme="dark"] #reading-progress{
   background: #3b82f6;
 }
@@ -1850,7 +1839,7 @@ body{
   margin:0;
 }
 
-/* موبايل */
+
 @media (max-width:650px){
   .img-with-text{
     flex-direction:column;
@@ -1890,22 +1879,22 @@ body{
   background:rgba(255,255,255,.07);
 }
 
-/* ===== MOBILE MENU FIX FINAL ===== */
 
-/* الكمبيوتر */
+
+
 .mobile-menu-wrap{
   display:none;
 }
 
-/* الموبايل فقط */
+
 @media (max-width:600px){
 
-  /* اخفاء ازرار الكمبيوتر */
+
   .top-actions{
     display:none !important;
   }
 
-  /* اظهار زر الموبايل */
+  
   .mobile-menu-wrap{
     display:flex;
     align-items:center;
@@ -1914,7 +1903,7 @@ body{
 
 }
 
-  /* زر القائمة */
+  
   .mobile-menu-btn{
     width:38px;
     height:38px;
@@ -1933,10 +1922,10 @@ body{
     color:#fff;
   }
 
-  /* القائمة */
+ 
   .mobile-menu{
     position:absolute;
-    top:60px; /* مسافة من التوب بار */
+    top:60px; 
     right:0;
 
     display:flex;
@@ -1956,7 +1945,7 @@ body{
     pointer-events:auto;
   }
 
-  /* الازرار بدون برواز */
+ 
   .mobile-menu a{
     width:42px;
     height:42px;
@@ -1978,7 +1967,7 @@ body{
   }
 }
 
-  /* تعطيل أنيميشن الزرار العام لزر الإغلاق */
+ 
 .toc-close{
   transition: background .25s ease, transform .25s ease;
 }
@@ -1991,9 +1980,7 @@ body{
   transform: translateY(-50%) scale(.95) !important;
 }
 
-/* ===============================
-   صور المقالات في الموبايل فقط
-================================ */
+
 @media (max-width:600px){
 
   .float-img{
@@ -2003,11 +1990,11 @@ body{
     max-width:100%;
     height:auto;
 
-    margin:10px 0 12px 0; /* مسافة خفيفة فوق وتحت */
+    margin:10px 0 12px 0; 
     border-radius:12px;
   }
 
-  /* يخلي الكلام يبدأ تحت الصورة */
+  
   .article p{
     display:block;
   }
@@ -2020,13 +2007,13 @@ html{
 
 
 
-  /* 🔥 FORCE DARK BACKGROUND FINAL */
+ 
 html[data-theme="dark"],
 html[data-theme="dark"] body{
   background:#0f1115 !important;
 }
 
-/* أي عنصر ممكن يبيض الصفحة */
+
 html[data-theme="dark"] .slide,
 html[data-theme="dark"] .slide-content,
 html[data-theme="dark"] .article,
@@ -2034,24 +2021,24 @@ html[data-theme="dark"] section{
   background:transparent !important;
 }
 
-/* الباك جراوند الوحيد */
+
 html[data-theme="dark"] body{
   background:#0f1115 !important;
 }
 
-/* 🔥 لون عناصر محتويات البحث في الدارك مود */
+
 [data-theme="dark"] .toc-panel li{
   color:#ffffff !important;
 }
 
-/* العنصر النشط يفضل أبيض */
+
 [data-theme="dark"] .toc-panel li.active{
   color:#ffffff !important;
 }
 
 
   
-  /* منع أي عنوان يوسع البوكس */
+ 
 .section-title h2,
 .article h3{
   max-width:92%;
@@ -2059,15 +2046,15 @@ html[data-theme="dark"] body{
   box-sizing:border-box;
 }
 
-/* يمنع تمدد البراويز */
+
 .article{
   overflow:hidden;
 }
 
-  /* ===== MOBILE TITLES SMART ===== */
+ 
 @media (max-width:600px){
 
-  /* العناوين الرئيسية الكبيرة */
+  
   .section-title h2{
     font-size: clamp(18px, 4.8vw, 26px);
     padding:14px 22px;
@@ -2078,7 +2065,7 @@ html[data-theme="dark"] body{
     margin:auto;
   }
 
-  /* العناوين الفرعية الزرقا */
+ 
   .article h3{
     font-size: clamp(8px,3.5vw,13px);
     padding:12px 18px;
@@ -2086,7 +2073,7 @@ html[data-theme="dark"] body{
 
 }
 
-  /* ===== DARK MODE TEXT FIX ===== */
+ 
 [data-theme="dark"] .refs li{
   color:#ffffff !important;
 }
@@ -2101,7 +2088,7 @@ html[data-theme="dark"] body{
 
 
 
-/* نهاية قائمة المحتويات للموبايل فقط */
+
 .toc-end{
   display:none;
 }
@@ -2115,7 +2102,7 @@ html[data-theme="dark"] body{
     opacity:.7;
 
     margin-top:18px;
-    padding-bottom:25px; /* مسافة عن شريط الموبايل */
+    padding-bottom:25px; 
   }
 
   [data-theme="dark"] .toc-end{
@@ -2132,7 +2119,7 @@ html[data-theme="dark"] body{
 
 <body data-theme="light">
 
-  <!-- Analytics hidden containers -->
+ 
 <div id="statsRow1" style="display:none"></div>
 <div id="statsRow2" style="display:none"></div>
 
@@ -2142,12 +2129,12 @@ html[data-theme="dark"] body{
 <header class="topbar">
  <div class="topbar-inner">
 
-  <!-- الشمال: السويتش -->
+ 
   <div class="switch" id="themeSwitch">
     <div class="knob" id="knob">☀️</div>
   </div>
 
-  <!-- النص -->
+  
   <div class="title-slot">
     <div class="title-wrap">
       <div class="title-frame">
@@ -2157,7 +2144,7 @@ html[data-theme="dark"] body{
     </div>
   </div>
 
-  <!-- اليمين كمبيوتر -->
+  
   <div class="top-actions">
 
     <div class="tooltip-wrap">
@@ -2177,14 +2164,14 @@ html[data-theme="dark"] body{
 
   </div>
 
-  <!-- زر الموبايل -->
+  
   <div class="mobile-menu-wrap">
 
     <div class="tooltip-wrap">
       <div class="mobile-menu-btn" id="mobileMenuBtn">✈️</div>
     </div>
 
-    <!-- القائمة المنسدلة -->
+    
     <div class="mobile-menu" id="mobileMenu">
       <a href="profile.html" class="profile-btn">👤</a>
       <a href="about.html" class="profile-btn">ℹ️</a>
@@ -2197,10 +2184,10 @@ html[data-theme="dark"] body{
 </header>
 
  
-<!-- زر فتح المحتويات -->
 
 
-<!-- صندوق المحتويات -->
+
+
 <div class="toc-panel" id="toc">
 
  <div class="toc-header">
@@ -2952,11 +2939,11 @@ knob.textContent = savedTheme === "dark" ? "🌙" : "☀️";
 
 switchBtn.onclick = () => {
 
-  keepScroll(); // حفظ مكان الاسكرول
+  keepScroll();
 
   const html = document.documentElement;
 
-  /* 🔥 منع أي transition لحظة التغيير */
+  
   html.classList.add("theme-switching");
 
   const newTheme = html.dataset.theme === "dark" ? "light" : "dark";
@@ -2967,7 +2954,7 @@ switchBtn.onclick = () => {
   requestAnimationFrame(()=>{
     restoreScroll();
 
-    /* رجوع الانيميشن بعد التغيير */
+    
     setTimeout(()=>{
       html.classList.remove("theme-switching");
     },50);
@@ -2976,7 +2963,7 @@ switchBtn.onclick = () => {
 };
 
 
-/* ===== زر قائمة العناوين (☰) ===== */
+
 const tocBtn = document.querySelector(".toc-toggle");
 const tocPanel = document.getElementById("toc");
 const tocClose = document.getElementById("tocClose");
@@ -2986,14 +2973,14 @@ tocClose.addEventListener("click", () => {
   tocBtn.classList.remove("hidden");
 });
 
-// فتح / غلق القائمة
+
 tocBtn.addEventListener("click", (e) => {
   e.stopPropagation();
   tocPanel.classList.toggle("open");
   tocBtn.classList.toggle("hidden");
 });
 
-// إغلاق قائمة المحتويات عند الضغط خارجها
+
 document.addEventListener("click", (e) => {
   if (
     tocPanel.classList.contains("open") &&
@@ -3007,7 +2994,7 @@ document.addEventListener("click", (e) => {
 
 
 
-// الضغط على عنصر
+
 document.querySelectorAll(".toc-panel li").forEach(item => {
   item.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -3088,7 +3075,7 @@ function updateTopBarSmart() {
     }
   });
 
-  // 1️⃣ لو العنوان ظاهر على الشاشة
+  
   if (visibleTitle) {
     mainTitle.textContent = BASE_TITLE;
     mobileSub.textContent = "";
@@ -3096,7 +3083,7 @@ function updateTopBarSmart() {
     return;
   }
 
-  // 2️⃣ مفيش عنوان ظاهر → نجيب أقرب عنوان فوق
+ 
   let closest = null;
   let closestTop = -Infinity;
 
@@ -3112,13 +3099,13 @@ function updateTopBarSmart() {
     mainTitle.textContent = BASE_TITLE;
 
     if (closest) {
-  // الكمبيوتر
+ 
   if (window.innerWidth > 750) {
     mainTitle.textContent = `${BASE_TITLE} — ${closest.textContent}`;
     mobileSub.textContent = "";
     mobileSub.style.display = "none";
   }
-  // الموبايل
+ 
   else {
     mainTitle.textContent = BASE_TITLE;
     mobileSub.textContent = closest.textContent;
@@ -3147,7 +3134,7 @@ function updateTOCActiveSmart() {
   slides.forEach(slide => {
     const rect = slide.getBoundingClientRect();
 
-    // لو السلايد داخل الشاشة
+    
     if (rect.top <= window.innerHeight * 0.35 && rect.bottom >= 120) {
       const distance = Math.abs(rect.top);
       if (distance < minDistance) {
@@ -3157,7 +3144,7 @@ function updateTOCActiveSmart() {
     }
   });
 
-  // 🔥 FIX آخر سلايد (الخاتمة)
+  
   if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 80) {
     activeSlide = slides[slides.length - 1];
   }
@@ -3193,7 +3180,7 @@ const articleObserver = new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{
     if(entry.isIntersecting){
       entry.target.classList.add("show");
-      articleObserver.unobserve(entry.target); // 👈 المفتاح
+      articleObserver.unobserve(entry.target); 
     }
   });
 },{
@@ -3218,7 +3205,7 @@ window.addEventListener("scroll", updateReadingProgress);
 window.addEventListener("load", updateReadingProgress);
 
 
-// Mobile hint لزر "عن البحث"
+
 const aboutBtn = document.getElementById("aboutBtn");
 
 if (aboutBtn && window.innerWidth <= 600) {
@@ -3254,14 +3241,14 @@ if(mobileBtn){
     }
   };
 
-  /* قفل بالضغط خارج */
+  
   document.addEventListener("click",(e)=>{
     if(!mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)){
       closeMenu();
     }
   });
 
-  /* قفل بالاسكرول */
+ 
   window.addEventListener("scroll", closeMenu);
 }
 
@@ -3298,6 +3285,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
