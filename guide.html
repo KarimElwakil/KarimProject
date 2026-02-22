@@ -1613,9 +1613,16 @@ html[data-theme="dark"] .feature-box{
 
 /* ===== MOBILE MENU FIX FINAL ===== */
 
-/* الكمبيوتر */
 .mobile-menu-wrap{
   display:none;
+}
+
+/* يظهر موبايل بس */
+@media (max-width:700px){
+  .mobile-menu-wrap{
+    display:flex;
+    align-items:center;
+  }
 }
 
 /* الموبايل فقط */
@@ -1624,13 +1631,6 @@ html[data-theme="dark"] .feature-box{
   /* اخفاء ازرار الكمبيوتر */
   .top-actions{
     display:none !important;
-  }
-
-  /* اظهار زر الموبايل */
-  .mobile-menu-wrap{
-    display:flex;
-    align-items:center;
-    position:relative;
   }
 
 }
@@ -1942,7 +1942,7 @@ html[data-theme="dark"] .feature-box{
 </div>
 
        <!-- زر الموبايل (شرح فقط) -->
-<div class="guide-item mobile-only">
+<div class="guide-item">
 
   <!-- الزر الرئيسي -->
   <div class="demo-mobile-wrap">
@@ -2220,38 +2220,11 @@ const db = firebase.database();
 
 <script src="memory.js"></script>
 
-const mobileBtn  = document.getElementById("mobileMenuBtn");
-const mobileMenu = document.getElementById("mobileMenu");
 
-if(mobileBtn){
-
-  mobileBtn.onclick = (e)=>{
-    e.stopPropagation();
-
-    mobileMenu.classList.toggle("open");
-    mobileBtn.classList.toggle("open");
-
-    if(mobileMenu.classList.contains("open")){
-      mobileBtn.textContent = "✕";
-      document.body.style.overflow="hidden"; // منع سكرول
-    }else{
-      mobileBtn.textContent = "✈️";
-      document.body.style.overflow="";
-    }
-  };
-
-  document.addEventListener("click",(e)=>{
-    if(!mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)){
-      mobileMenu.classList.remove("open");
-      mobileBtn.textContent="✈️";
-      document.body.style.overflow="";
-    }
-  });
-
-}
     
 </body>
 </html>
+
 
 
 
