@@ -50,7 +50,7 @@ html[data-theme="dark"] .topbar-inner{
 }
 
 :root{
-  --light-card-bg: #f1f5fb;      /* أزرق فاتح جدًا */
+  --light-card-bg: #f1f5fb;      
   --light-card-border: rgba(37,99,235,.12);
   --light-card-shadow:
     inset 0 1px 2px rgba(255,255,255,.9),
@@ -70,10 +70,10 @@ html[data-theme="dark"]{
  --bg:#0f1115;
   --text:#fff;
 
-  /* 🔥 لون موحّد لكل البراويز */
+  
   --card-bg: rgba(28,30,38,.95);
 
-  /* ✨ Shadow ناعم وراقي */
+ 
   --card-shadow:
     inset 0 1px 2px rgba(255,255,255,.06),
     0 14px 40px rgba(0,0,0,.75);
@@ -110,7 +110,7 @@ body{
 }
 
 
-/* ===== Global Reading Typography ===== */
+
 body{
   font-size: 18px;
   line-height: 1.95;
@@ -118,12 +118,12 @@ body{
 }
 
 
-/* منع التحديد */
+
 .topbar, button, .lang, .lang-item, .switch, h1, h2{
   user-select:none;
 }
 
-/* ===== TOP BAR ===== */
+
 .topbar{
   position:fixed;
   top:20px;
@@ -176,7 +176,7 @@ html[data-theme="dark"] .title-frame{
 
   white-space:nowrap;
   overflow:hidden;
-  text-overflow:ellipsis;  /* ← ذكي مش وحش */
+  text-overflow:ellipsis;  
 }
 
 
@@ -204,7 +204,7 @@ html[data-theme="dark"] .profile-btn{
 
 
 
-/* ===== CONTROLS ===== */
+
 .profile-btn{
   width:36px;
   height:36px;
@@ -228,7 +228,7 @@ html[data-theme="dark"] .profile-btn{
   gap:16px;
 }
 
-/* ===== SWITCH ===== */
+
 .switch{
   
   width:54px;
@@ -274,7 +274,7 @@ html[data-theme="dark"] .topbar{
 
 
 
-/* ===== FOOTER ===== */
+
 .site-footer{
   margin-top:-40px;
   padding:50px 20px;
@@ -333,7 +333,7 @@ html[data-theme="dark"] .topbar{
   display: flex;
 }
 
-/* GRID الفوتر */
+
 .footer-grid{
   display:flex;
   justify-content:space-between;
@@ -344,30 +344,30 @@ html[data-theme="dark"] .topbar{
 .footer-col{
   display:flex;
   flex-direction:column;
-  align-items:center;   /* 👈 أهم سطر */
+  align-items:center;   
   text-align:center;
   gap:12px;
 }
 
-/* يمين */
+
 .footer-col.right{
   text-align:right;
 }
 
-/* شمال */
+
 .footer-col.left{
   text-align:left;
 }
 
-/* تصغير الأزرار */
+
 .footer-btn.small{
   padding:10px 26px;
   font-size:16px;
-  width:auto;           /* ⬅️ مهم */
-  min-width:unset;      /* ⬅️ مهم */
+  width:auto;          
+  min-width:unset;     
 }
 
-/* موبايل */
+
 @media (max-width:600px){
  .footer-text{
     font-size:14px;
@@ -402,7 +402,6 @@ html[data-theme="dark"] .topbar{
 
 
 
-/* ===== Slide Animation ===== */
 
 .topbar{
   animation: dropBar 1s ease forwards;
@@ -432,6 +431,7 @@ html[data-theme="dark"] .topbar{
     opacity:1;
   }
 }
+  
 #progress-bar{
   position:fixed;
   top:0;
@@ -453,33 +453,6 @@ html[data-theme="dark"] .topbar{
 
 
 
-
-
-
-
-
-
-/* الفقرات ترجع طبيعية */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ===== أنيميشن عام لكل الأزرار ===== */
 button,
 .profile-btn,
 .switch,
@@ -521,7 +494,7 @@ button:hover,
 
 
 
-/* === FIX نهائي لأول سلايد === */
+
 body{
   padding-top:140px;
 }
@@ -542,7 +515,7 @@ body{
 
 
 
-/* ===== Tooltip عام ===== */
+
 .tooltip-wrap{
   position: relative;
   display: inline-flex;
@@ -552,17 +525,17 @@ body{
 
 .tooltip-text{
   position: absolute;
-  bottom: -34px;              /* أقرب للزر */
+  bottom: -34px;            
   right: 50%;
   transform: translateX(50%) translateY(4px);
 
   background: rgba(0,0,0,.75);
   color: #fff;
 
-  padding: 4px 10px;          /* ⬅️ أصغر */
+  padding: 4px 10px;         
   border-radius: 999px;
 
-  font-size: 11px;            /* ⬅️ أصغر */
+  font-size: 11px;            
   font-weight: 600;
   line-height: 1.4;
 
@@ -575,7 +548,7 @@ body{
   box-shadow: 0 6px 16px rgba(0,0,0,.25);
 }
 
-/* سهم صغير */
+
 .tooltip-text::after{
   content:"";
   position:absolute;
@@ -591,7 +564,7 @@ body{
   transform: translateX(50%) translateY(0);
 }
 
-/* دارك مود */
+
 html[data-theme="dark"] .tooltip-text{
   background: rgba(255,255,255,.15);
   color:#fff;
@@ -707,7 +680,7 @@ html[data-theme="dark"] .current-topic{
   }
 }
 
-/* ===== TITLE FRAME (FINAL FIX) ===== */
+
 .title-frame{
   display:inline-flex;
   width:auto !important;
@@ -729,19 +702,19 @@ html[data-theme="dark"] .title-frame{
 
 .profile-btn,
 .switch{
-  flex-shrink:0;   /* ❌ ممنوع ينكمش */
+  flex-shrink:0;  
 }
 
 .title-slot{
-  flex:1;                /* ياخد المساحة المتاحة فقط */
+  flex:1;                
   display:flex;
   justify-content:center;
-  min-width:0;           /* مهم جدًا */
+  min-width:0;          
 }
 
 @media (max-width: 600px){
 
-  /* ===== Mobile Subtitle – LIKE INDEX ===== */
+ 
 .mobile-subtitle{
   display:none;
 
@@ -767,7 +740,7 @@ html[data-theme="dark"] .title-frame{
   text-overflow:ellipsis;
 }
 
-/* دارك مود */
+
 html[data-theme="dark"] .mobile-subtitle{
   background:rgba(28,30,36,.95);
   color:#fff;
@@ -814,8 +787,8 @@ html[data-theme="dark"] .mobile-subtitle{
   line-height:1.5;
 
   text-align:center;
-  white-space:normal;     /* ✅ يلف الكلام */
-  word-break:break-word; /* ✅ مفيش خنق */
+  white-space:normal;    
+  word-break:break-word; 
 }
 
 html[data-theme="dark"] .title-frame,
@@ -885,7 +858,7 @@ html[data-theme="dark"] .mobile-subtitle{
   z-index: 2;
 }
 
-/* ===== DARK MODE – GLOBAL CARD STYLE ===== */
+
 html[data-theme="dark"] .topbar,
 html[data-theme="dark"] .title-frame,
 html[data-theme="dark"] .mobile-subtitle,
@@ -897,25 +870,25 @@ html[data-theme="dark"] .site-footer{
 
 html[data-theme="dark"] .topbar,
 
-/* ===== DARK MODE FIX – SWITCH VISIBILITY ===== */
+
 html[data-theme="dark"] .switch{
-  background: rgba(255,255,255,.12);   /* أفتح من الخلفية */
+  background: rgba(255,255,255,.12);   
   border: 1px solid rgba(255,255,255,.25);
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.15),
     0 6px 18px rgba(0,0,0,.6);
 }
 
-/* الـ knob (القمر) */
+
 html[data-theme="dark"] .knob{
-  background: #111;          /* يبان أكتر */
+  background: #111;         
   color: #fff;
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.2),
     0 4px 10px rgba(0,0,0,.6);
 }
 
-/* ===== Dark Mode Unified Frames ===== */
+
 html[data-theme="dark"] .title-frame,
 html[data-theme="dark"] .site-footer,
 html[data-theme="dark"] .mobile-subtitle {
@@ -926,7 +899,7 @@ html[data-theme="dark"] .mobile-subtitle {
 }
 
 
-/* ===== TITLE SOFT REVEAL ANIMATION ===== */
+
 @keyframes titleReveal {
   from {
     opacity: 0;
@@ -970,7 +943,7 @@ html[data-theme="dark"] .mobile-subtitle {
 
 
 
-/* ===== LIGHT MODE – READING FEEDBACK ===== */
+
 
 
 @keyframes darkShadowPulse {
@@ -983,7 +956,7 @@ html[data-theme="dark"] .mobile-subtitle {
 
 
 
-/* ===== ABSOLUTE COLOR LOCK ===== */
+
 html[data-theme="light"] {
   --bg: #f6f7fb;
 }
@@ -992,7 +965,7 @@ html[data-theme="dark"] {
   --bg: #0f1115;
 }
 
-/* ===== PREVENT THEME FLASH ===== */
+
 .theme-lock,
 .theme-lock * {
   transition: none !important;
@@ -1048,13 +1021,13 @@ html[data-theme="dark"] .card{
   box-sizing: border-box;
 }
 
-/* ===== PREVENT SCROLL JUMP ON THEME CHANGE ===== */
+
 html.theme-switching,
 html.theme-switching body {
   overflow-anchor: none !important;
 }
 
-/* ===== GUIDE PAGE STRUCTURE ===== */
+
 
 .slide{
   padding:60px 20px;
@@ -1095,7 +1068,7 @@ html[data-theme="dark"] .article{
   font-size:18px;
 }
 
-/* أيقونات داخل الشرح */
+
 .guide-item{
   display:flex;
   align-items:center;
@@ -1118,7 +1091,7 @@ html[data-theme="dark"] .guide-icon{
   background:rgba(96,165,250,.15);
 }
 
-/* ===== GUIDE TITLE FRAME (BLUE LIKE INDEX) ===== */
+
 
 .article h3{
   display:inline-block;
@@ -1153,7 +1126,7 @@ html[data-theme="dark"] .article h3{
   transform:translateY(-2px);
 }
 
-/* ===== GUIDE BUTTON SIMULATION ===== */
+
 
 .fake-btn{
   display:inline-flex;
@@ -1191,7 +1164,7 @@ html[data-theme="dark"] .fake-btn{
   transform:scale(.96);
 }
 
-/* أيقونة جوا الزرار */
+
 .fake-icon{
   width:30px;
   height:30px;
@@ -1209,7 +1182,7 @@ html[data-theme="dark"] .fake-icon{
   background:rgba(96,165,250,.22);
 }
 
-/* ===== GUIDE ICONS LIKE REAL TOPBAR ===== */
+
 
 .guide-icons{
   display:flex;
@@ -1260,7 +1233,6 @@ html[data-theme="dark"] .guide-icon{
   transform:scale(.95);
 }
 
-/* ===== GUIDE TOOLTIP ===== */
 
 .guide-icon-wrap{
   position:relative;
@@ -1305,7 +1277,6 @@ html[data-theme="dark"] .guide-icon{
   transform:translateX(50%) translateY(0);
 }
 
-/* ===== REALISTIC FAKE SWITCH ===== */
 
 .fake-switch{
   position:relative;
@@ -1342,7 +1313,7 @@ html[data-theme="dark"] .guide-icon{
   transition:.3s ease;
 }
 
-/* الوضع عند التفعيل */
+
 .fake-toggle:checked + .fake-track{
   background:#333;
 }
@@ -1363,7 +1334,7 @@ html[data-theme="dark"] .guide-icon{
 
 
 
-/* ===== GUIDE HIGHLIGHT BOX ===== */
+
 
 .guide-highlight{
   margin-top:40px;
@@ -1414,7 +1385,7 @@ html[data-theme="dark"] .guide-highlight{
 }
 
 
-/* ===== BLUE MENU BUTTON – SAME AS INDEX ===== */
+
 
 .blue-menu-btn{
   width:56px;
@@ -1449,7 +1420,7 @@ html[data-theme="dark"] .guide-highlight{
   transform:scale(.95);
 }
 
-/* الخطوط */
+
 .menu-lines{
   display:flex;
   flex-direction:column;
@@ -1463,7 +1434,7 @@ html[data-theme="dark"] .guide-highlight{
   border-radius:4px;
 }
 
-/* ===== FORCE BLUE INDEX MENU BUTTON ===== */
+
 
 .blue-menu-btn{
   all: unset;
@@ -1482,8 +1453,8 @@ html[data-theme="dark"] .guide-highlight{
   cursor:pointer;
   transition:.25s ease;
 
-   flex-shrink:0;          /* يمنع الانكماش */
-   aspect-ratio:1/1;       /* يقفلها دايرة مهما حصل */
+   flex-shrink:0;        
+   aspect-ratio:1/1;      
 
   user-select:none;
 }
@@ -1499,7 +1470,7 @@ html[data-theme="dark"] .guide-highlight{
   transform:scale(.95);
 }
 
-/* الخطوط */
+
 .blue-menu-btn span{
   display:block;
   width:24px;
@@ -1510,16 +1481,16 @@ html[data-theme="dark"] .guide-highlight{
 }
 
 .blue-menu-btn{
-  color:#fff;                 /* لو أيقونة font */
+  color:#fff;               
 }
 
 .blue-menu-btn i,
 .blue-menu-btn svg{
   color:#fff;
-  fill:#fff;                  /* لو SVG */
+  fill:#fff;                
 }
 
-/* ===== Stagger Card Animation ===== */
+
 
 .article{
   opacity:0;
@@ -1532,7 +1503,6 @@ html[data-theme="dark"] .guide-highlight{
   transform:translateY(0);
 }
 
-/* ===== Important Guide Note Box ===== */
 
 .guide-note{
   margin-top:35px;
@@ -1569,7 +1539,6 @@ html[data-theme="dark"] .guide-note{
     0 18px 40px rgba(0,0,0,.7);
 }
 
-/* ===== Feature Boxes ===== */
 
 .feature-list{
   display:flex;
@@ -1605,15 +1574,13 @@ html[data-theme="dark"] .feature-box{
     0 14px 40px rgba(0,0,0,.7);
 }
 
-/* ===== Disable transitions during theme switch ===== */
+
 .theme-switching *,
 .theme-switching {
   transition: none !important;
 }
 
-/* ===============================
-   MOBILE MENU – REAL BUTTON
-================================ */
+
 
 .mobile-menu-wrap{
   position:relative;
@@ -1697,9 +1664,7 @@ html[data-theme="dark"] .feature-box{
   color:#fff;
 }
 
-  /* ===============================
-   MOBILE MENU – DEMO VERSION
-================================ */
+
 
 .demo-mobile-wrap{
   position:relative;
@@ -1731,7 +1696,7 @@ html[data-theme="dark"] .feature-box{
   align-items:center;
   gap:16px;
 
-  margin-top:16px;   /* مسافة تحت الزر */
+  margin-top:16px;   
   max-height:0;
   overflow:hidden;
 
@@ -1760,13 +1725,13 @@ html[data-theme="dark"] .feature-box{
   transition:transform .18s ease, background .18s ease;
 }
 
-/* Hover بدون شادو */
+
 .demo-icon:hover{
   transform:translateY(-2px) scale(1.05);
   background:rgba(0,0,0,.10);
 }
 
-/* ضغط */
+
 .demo-icon:active{
   transform:scale(.94);
 }
@@ -1778,7 +1743,7 @@ html[data-theme="dark"] .feature-box{
 }
 
 
-/* منع التحديد على الديمو */
+
 .demo-mobile-wrap,
 .demo-mobile-wrap *{
   user-select:none;
@@ -1786,7 +1751,7 @@ html[data-theme="dark"] .feature-box{
   -ms-user-select:none;
 }
 
-  /* ===== مقالات دليل الاستخدام – شكل احترافي مثل المراجع ===== */
+ 
 
 .guide-articles{
   display:flex;
@@ -1813,12 +1778,12 @@ html[data-theme="dark"] .guide-card{
   box-shadow:var(--card-shadow);
 }
 
-/* حركة بسيطة */
+
 .guide-card:hover{
   transform:translateY(-6px) scale(1.01);
 }
 
-/* عنوان الكارت */
+
 .guide-card-title{
   font-size:22px;
   font-weight:900;
@@ -1838,7 +1803,7 @@ html[data-theme="dark"] .guide-card-title{
   background:rgba(96,165,250,.22);
 }
 
-/* نص */
+
 .guide-card p{
   line-height:2;
   font-size:17px;
@@ -1846,7 +1811,7 @@ html[data-theme="dark"] .guide-card-title{
   margin-bottom:10px;
 }
 
-/* شريط جانبي جمالي */
+
 .guide-card::before{
   content:"";
   position:absolute;
@@ -1865,7 +1830,7 @@ html[data-theme="dark"] .guide-card-title{
 
 <body>
 
-  <!-- Analytics hidden containers -->
+
 <div id="statsRow1" style="display:none"></div>
 <div id="statsRow2" style="display:none"></div>
 
@@ -1874,7 +1839,7 @@ html[data-theme="dark"] .guide-card-title{
   <div class="topbar-inner">
 
 
- <!-- شمال -->
+ 
   <div class="switch" id="themeSwitch">
     <div class="knob" id="knob">☀️</div>
   </div>
@@ -1882,7 +1847,7 @@ html[data-theme="dark"] .guide-card-title{
 
 
 
-    <!-- النص (العنوان فقط) -->
+   
   <div class="title-slot">
   <div class="title-frame">
     <span id="topTitleMain" class="title-main">دليل المستخدم</span>
@@ -1892,7 +1857,7 @@ html[data-theme="dark"] .guide-card-title{
 
 
 
-  <!-- مجموعة أزرار اليمين -->
+ 
 <div class="top-actions">
 
   <div class="tooltip-wrap">
@@ -1912,14 +1877,14 @@ html[data-theme="dark"] .guide-card-title{
 </div>
 </div>
     
-  <!-- زر الموبايل -->
+  
   <div class="mobile-menu-wrap">
 
     <div class="tooltip-wrap">
       <div class="mobile-menu-btn" id="mobileMenuBtn">✈️</div>
     </div>
 
-    <!-- القائمة المنسدلة -->
+   
     <div class="mobile-menu" id="mobileMenu">
       <a href="profile.html" class="profile-btn">👤</a>
       <a href="about.html" class="profile-btn">ℹ️</a>
@@ -2018,15 +1983,15 @@ html[data-theme="dark"] .guide-card-title{
 
 </div>
 
-       <!-- زر الموبايل (شرح فقط) -->
+     
 <div class="guide-item">
 
-  <!-- الزر الرئيسي -->
+ 
   <div class="demo-mobile-wrap">
 
     <div class="demo-mobile-btn" id="demoMenuBtn">✈️</div>
 
-    <!-- القائمة -->
+   
     <div class="demo-mobile-menu" id="demoMenu">
 
       <div class="demo-icon">👤</div>
@@ -2283,14 +2248,14 @@ const html = document.documentElement;
 const switchBtn = document.getElementById("themeSwitch");
 const knob = document.getElementById("knob");
 
-/* تحميل الثيم */
+
 const savedTheme = localStorage.getItem("theme") || "light";
 html.dataset.theme = savedTheme;
 updateKnob(savedTheme);
 
 switchBtn.onclick = () => {
 
-  /* 1️⃣ وقف الترانزيشن مؤقتًا */
+ 
   html.classList.add("theme-switching");
 
   const newTheme =
@@ -2300,7 +2265,7 @@ switchBtn.onclick = () => {
   localStorage.setItem("theme", newTheme);
   updateKnob(newTheme);
 
-  /* 2️⃣ رجّع الترانزيشن بعد فريم */
+ 
   requestAnimationFrame(() => {
     setTimeout(() => {
       html.classList.remove("theme-switching");
@@ -2319,7 +2284,7 @@ const topTitle = document.getElementById("topTitleMain");
 
 
 const BASE_TITLE = "عن البحث";
-const TOPBAR_OFFSET = 140; // نفس padding-top
+const TOPBAR_OFFSET = 140; 
 
 
 
@@ -2328,7 +2293,7 @@ const TOPBAR_OFFSET = 140; // نفس padding-top
 
 
 
-/* ===== Stagger ظهور الكروت ===== */
+
 
 const cards = document.querySelectorAll(".article");
 
@@ -2336,7 +2301,7 @@ function revealCards(){
   cards.forEach((card, index) => {
     setTimeout(() => {
       card.classList.add("show");
-    }, index * 250); // فرق 250ms بين كل كارت
+    }, index * 250); 
   });
 }
 
@@ -2368,14 +2333,14 @@ if(mobileBtn){
     }
   };
 
-  /* قفل بالضغط خارج */
+ 
   document.addEventListener("click",(e)=>{
     if(!mobileMenu.contains(e.target) && !mobileBtn.contains(e.target)){
       closeMenu();
     }
   });
 
-  /* قفل بالاسكرول */
+
   window.addEventListener("scroll", closeMenu);
 }
 
@@ -2428,6 +2393,7 @@ if(demoBtn){
     
 </body>
 </html>
+
 
 
 
