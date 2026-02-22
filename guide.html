@@ -1699,70 +1699,88 @@ html[data-theme="dark"] .feature-box{
   }
 }
 
-  /* ===== FAKE MOBILE MENU IN GUIDE ===== */
-.fake-menu-wrap{
+/* يخفيه من الكمبيوتر */
+@media (min-width:900px){
+  .mobile-only{
+    display:none;
+  }
+}
+
+/* الحاوية */
+.demo-mobile-wrap{
+  position:relative;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:14px;
-  margin-bottom:10px;
 }
 
-/* زر */
-.fake-menu-btn{
-  width:48px;
-  height:48px;
+/* زر الطيارة */
+.demo-mobile-btn{
+  width:56px;
+  height:56px;
   border-radius:50%;
-  background:#3b82f6;
+  background:#e5e7eb;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:22px;
-  color:#fff;
+  font-size:26px;
   cursor:pointer;
   transition:.35s;
 }
 
-.fake-menu-btn:hover{
-  transform:scale(1.08);
+/* شكل الاكس */
+.demo-mobile-btn.open{
+  font-size:28px;
+  transform:rotate(180deg);
 }
 
 /* القائمة */
-.fake-menu-list{
+.demo-mobile-menu{
+  margin-top:22px; /* نفس المسافة اللي عندك بالمللي */
   display:flex;
   flex-direction:column;
-  gap:12px;
+  gap:16px;
+
   max-height:0;
   overflow:hidden;
   opacity:0;
-  transform:translateY(-10px);
+
   transition:.4s ease;
 }
 
-/* عند الفتح */
-.fake-menu-list.open{
-  max-height:200px;
+/* لما تفتح */
+.demo-mobile-menu.show{
+  max-height:400px;
   opacity:1;
-  transform:translateY(0);
 }
 
-/* الازرار */
-.fake-circle{
-  width:42px;
-  height:42px;
+/* الايقونات */
+.demo-icon{
+  width:56px;
+  height:56px;
   border-radius:50%;
-  background:rgba(0,0,0,.08);
+  background:#e5e7eb;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:18px;
-  transition:.25s;
+  font-size:22px;
+
+  transform:translateY(-15px);
+  opacity:0;
+  transition:.35s;
 }
 
-html[data-theme="dark"] .fake-circle{
-  background:rgba(255,255,255,.12);
-  color:#fff;
+/* انيميشن الظهور */
+.demo-mobile-menu.show .demo-icon{
+  transform:translateY(0);
+  opacity:1;
 }
+
+/* تأخير نزول كل زر */
+.demo-mobile-menu.show .demo-icon:nth-child(1){transition-delay:.05s}
+.demo-mobile-menu.show .demo-icon:nth-child(2){transition-delay:.12s}
+.demo-mobile-menu.show .demo-icon:nth-child(3){transition-delay:.19s}
+.demo-mobile-menu.show .demo-icon:nth-child(4){transition-delay:.26s}
 
 
 /* =============================================================================== ===== */
@@ -1924,30 +1942,31 @@ html[data-theme="dark"] .fake-circle{
 
 </div>
 
-        <div class="guide-item">
+       <!-- زر الموبايل (شرح فقط) -->
+<div class="guide-item mobile-only">
 
-  <!-- زر المينيو -->
-  <div class="fake-menu-wrap">
+  <!-- الزر الرئيسي -->
+  <div class="demo-mobile-wrap">
 
-    <div class="fake-menu-btn" id="guideMenuBtn">
-      <span id="guideMenuIcon">✈️</span>
-    </div>
+    <div class="demo-mobile-btn" id="demoMenuBtn">✈️</div>
 
     <!-- القائمة -->
-    <div class="fake-menu-list" id="guideMenuList">
-      <div class="fake-circle">👤</div>
-      <div class="fake-circle">📄</div>
-      <div class="fake-circle">ℹ️</div>
-      <div class="fake-circle">❓</div>
+    <div class="demo-mobile-menu" id="demoMenu">
+
+      <div class="demo-icon">👤</div>
+      <div class="demo-icon">ℹ️</div>
+      <div class="demo-icon">❓</div>
+      <div class="demo-icon">📄</div>
+
     </div>
 
   </div>
 
   <div class="guide-text">
-    <h4>زر قائمة الانتقالات في الهاتف</h4>
+    <h4>زر قائمة الهواتف</h4>
     <p>
       يظهر هذا الزر في الهواتف فقط بسبب صغر مساحة الشريط العلوي،
-      وعند الضغط عليه تظهر أزرار التنقل بشكل منظم لتسهيل الاستخدام.
+      وعند الضغط عليه تظهر أزرار التنقل بشكل رأسي منظم.
     </p>
   </div>
 
@@ -2203,28 +2222,32 @@ const db = firebase.database();
 <script src="memory.js"></script>
 
 <script>
-const guideBtn  = document.getElementById("guideMenuBtn");
-const guideList = document.getElementById("guideMenuList");
-const guideIcon = document.getElementById("guideMenuIcon");
 
-if(guideBtn){
+const demoBtn  = document.getElementById("demoMenuBtn");
+const demoMenu = document.getElementById("demoMenu");
 
-  guideBtn.onclick = ()=>{
+if(demoBtn){
 
-    guideList.classList.toggle("open");
+  demoBtn.onclick = ()=>{
 
-    if(guideList.classList.contains("open")){
-      guideIcon.textContent = "✕";
+    demoMenu.classList.toggle("show");
+
+    if(demoMenu.classList.contains("show")){
+      demoBtn.textContent = "✕";
+      demoBtn.classList.add("open");
     }else{
-      guideIcon.textContent = "✈️";
+      demoBtn.textContent = "✈️";
+      demoBtn.classList.remove("open");
     }
 
   };
 
 }
+
 </script>
     
 </body>
 </html>
+
 
 
