@@ -2131,31 +2131,33 @@ html[data-theme="dark"] body{
   [data-theme="dark"] .footer-text{
   color:#ffffff !important;
 }
-/* ===== نهاية البحث في الموبايل والتابلت فقط ===== */
-.mobile-end-space{
+
+
+
+/* نهاية قائمة المحتويات للموبايل فقط */
+.toc-end{
   display:none;
 }
 
 @media (max-width:1024px){
-
-  .mobile-end-space{
+  .toc-end{
     display:block;
     text-align:center;
     font-weight:800;
-    font-size:15px;
+    font-size:14px;
     opacity:.7;
 
-    margin-top:40px;
-    margin-bottom:120px; /* أهم سطر علشان شريط الموبايل */
+    margin-top:18px;
+    padding-bottom:80px; /* مسافة عن شريط الموبايل */
   }
 
-  /* دارك مود */
-  [data-theme="dark"] .mobile-end-space{
+  [data-theme="dark"] .toc-end{
     color:#fff;
     opacity:.85;
   }
-
 }
+
+  
 
 /* =============================================================================== ===== */
 </style>
@@ -2254,7 +2256,9 @@ html[data-theme="dark"] body{
   </ul>
 </div>
 
-
+<div class="toc-end">
+انتهى المحتوى ✔
+</div>
 
 
 <!-- ===== SLIDE 1 ===== -->
@@ -2927,12 +2931,7 @@ html[data-theme="dark"] body{
       </ul>
 
     </div>
-
   </div>
-
- <div class="mobile-end-space">
-انتهى المحتوى ✔
-</div>
 </section>
     
 <div class="end-message">
@@ -3324,6 +3323,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
