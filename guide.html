@@ -1699,6 +1699,71 @@ html[data-theme="dark"] .feature-box{
   }
 }
 
+  /* ===== FAKE MOBILE MENU IN GUIDE ===== */
+.fake-menu-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  margin-bottom:10px;
+}
+
+/* زر */
+.fake-menu-btn{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#3b82f6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  color:#fff;
+  cursor:pointer;
+  transition:.35s;
+}
+
+.fake-menu-btn:hover{
+  transform:scale(1.08);
+}
+
+/* القائمة */
+.fake-menu-list{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  max-height:0;
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(-10px);
+  transition:.4s ease;
+}
+
+/* عند الفتح */
+.fake-menu-list.open{
+  max-height:200px;
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* الازرار */
+.fake-circle{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:rgba(0,0,0,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  transition:.25s;
+}
+
+html[data-theme="dark"] .fake-circle{
+  background:rgba(255,255,255,.12);
+  color:#fff;
+}
+
 
 /* =============================================================================== ===== */
 </style>
@@ -1854,6 +1919,35 @@ html[data-theme="dark"] .feature-box{
     <p>
       يفتح صفحة دليل المستخدم التي تشرح كيفية التنقل
       داخل الموقع وطريقة استخدام جميع العناصر التفاعلية.
+    </p>
+  </div>
+
+</div>
+
+        <div class="guide-item">
+
+  <!-- زر المينيو -->
+  <div class="fake-menu-wrap">
+
+    <div class="fake-menu-btn" id="guideMenuBtn">
+      <span id="guideMenuIcon">✈️</span>
+    </div>
+
+    <!-- القائمة -->
+    <div class="fake-menu-list" id="guideMenuList">
+      <div class="fake-circle">👤</div>
+      <div class="fake-circle">📄</div>
+      <div class="fake-circle">ℹ️</div>
+      <div class="fake-circle">❓</div>
+    </div>
+
+  </div>
+
+  <div class="guide-text">
+    <h4>زر قائمة الانتقالات في الهاتف</h4>
+    <p>
+      يظهر هذا الزر في الهواتف فقط بسبب صغر مساحة الشريط العلوي،
+      وعند الضغط عليه تظهر أزرار التنقل بشكل منظم لتسهيل الاستخدام.
     </p>
   </div>
 
@@ -2108,7 +2202,29 @@ const db = firebase.database();
 
 <script src="memory.js"></script>
 
+<script>
+const guideBtn  = document.getElementById("guideMenuBtn");
+const guideList = document.getElementById("guideMenuList");
+const guideIcon = document.getElementById("guideMenuIcon");
+
+if(guideBtn){
+
+  guideBtn.onclick = ()=>{
+
+    guideList.classList.toggle("open");
+
+    if(guideList.classList.contains("open")){
+      guideIcon.textContent = "✕";
+    }else{
+      guideIcon.textContent = "✈️";
+    }
+
+  };
+
+}
+</script>
     
 </body>
 </html>
+
 
