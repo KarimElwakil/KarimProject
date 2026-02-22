@@ -2062,34 +2062,31 @@ html[data-theme="dark"] body{
 
   /* ===== FIX FINAL FONT DESKTOP ===== */
 
-/* الكمبيوتر فقط */
+/* ===== DESKTOP FONT RESET ===== */
 @media (min-width: 900px){
 
-  body{
-    font-size:17px !important;
-  }
-
-  .article p{
-    font-size:18px !important;
-    line-height:1.9;
+  .section-title h2{
+    font-size: 34px;
+    padding:18px 60px;
+    white-space:nowrap;
   }
 
   .article h3{
-    font-size:20px !important;
-    padding:12px 22px !important;
+    font-size:22px;
+    padding:14px 28px;
   }
 
-  .section-title h2{
-    font-size:26px !important;
-    padding:14px 40px !important;
+  .article p{
+    font-size:19px;
+    line-height:2.1;
   }
 
 }
-
+  
   /* منع أي عنوان يوسع البوكس */
 .section-title h2,
 .article h3{
-  max-width:100%;
+  max-width:92%;
   width:auto;
   box-sizing:border-box;
 }
@@ -2097,6 +2094,28 @@ html[data-theme="dark"] body{
 /* يمنع تمدد البراويز */
 .article{
   overflow:hidden;
+}
+
+  /* ===== MOBILE TITLES SMART ===== */
+@media (max-width:600px){
+
+  /* العناوين الرئيسية الكبيرة */
+  .section-title h2{
+    font-size: clamp(18px, 4.8vw, 26px);
+    padding:14px 22px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width:92%;
+    margin:auto;
+  }
+
+  /* العناوين الفرعية الزرقا */
+  .article h3{
+    font-size: clamp(17px,4.2vw,22px);
+    padding:12px 18px;
+  }
+
 }
 
 /* =============================================================================== ===== */
@@ -3262,6 +3281,7 @@ const db = firebase.database();
   
 </body>
 </html>
+
 
 
 
