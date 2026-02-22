@@ -2060,7 +2060,44 @@ html[data-theme="dark"] body{
   color:#ffffff !important;
 }
 
+  /* ===== FIX FINAL FONT DESKTOP ===== */
 
+/* الكمبيوتر فقط */
+@media (min-width: 900px){
+
+  body{
+    font-size:17px !important;
+  }
+
+  .article p{
+    font-size:18px !important;
+    line-height:1.9;
+  }
+
+  .article h3{
+    font-size:20px !important;
+    padding:12px 22px !important;
+  }
+
+  .section-title h2{
+    font-size:26px !important;
+    padding:14px 40px !important;
+  }
+
+}
+
+  /* منع أي عنوان يوسع البوكس */
+.section-title h2,
+.article h3{
+  max-width:100%;
+  width:auto;
+  box-sizing:border-box;
+}
+
+/* يمنع تمدد البراويز */
+.article{
+  overflow:hidden;
+}
 
 /* =============================================================================== ===== */
 </style>
@@ -3220,38 +3257,12 @@ const db = firebase.database();
 
 <script src="memory.js"></script>
 
-<script>
-function autoFitTitles(){
 
-  const titles = document.querySelectorAll(
-    ".section-title h2, .article h3"
-  );
-
-  titles.forEach(el => {
-
-    el.style.whiteSpace = "nowrap";
-
-    let size = 26; // بداية حجم
-    if(el.classList.contains("article-title")) size = 20;
-
-    el.style.fontSize = size + "px";
-
-    while(el.scrollWidth > el.clientWidth && size > 13){
-      size--;
-      el.style.fontSize = size + "px";
-    }
-
-  });
-
-}
-
-window.addEventListener("load", autoFitTitles);
-window.addEventListener("resize", autoFitTitles);
-</script>
 
   
 </body>
 </html>
+
 
 
 
