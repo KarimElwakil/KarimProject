@@ -89,7 +89,22 @@ db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
 });
 
+function sendTelegram(text){
 
+ const TELEGRAM_BOT = "توكن البوت";
+ const TELEGRAM_CHAT = "chatid";
+
+ fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:TELEGRAM_CHAT,
+    text:text
+  })
+ });
+
+}
+  
 function startAnalytics(){
 
   /* ================================
@@ -770,6 +785,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
