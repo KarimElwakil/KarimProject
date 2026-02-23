@@ -2,7 +2,7 @@ console.log("Analytics system starting...");
 
 console.log("Firebase working test");
 
-let stopAllTracking = false;
+let stopAllTracking = window.stopAllTracking || false;
 
 // ===== UI HELPERS =====
 
@@ -832,6 +832,7 @@ document.addEventListener("visibilitychange", ()=>{
 }); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
