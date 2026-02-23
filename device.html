@@ -13,6 +13,7 @@ font-weight:bold;
 margin-bottom:10px">
 ⚙ إعدادات الجهاز
 </button>
+  
   <div id="deviceSettings" style="
 display:none;
 background:#0f172a;
@@ -21,16 +22,8 @@ border-radius:14px;
 margin-bottom:20px;
 border:1px solid #1e293b">
 </div>
-  <button onclick="toggleNotify()" style="
-background:#0ea5e9;
-border:none;
-padding:8px 18px;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
-margin-bottom:10px">
-🔔 إشعار عند دخول الجهاز
-</button>
+  
+ 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
@@ -90,7 +83,53 @@ transition:.2s;
 transform:scale(1.05);
 }
 
+.setting-switch{
+display:flex;
+align-items:center;
+justify-content:space-between;
+background:#0f172a;
+padding:14px 18px;
+border-radius:14px;
+margin:8px 0;
+font-weight:bold;
+}
 
+.switch-btn{
+width:60px;
+height:28px;
+border-radius:20px;
+cursor:pointer;
+position:relative;
+transition:.3s;
+}
+
+.switch-btn::after{
+content:"";
+position:absolute;
+top:4px;
+left:4px;
+width:20px;
+height:20px;
+border-radius:50%;
+background:#fff;
+transition:.3s;
+}
+
+/* OFF */
+.switch-off{
+background:#ff3b3b;
+}
+.switch-off::after{
+left:4px;
+}
+
+/* ON */
+.switch-on{
+background:#00e676;
+}
+.switch-on::after{
+left:36px;
+}
 </style>
 </head>
 <body>
@@ -1092,6 +1131,16 @@ function openSettings(){
  box.innerHTML = `
  <h3>⚙ إعدادات الجهاز</h3>
 
+ <div class="setting-switch">
+اشعار دخول الجهاز 🔔
+<div id="notifySwitch" class="switch-btn switch-off" onclick="toggleNotify()"></div>
+</div>
+
+<div class="setting-switch">
+Ban الجهاز 🚫
+<div id="banSwitch" class="switch-btn switch-off" onclick="toggleBan()"></div>
+</div>
+
  <div style="margin-top:15px">
 
  <button onclick="deleteDeviceFull()" class="switchBtn" style="background:#dc2626">
@@ -1106,13 +1155,6 @@ function openSettings(){
  📄 حذف صفحة
  </button>
 
- <button onclick="toggleBan()" class="switchBtn" id="banBtn">
- 🔴 Ban الجهاز
- </button>
-
- <button onclick="toggleNotify()" class="switchBtn" id="notifyBtn">
- 🔔 إشعار دخول الجهاز
- </button>
 
  </div>
 
@@ -1182,39 +1224,45 @@ function deleteSession(deviceKey,browser,sessionId){
 
 }
 
-  function toggleBan(){
 
- const banRef = db.ref("bannedDevices/"+id);
+/* ================================
+   SWITCH SYSTEM FINAL
+================================ */
 
- banRef.once("value").then(snap=>{
+const settingsRef = db.ref("deviceSettings/"+id);
 
-  if(snap.exists()){
-    banRef.remove();
-    alert("تم إلغاء الحظر");
-  }else{
-    banRef.set(true);
-    alert("تم حظر الجهاز");
-  }
+// تحميل الحالة
+settingsRef.on("value",snap=>{
+ const s = snap.val()||{};
 
- });
+ updateSwitch("notifySwitch", s.notify);
+ updateSwitch("banSwitch", s.banned);
+});
+
+function updateSwitch(el,val){
+ const btn=document.getElementById(el);
+ if(!btn) return;
+
+ if(val){
+  btn.classList.remove("switch-off");
+  btn.classList.add("switch-on");
+ }else{
+  btn.classList.add("switch-off");
+  btn.classList.remove("switch-on");
+ }
+}
+
+// اشعارات
+function toggleNotify(){
+
+ settingsRef.child("notify").transaction(v=>!v);
 
 }
 
-function toggleNotify(){
+// بان الجهاز
+function toggleBan(){
 
- const ref = db.ref("deviceSettings/"+id+"/notify");
-
- ref.once("value").then(snap=>{
-
-  if(snap.exists() && snap.val()===true){
-    ref.set(false);
-    alert("تم إيقاف إشعارات الدخول");
-  }else{
-    ref.set(true);
-    alert("تم تفعيل إشعارات الدخول");
-  }
-
- });
+ settingsRef.child("banned").transaction(v=>!v);
 
 }
 
