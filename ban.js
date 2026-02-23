@@ -1,4 +1,4 @@
-(function(){
+
 
 /* 🛑 اخفي الصفحة فوراً لحد ما نقرر */
 document.documentElement.style.display="none";
@@ -86,3 +86,4 @@ firebase.database()
 });
 
 })();
+
