@@ -70,28 +70,55 @@ db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
   localStorage.setItem("deviceId", deviceId);
 
-  // 🔴 مراقبة البان realtime
 firebase.database()
 .ref("deviceSettings/"+deviceId+"/banned")
 .on("value",snap=>{
 
- if(snap.val()===true){
+ const banned = snap.val()===true;
 
-  document.body.innerHTML = `
-  <div style="
-  background:black;
-  color:red;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  font-weight:bold">
-  🚫 تم حظر هذا الجهاز من الموقع
-  </div>`;
+ if(banned){
 
-  throw new Error("banned");
+   document.documentElement.style.overflow="hidden";
+   document.body.style.overflow="hidden";
+   document.body.style.margin="0";
+   document.body.style.height="100vh";
+
+   let banBox = document.getElementById("banOverlay");
+
+   if(!banBox){
+     banBox = document.createElement("div");
+     banBox.id="banOverlay";
+     banBox.style.position="fixed";
+     banBox.style.top="0";
+     banBox.style.left="0";
+     banBox.style.width="100%";
+     banBox.style.height="100%";
+     banBox.style.background="black";
+     banBox.style.display="flex";
+     banBox.style.alignItems="center";
+     banBox.style.justifyContent="center";
+     banBox.style.fontSize="28px";
+     banBox.style.fontWeight="bold";
+     banBox.style.color="red";
+     banBox.style.zIndex="999999";
+
+     banBox.innerHTML="🚫 تم حظر هذا الجهاز من الموقع";
+
+     document.body.appendChild(banBox);
+   }
+
+ }else{
+
+   document.documentElement.style.overflow="";
+   document.body.style.overflow="";
+   document.body.style.height="";
+
+   const banBox = document.getElementById("banOverlay");
+   if(banBox) banBox.remove();
+
  }
+
+
 
   // لو مش محظور يبدأ التحليلات
 startAnalytics();
@@ -783,6 +810,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
