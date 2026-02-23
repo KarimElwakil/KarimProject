@@ -1,24 +1,4 @@
 
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyCs6OJNRdad5jwpaWOmEzs-Z_71QJcA-4M",
-  authDomain: "searchanalytics-4bbbf.firebaseapp.com",
-  databaseURL: "https://searchanalytics-4bbbf-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "searchanalytics-4bbbf",
-  storageBucket: "searchanalytics-4bbbf.firebasestorage.app",
-  messagingSenderId: "555407096660",
-  appId: "1:555407096660:web:3a3865df93d90d4147e6c1"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-</script>
-
-<!-- 🔴 BAN SYSTEM START -->
-<script>
 (function(){
 
 // نمنع عرض الصفحة لحد ما نتاكد
@@ -83,5 +63,6 @@ firebase.database()
 });
 
 })();
-</script>
+
+
 <!-- 🔴 BAN SYSTEM END -->
