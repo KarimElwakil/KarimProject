@@ -1041,15 +1041,13 @@ deviceRef.on("value",snap=>{
 
    const newData = devices[k];
 
-   // أول تحميل بس يرسم
-   if(!firstLoadDone){
-     firstLoadDone = true;
-     drawDevice(k,newData);
+   // لو فيه جلسة مفتوحة متعملش redraw
+   if(openedSession) {
+     liveUpdateDevice(newData);
      return;
    }
 
-   // تحديث لايف بدون إعادة رسم
-   liveUpdateDevice(newData);
+   drawDevice(k,newData);
 
  });
 });
@@ -1203,15 +1201,17 @@ Ban الجهاز 🚫
 function deletePageMenu(){
 
  const extra = document.getElementById("settingsExtra");
- extra.innerHTML="<h4>📄 حذف صفحة:</h4>";
+ extra.innerHTML="<h4>اختر الصفحة:</h4>";
 
  db.ref("analytics/devices/"+id+"/browsers").once("value").then(snap=>{
+
   const browsers = snap.val();
   if(!browsers) return;
 
   let sessionCounter = 0;
 
   Object.keys(browsers).forEach(browser=>{
+
     const sessions = browsers[browser].sessions;
     if(!sessions) return;
 
@@ -1223,27 +1223,36 @@ function deletePageMenu(){
 
       Object.keys(pages).forEach(pageName=>{
 
-        const last = pages[pageName].lastSeen?.readable || "";
+        const visits = pages[pageName].visits;
+        if(!visits) return;
 
-        extra.innerHTML+=`
-        <div style="
-        background:#020617;
-        padding:12px;
-        border-radius:10px;
-        margin:8px 0;
-        border:1px solid #0f172a">
+        Object.keys(visits).forEach(visitId=>{
 
-        <b>📄 ${pageName}</b><br>
-        🧠 جلسة رقم: ${sessionCounter}<br>
-        🕒 ${last}
+          const v = visits[visitId];
 
-        <button onclick="deletePageReal('${browser}','${sessionId}','${pageName}')"
-        style="margin-top:6px;background:#dc2626;border:none;padding:6px 14px;border-radius:8px;cursor:pointer">
-        حذف الصفحة
-        </button>
+          const time = new Date(v.enterTimestamp || Date.now())
+          .toLocaleString();
 
-        </div>
-        `;
+          extra.innerHTML+=`
+          <div style="margin:10px 0;padding:10px;background:#020617;border-radius:10px">
+
+          📄 ${pageName}
+          <br>
+          🧠 جلسة رقم: ${sessionCounter}
+          <br>
+          🕒 ${time}
+
+          <br><br>
+
+          <button onclick="deletePageReal('${browser}','${sessionId}','${pageName}','${visitId}')"
+          style="background:#dc2626;border:none;padding:6px 14px;border-radius:8px">
+          حذف الصفحة
+          </button>
+
+          </div>
+          `;
+
+        });
 
       });
 
@@ -1252,26 +1261,17 @@ function deletePageMenu(){
   });
 
  });
-
 }
 
-function deletePageReal(browser,sessionId,pageName){
+function deletePageReal(browser,sessionId,pageName,visitId){
 
- db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}`)
- .remove()
- .then(()=>{
+db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}/visits/${visitId}`)
+.remove()
+.then(()=>{
 
-   // امسحها فوراً من الواجهة
-   deletePageMenu();
+ deletePageMenu(); // تحديث القائمة فوراً
 
-   // لو الجلسة مفتوحة تحت
-   const box = document.getElementById("sess_"+safeId(sessionId));
-   if(box){
-     box.innerHTML = "<div style='color:#888'>تم حذف الصفحة</div>";
-   }
-
- });
-
+});
 }
 
   function deleteDeviceFull(){
