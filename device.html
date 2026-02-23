@@ -33,6 +33,7 @@ border:1px solid #1e293b">
   let openedSession = null;
 let openedPage = null;
   let liveSessionListener = null;
+  let sessionsLiveRef = null;
 
   
 
@@ -160,6 +161,33 @@ const db = firebase.database();
 const url = new URL(location.href);
 const id = url.searchParams.get("id");
   const settingsRef = db.ref("deviceSettings/"+id);
+
+ // 🔥 مراقبة الجلسات لايف
+sessionsLiveRef = db.ref("analytics/devices/"+id+"/browsers");
+
+sessionsLiveRef.on("value",snap=>{
+
+ const data = snap.val();
+ if(!data) return;
+
+ document.querySelectorAll("[id^='sess_']").forEach(el=>{
+   const sid = el.id.replace("sess_","");
+   let exists = false;
+
+   Object.values(data).forEach(browser=>{
+     if(browser.sessions && browser.sessions[sid]){
+       exists = true;
+     }
+   });
+
+   // لو الجلسة اتحذفت من الداتا
+   if(!exists){
+     const card = el.closest(".card");
+     if(card) card.remove();
+   }
+ });
+
+});
 
 const container = document.getElementById("info");
 container.innerHTML = "جاري تحميل بيانات الجهاز...";
@@ -1172,44 +1200,50 @@ Ban الجهاز 🚫
  `;
 }
 
- function deletePageMenu(){
+function deletePageMenu(){
 
  const extra = document.getElementById("settingsExtra");
- extra.innerHTML="<h4>اختر الصفحة:</h4>";
+ extra.innerHTML="<h4>📄 حذف صفحة:</h4>";
 
- db.ref("analytics/devices").once("value").then(snap=>{
+ db.ref("analytics/devices/"+id+"/browsers").once("value").then(snap=>{
+  const browsers = snap.val();
+  if(!browsers) return;
 
-  const devices = snap.val();
-  if(!devices) return;
+  let sessionCounter = 0;
 
-  Object.keys(devices).forEach(deviceKey=>{
-    if(!deviceKey.includes(id)) return;
+  Object.keys(browsers).forEach(browser=>{
+    const sessions = browsers[browser].sessions;
+    if(!sessions) return;
 
-    const device = devices[deviceKey];
-    if(!device.browsers) return;
+    Object.keys(sessions).forEach(sessionId=>{
+      sessionCounter++;
 
-    Object.keys(device.browsers).forEach(browser=>{
-      const sessions=device.browsers[browser].sessions;
-      if(!sessions) return;
+      const pages = sessions[sessionId].pages;
+      if(!pages) return;
 
-      Object.keys(sessions).forEach(sessionId=>{
+      Object.keys(pages).forEach(pageName=>{
 
-        const pages = sessions[sessionId].pages;
-        if(!pages) return;
+        const last = pages[pageName].lastSeen?.readable || "";
 
-        Object.keys(pages).forEach(pageName=>{
+        extra.innerHTML+=`
+        <div style="
+        background:#020617;
+        padding:12px;
+        border-radius:10px;
+        margin:8px 0;
+        border:1px solid #0f172a">
 
-          extra.innerHTML+=`
-          <div style="margin:8px 0">
-          ${pageName}
-          <button onclick="deletePage('${deviceKey}','${browser}','${sessionId}','${pageName}')"
-          style="margin-right:10px;background:#dc2626;border:none;padding:4px 10px;border-radius:6px">
-          حذف
-          </button>
-          </div>
-          `;
+        <b>📄 ${pageName}</b><br>
+        🧠 جلسة رقم: ${sessionCounter}<br>
+        🕒 ${last}
 
-        });
+        <button onclick="deletePageReal('${browser}','${sessionId}','${pageName}')"
+        style="margin-top:6px;background:#dc2626;border:none;padding:6px 14px;border-radius:8px;cursor:pointer">
+        حذف الصفحة
+        </button>
+
+        </div>
+        `;
 
       });
 
@@ -1221,12 +1255,21 @@ Ban الجهاز 🚫
 
 }
 
-  function deletePage(deviceKey,browser,sessionId,pageName){
+function deletePageReal(browser,sessionId,pageName){
 
- db.ref(`analytics/devices/${deviceKey}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}`)
+ db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}`)
  .remove()
  .then(()=>{
+
+   // امسحها فوراً من الواجهة
    deletePageMenu();
+
+   // لو الجلسة مفتوحة تحت
+   const box = document.getElementById("sess_"+safeId(sessionId));
+   if(box){
+     box.innerHTML = "<div style='color:#888'>تم حذف الصفحة</div>";
+   }
+
  });
 
 }
@@ -1289,15 +1332,15 @@ function deleteSession(deviceKey,browser,sessionId){
  db.ref(`analytics/devices/${deviceKey}/browsers/${browser}/sessions/${sessionId}`)
  .remove()
  .then(()=>{
-
-   // امسحها من الواجهة فوراً
-   const card = document.getElementById("sess_"+safeId(sessionId))?.closest(".card");
-   if(card) card.remove();
-
+   // تختفي فوراً من كل مكان
+   document.querySelectorAll(`[id*="${sessionId}"]`).forEach(el=>{
+     const card = el.closest(".card");
+     if(card) card.remove();
+   });
  });
 
 }
-
+  
 function updateSwitch(el,val){
  const btn=document.getElementById(el);
  if(!btn) return;
