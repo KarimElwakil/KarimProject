@@ -228,11 +228,11 @@ function drawDevice(name,data){
  let sessionsHTML="";
  let totalTimeAll=0;
 
- if(!data.browsers){
-   container.innerHTML="لا يوجد جلسات";
-   return;
- }
-
+if(!data.browsers){
+ container.innerHTML="لا يوجد جلسات حالياً";
+ return;
+}
+  
  Object.keys(data.browsers).forEach(browser=>{
 
    const sessions = data.browsers[browser].sessions;
@@ -866,8 +866,8 @@ const box=document.getElementById("sess_"+safeId(id));
 const btnPages=document.getElementById("btn_pages_"+id);
 const btnDevice=document.getElementById("btn_device_"+id);
 
-btnPages.style.display="none";
-btnDevice.style.display="inline-block";
+const el = document.getElementById("btn_pages_"+sessionId);
+if(el) el.style.display="inline-block";
 
 loadSessionPages(id,box);
 }
@@ -894,9 +894,8 @@ const box=document.getElementById("sess_"+safeId(id));
 const btnPages=document.getElementById("btn_pages_"+id);
 const btnDevice=document.getElementById("btn_device_"+id);
 
-btnDevice.style.display="none";
-btnPages.style.display="inline-block";
-
+const el = document.getElementById("btn_pages_"+sessionId);
+if(el) el.style.display="inline-block";
 loadDeviceInfo(id,box);
 }
 
@@ -1267,28 +1266,47 @@ function deletePageReal(browser,sessionId,pageName,visitId){
 
 drawingNow = true;
 
-const pageRef = db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}/visits/${visitId}`);
+const base =
+`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}`;
 
-pageRef.remove().then(()=>{
+// احذف الزيارة
+db.ref(`${base}/pages/${pageName}/visits/${visitId}`).remove()
+.then(()=>{
 
- // نشوف هل باقي visits ولا لا
- db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}/visits`)
- .once("value")
+ // هل باقي زيارات؟
+ db.ref(`${base}/pages/${pageName}/visits`).once("value")
  .then(s=>{
 
+   // لو مفيش زيارات → امسح الصفحة نفسها
    if(!s.exists()){
-     // امسح الصفحة كلها
-     db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}`).remove();
+
+     db.ref(`${base}/pages/${pageName}`).remove();
+
+     // امسحها من flow
+     db.ref(`${base}/flow`).once("value").then(flowSnap=>{
+       const flow = flowSnap.val();
+       if(!flow) return;
+
+       Object.keys(flow).forEach(key=>{
+         if(flow[key].page === pageName){
+           db.ref(`${base}/flow/${key}`).remove();
+         }
+       });
+
+     });
+
    }
 
+   // تحديث القائمة فوراً
    deletePageMenu();
-   setTimeout(()=> drawingNow=false ,800);
+
+   setTimeout(()=> drawingNow=false ,500);
 
  });
 
 });
-}
 
+}
   function deleteDeviceFull(){
 
  if(!confirm("هل انت متأكد انك عايز تحذف الجهاز بالكامل؟")) return;
