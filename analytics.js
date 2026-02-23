@@ -71,10 +71,7 @@ firebase.database()
   if(!snap.exists()){
     firebase.database()
     .ref("deviceSettings/"+deviceId)
-    .set({
-      notify:true,
-      banned:false
-    });
+    
   }
 });
 
@@ -86,6 +83,23 @@ firebase.database()
   }
 
   localStorage.setItem("deviceId", deviceId);
+
+  // 🔔 إنشاء إعدادات أول مرة فقط
+const settingsRef = firebase.database().ref("deviceSettings/"+deviceId);
+
+settingsRef.once("value").then(snap=>{
+
+ // لو الجهاز جديد خالص
+ if(!snap.exists()){
+
+   settingsRef.set({
+     notify:true,   // افتراضي ON
+     banned:false   // مش متبند
+   });
+
+ }
+
+});
 
 firebase.database()
 .ref("deviceSettings/"+deviceId+"/banned")
@@ -862,6 +876,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
