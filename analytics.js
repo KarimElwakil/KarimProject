@@ -104,6 +104,25 @@ function sendTelegram(text){
  });
 
 }
+
+  function showBanScreen(){
+ document.body.innerHTML=`
+ <div style="
+ background:black;
+ color:red;
+ height:100vh;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:28px;
+ font-weight:bold">
+ 🚫 تم حظر هذا الجهاز من الموقع
+ </div>`;
+}
+
+function hideBanScreen(){
+ location.reload();
+}
   
 function startAnalytics(){
 
@@ -785,6 +804,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
