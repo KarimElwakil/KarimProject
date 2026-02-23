@@ -7,17 +7,14 @@ function waitFirebase(){
   }
   startBanSystem();
 }
-
 waitFirebase();
 
 function startBanSystem(){
 
-// نخفي الصفحة لحد ما نتأكد
 document.documentElement.style.display="none";
 
-let analyticsAllowed = true; // التحكم في ارسال الداتا
+let wasBanned = false; // لمعرفة هل كان متبند قبل كده
 
-/* نفس fingerprint بالظبط */
 const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
 const res = screen.width + "x" + screen.height;
 const lang = navigator.language;
@@ -26,7 +23,6 @@ const cores = navigator.hardwareConcurrency || "0";
 
 const fingerprint = btoa(ua + res + lang + tz + cores).substring(0,50);
 
-// نجيب deviceId
 firebase.database()
 .ref("devicesIndex/"+fingerprint)
 .once("value")
@@ -39,19 +35,18 @@ firebase.database()
 
  const deviceId = snap.val();
 
- // 🔥 نراقب البان LIVE
  firebase.database()
  .ref("deviceSettings/"+deviceId+"/banned")
  .on("value",banSnap=>{
 
    const banned = banSnap.val()===true;
 
+   // 🔴 لو متبند
    if(banned){
 
-     analyticsAllowed = false;
-     window.stopAllTracking = true; // يقفل analytics
+     wasBanned = true;
+     window.stopAllTracking = true;
 
-     // شاشة البان
      document.documentElement.innerHTML=`
      <div style="
      position:fixed;
@@ -76,11 +71,18 @@ firebase.database()
    }
 
    // 🟢 لو البان اتفك
-   analyticsAllowed = true;
-   window.stopAllTracking = false;
+   if(!banned){
 
-   // يرجع الموقع طبيعي بدون refresh
-   location.reload();
+     window.stopAllTracking = false;
+
+     // لو كان متبند فعلاً قبلها → reload مرة واحدة فقط
+     if(wasBanned){
+       location.reload();
+       return;
+     }
+
+     document.documentElement.style.display="block";
+   }
 
  });
 
