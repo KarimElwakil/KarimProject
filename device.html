@@ -1201,23 +1201,15 @@ Ban الجهاز 🚫
 function deletePageMenu(){
 
  const extra = document.getElementById("settingsExtra");
- extra.innerHTML="<h4>اختر الصفحة:</h4>";
+ extra.innerHTML="<h3>📄 حذف الصفحات</h3>";
 
  db.ref("analytics/devices/"+id+"/browsers").once("value").then(snap=>{
 
   const browsers = snap.val();
-  if(!browsers) return;
-
-  let sessionCounter = 0;
-function deletePageMenu(){
-
- const extra = document.getElementById("settingsExtra");
- extra.innerHTML="<h3>حذف الصفحات</h3>";
-
- db.ref("analytics/devices/"+id+"/browsers").once("value").then(snap=>{
-
-  const browsers = snap.val();
-  if(!browsers) return;
+  if(!browsers){
+    extra.innerHTML += "<br>لا يوجد صفحات";
+    return;
+  }
 
   Object.keys(browsers).forEach(browser=>{
 
@@ -1237,12 +1229,11 @@ function deletePageMenu(){
       let block = `
       <div style="background:#020617;padding:15px;border-radius:12px;margin:15px 0">
       <b style="font-size:18px">📄 ${pageName}</b>
-      <br>جلسة: ${sessionId}
+      <br>🧠 جلسة: ${sessionId}
       <br><br>
       `;
 
       Object.keys(visits).forEach(vId=>{
-
         const v = visits[vId];
         const t = new Date(v.enterTimestamp||Date.now()).toLocaleString();
 
@@ -1268,8 +1259,10 @@ function deletePageMenu(){
   });
 
  });
+
 }
 
+  
 function deletePageReal(browser,sessionId,pageName,visitId){
 
 drawingNow = true;
