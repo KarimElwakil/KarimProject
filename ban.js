@@ -1,29 +1,27 @@
 (function(){
 
-// 🔴 استنى لحد ما firebase يبقى جاهز
 function waitFirebase(){
-  if(typeof firebase === "undefined" || !firebase.apps.length){
+  if(typeof firebase==="undefined" || !firebase.apps.length){
     setTimeout(waitFirebase,50);
     return;
   }
-  startBanSystem();
+  startBan();
 }
 
 waitFirebase();
 
-function startBanSystem(){
+function startBan(){
 
-// اخفي الموقع لحين التحقق
 document.documentElement.style.display="none";
 
-// fingerprint نفس القديم
-const fingerprint = btoa(
-navigator.userAgent +
-screen.width +
-screen.height +
-navigator.language +
-Intl.DateTimeFormat().resolvedOptions().timeZone
-).substring(0,50);
+/* نفس fingerprint القديم بالظبط */
+const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
+const res = screen.width + "x" + screen.height;
+const lang = navigator.language;
+const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const cores = navigator.hardwareConcurrency || "0";
+
+const fingerprint = btoa(ua + res + lang + tz + cores).substring(0,50);
 
 firebase.database()
 .ref("devicesIndex/"+fingerprint)
@@ -45,7 +43,6 @@ firebase.database()
 
    if(banned){
 
-     // وقف الموقع بالكامل
      document.documentElement.innerHTML=`
      <div style="
      position:fixed;
@@ -65,12 +62,9 @@ firebase.database()
 
      document.body.style.overflow="hidden";
      document.documentElement.style.overflow="hidden";
-
-     window.stop(); // ⛔ يمنع أي تحميل
      return;
    }
 
-   // لو مش متبند
    document.documentElement.style.display="block";
 
  });
