@@ -5,16 +5,19 @@ function waitFirebase(){
     setTimeout(waitFirebase,50);
     return;
   }
-  startBan();
+  startBanSystem();
 }
 
 waitFirebase();
 
-function startBan(){
+function startBanSystem(){
 
+// نخفي الصفحة لحد ما نتأكد
 document.documentElement.style.display="none";
 
-/* نفس fingerprint القديم بالظبط */
+let analyticsAllowed = true; // التحكم في ارسال الداتا
+
+/* نفس fingerprint بالظبط */
 const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
 const res = screen.width + "x" + screen.height;
 const lang = navigator.language;
@@ -23,6 +26,7 @@ const cores = navigator.hardwareConcurrency || "0";
 
 const fingerprint = btoa(ua + res + lang + tz + cores).substring(0,50);
 
+// نجيب deviceId
 firebase.database()
 .ref("devicesIndex/"+fingerprint)
 .once("value")
@@ -35,6 +39,7 @@ firebase.database()
 
  const deviceId = snap.val();
 
+ // 🔥 نراقب البان LIVE
  firebase.database()
  .ref("deviceSettings/"+deviceId+"/banned")
  .on("value",banSnap=>{
@@ -43,6 +48,10 @@ firebase.database()
 
    if(banned){
 
+     analyticsAllowed = false;
+     window.stopAllTracking = true; // يقفل analytics
+
+     // شاشة البان
      document.documentElement.innerHTML=`
      <div style="
      position:fixed;
@@ -62,10 +71,16 @@ firebase.database()
 
      document.body.style.overflow="hidden";
      document.documentElement.style.overflow="hidden";
+
      return;
    }
 
-   document.documentElement.style.display="block";
+   // 🟢 لو البان اتفك
+   analyticsAllowed = true;
+   window.stopAllTracking = false;
+
+   // يرجع الموقع طبيعي بدون refresh
+   location.reload();
 
  });
 
