@@ -70,19 +70,32 @@ db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
   localStorage.setItem("deviceId", deviceId);
 
-  firebase.database()
-  .ref("deviceSettings/"+deviceId+"/banned")
-  .on("value",snap=>{
+ firebase.database()
+.ref("deviceSettings/"+deviceId+"/banned")
+.on("value",snap=>{
 
-    const banned = snap.val()===true;
+ const banned = snap.val()===true;
 
-    if(banned){
-      showBanScreen();
-    }else{
-      hideBanScreen();
-    }
+ if(banned){
 
-  });
+   // وقف كل حاجة فوراً
+   document.documentElement.innerHTML = `
+   <div style="
+   background:black;
+   color:red;
+   height:100vh;
+   display:flex;
+   align-items:center;
+   justify-content:center;
+   font-size:28px;
+   font-weight:bold">
+   🚫 تم حظر هذا الجهاز
+   </div>`;
+
+   throw new Error("banned"); // يوقف السكربت بالكامل
+ }
+
+});
 
   // 🔥 هنا فقط مرة واحدة
   startAnalytics();
@@ -824,6 +837,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
