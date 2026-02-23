@@ -91,8 +91,8 @@ db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
 function sendTelegram(text){
 
- const TELEGRAM_BOT = "توكن البوت";
- const TELEGRAM_CHAT = "chatid";
+ const TELEGRAM_BOT = "8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k";
+ const TELEGRAM_CHAT = "5986160897"";
 
  fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
   method:"POST",
@@ -785,6 +785,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
