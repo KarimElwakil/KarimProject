@@ -2,6 +2,8 @@ console.log("Analytics system starting...");
 
 console.log("Firebase working test");
 
+let stopAllTracking = false;
+
 // ===== UI HELPERS =====
 
 const svgIcons = {
@@ -90,15 +92,15 @@ firebase.database()
    justify-content:center;
    font-size:28px;
    font-weight:bold">
-   🚫 تم حظر هذا الجهاز من الموقع
+   🚫 تم حظر هذا الجهاز
    </div>`;
 
    return;
  }
 
- // لو مش متبند
- if(!window.analyticsStarted){
-   window.analyticsStarted = true;
+ // لو اتفك
+ if(stopAllTracking){
+   stopAllTracking=false;
    startAnalytics();
  }
 
@@ -172,7 +174,7 @@ function hideBanScreen(){
 
   
 function startAnalytics(){
-  if(window.stopAllTracking) return;
+  if(stopAllTracking) return;
 
   /* ================================
    TELEGRAM ALERT SYSTEM
@@ -845,6 +847,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
