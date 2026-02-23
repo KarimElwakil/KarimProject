@@ -158,10 +158,7 @@ function hideBanScreen(){
   
 function startAnalytics(){
   
-
-  /* ================================
-   TELEGRAM ALERT SYSTEM
-================================ */
+if(window.stopAllTracking) return;
 
 const TELEGRAM_BOT = "8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k";
 const TELEGRAM_CHAT = "5986160897";
@@ -832,6 +829,7 @@ document.addEventListener("visibilitychange", ()=>{
 }); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
