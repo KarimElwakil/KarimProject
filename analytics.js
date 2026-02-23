@@ -59,27 +59,84 @@ const cores = navigator.hardwareConcurrency || "0";
 
 const fingerprint = btoa(ua + res + lang + tz + cores).substring(0,50);
 
-// نجيب او ننشئ device
 db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
   if(snap.exists()){
     deviceId = snap.val();
-
   }else{
     deviceId = "device_" + Math.random().toString(36).substring(2,10);
     db.ref("devicesIndex/"+fingerprint).set(deviceId);
   }
 
-  // نحفظه محلي
   localStorage.setItem("deviceId", deviceId);
 
-  // بعد ما يجهز نبدأ التحليلات
-  startAnalytics();
+  // 🔴🔥 فحص البان قبل تشغيل الموقع
+  firebase.database().ref("bannedDevices/"+deviceId).once("value")
+  .then(banSnap=>{
+
+    if(banSnap.exists()){
+      document.body.innerHTML = `
+      <div style="
+      background:black;
+      color:red;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:28px;
+      font-weight:bold">
+      🚫 تم حظر هذا الجهاز من دخول الموقع
+      </div>`;
+      throw new Error("device banned");
+    }
+
+    // لو مش محظور يبدأ التحليلات
+    startAnalytics();
+
+  });
 
 });
 
-
 function startAnalytics(){
+
+  /* ================================
+   TELEGRAM ALERT SYSTEM
+================================ */
+
+const TELEGRAM_BOT = "8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k";
+const TELEGRAM_CHAT = "5986160897";
+
+// نتحقق هل الاشعار مفعل للجهاز ده
+firebase.database()
+.ref("deviceSettings/"+deviceId+"/notify")
+.once("value")
+.then(snap=>{
+
+ if(!snap.exists()) return;
+ if(snap.val() !== true) return;
+
+ sendTelegramAlert();
+
+});
+
+function sendTelegramAlert(){
+
+ const msg =
+`📱 جهاز دخل الموقع
+ID: ${deviceId}
+🕒 ${new Date().toLocaleString()}
+📱 ${navigator.userAgent}`;
+
+ fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:TELEGRAM_CHAT,
+    text:msg
+  })
+ });
+
+}
 
 
 /* ===============================
@@ -127,6 +184,20 @@ sessionRef.child("info").update({
   readableStart: new Date().toLocaleString(),
   device: navigator.userAgent
 });
+
+  // 🔔 إشعار دخول جهاز
+const deviceName =
+ detectDevice() + " | " +
+ screen.width+"x"+screen.height;
+
+sendTelegram(
+"📲 جهاز دخل الموقع\n" +
+"━━━━━━━━━━\n" +
+"📱 "+deviceName+"\n"+
+"🌐 "+detectBrowser()+"\n"+
+"💻 "+detectOS()+"\n"+
+"🕒 "+new Date().toLocaleString()
+);
 
 // لما يقفل الموقع
 window.addEventListener("beforeunload",()=>{
@@ -708,6 +779,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
