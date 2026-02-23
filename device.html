@@ -978,27 +978,18 @@ db.ref("analytics/devices").once("value").then(snap=>{
 
 let drawingNow = false;
 
-deviceRef.on("value",snap=>{
- if(drawingNow) return;
-
+// 🔥 رسم مرة واحدة فقط
+deviceRef.once("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
  Object.keys(devices).forEach(k=>{
-   if(k !== id) return;
-
-   const newData = devices[k];
-
-   // 🔥 لا تعيد رسم الصفحة أبداً
-   if(!container.dataset.loadedOnce){
-     drawDevice(k,newData);
-     container.dataset.loadedOnce = "true";
-   } else {
-     liveUpdateDevice(newData);
+   if(k === id){
+     drawDevice(k,devices[k]);
    }
-
  });
 });
+  
   function liveUpdateDevice(data){
 
  if(!data.browsers) return;
