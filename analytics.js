@@ -100,12 +100,24 @@ settingsRef.once("value").then(snap=>{
 
    stopAllTracking = true;
 
-   document.body.innerHTML = `
-   <div style="background:black;color:red;height:100vh;
-   display:flex;align-items:center;justify-content:center;
-   font-size:30px;font-weight:bold">
-   🚫 تم حظر هذا الجهاز
-   </div>`;
+  document.body.innerHTML = `
+<div style="
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+color:red;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px;
+font-weight:bold;
+z-index:999999;
+overflow:hidden">
+🚫 تم حظر هذا الجهاز
+</div>`;
 
    return; // ⛔ وقف كل شيء
  }
@@ -867,6 +879,7 @@ document.addEventListener("visibilitychange", ()=>{
 }); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
