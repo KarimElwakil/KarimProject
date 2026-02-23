@@ -666,8 +666,6 @@ function savePageExit() {
 const durationSec =
   Math.floor((endTime - pageStart) / 1000);
 
-devicePageRef.child("totalTimeOnPageSec")
-  .transaction(v => (v || 0) + durationSec);
 
 
 
@@ -772,6 +770,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
