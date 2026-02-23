@@ -63,17 +63,7 @@ const fingerprint = btoa(ua + res + lang + tz + cores).substring(0,50);
 
 db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
-  // 🔔 تفعيل الاشعارات افتراضي
-firebase.database()
-.ref("deviceSettings/"+deviceId)
-.once("value")
-.then(snap=>{
-  if(!snap.exists()){
-    firebase.database()
-    .ref("deviceSettings/"+deviceId)
-    
-  }
-});
+ 
 
   if(snap.exists()){
     deviceId = snap.val();
@@ -875,6 +865,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
