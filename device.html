@@ -1122,7 +1122,8 @@ const card = document.getElementById("sess_"+safeId(sid))?.closest(".card");
 
 function openSettings(){
 
-  settingsRef.on("value",snap=>{
+ settingsRef.off();
+settingsRef.on("value",snap=>{
  const data=snap.val()||{};
  updateSwitch("notifySwitch",data.notify===true);
  updateSwitch("banSwitch",data.banned===true);
