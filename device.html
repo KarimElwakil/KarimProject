@@ -1019,7 +1019,7 @@ deviceRef.once("value",snap=>{
 let drawingNow = false;
 
 deviceRef.on("value",snap=>{
- if(drawingNow) return; // 🔥 يمنع إعادة الرسم وقت التعديل
+ if(drawingNow) return;
 
  const devices = snap.val();
  if(!devices) return;
@@ -1029,16 +1029,28 @@ deviceRef.on("value",snap=>{
 
    const newData = devices[k];
 
-   // لو فاتح جلسة
+   // ❌ لو فيه جلسة مفتوحة → لا تعيد الرسم
    if(openedSession){
      liveUpdateDevice(newData);
      return;
    }
 
+   // ❌ لو الإعدادات مفتوحة سيبها
+   if(document.getElementById("deviceSettings")?.style.display==="block"){
+     liveUpdateDevice(newData);
+     return;
+   }
+
+   // ❌ لو المستخدم فاتح صفحات سيبها
+   if(openedPage){
+     liveUpdateDevice(newData);
+     return;
+   }
+
+   // 🔥 غير كده بس اعمل رسم
    drawDevice(k,newData);
  });
 });
-
   function liveUpdateDevice(data){
 
  if(!data.browsers) return;
