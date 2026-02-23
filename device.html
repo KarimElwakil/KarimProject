@@ -162,33 +162,7 @@ const url = new URL(location.href);
 const id = url.searchParams.get("id");
   const settingsRef = db.ref("deviceSettings/"+id);
 
- // 🔥 مراقبة الجلسات لايف
-sessionsLiveRef = db.ref("analytics/devices/"+id+"/browsers");
-
-sessionsLiveRef.on("value",snap=>{
-
- const data = snap.val();
- if(!data) return;
-
- document.querySelectorAll("[id^='sess_']").forEach(el=>{
-   const sid = el.id.replace("sess_","");
-   let exists = false;
-
-   Object.values(data).forEach(browser=>{
-     if(browser.sessions && browser.sessions[sid]){
-       exists = true;
-     }
-   });
-
-   // لو الجلسة اتحذفت من الداتا
-   if(!exists){
-     const card = el.closest(".card");
-     if(card) card.remove();
-   }
- });
-
-});
-
+ 
 const container = document.getElementById("info");
 container.innerHTML = "جاري تحميل بيانات الجهاز...";
 
@@ -362,6 +336,8 @@ class="switchBtn">
  }
 
 },300);
+
+  container.dataset.loadedOnce = "true";
 
 }
 
@@ -766,7 +742,7 @@ function drawMap(data){
  
   function startLiveSession(sessionId){
 
-    if(!openedPage) return;
+  
 
 
  // اقفل القديم
@@ -916,9 +892,7 @@ function loadDeviceInfo(sessionId,box){
 
 const ref = db.ref("analytics/devices");
 
-ref.off();
-
-ref.on("value",snap=>{
+ref.once("value").then(snap=>{
  const devices = snap.val();
  if(!devices) return;
 
@@ -1000,20 +974,6 @@ db.ref("analytics/devices").once("value").then(snap=>{
 });
 }
 
-let currentDeviceData = null;
-
-// تحميل أول مرة فقط
-deviceRef.once("value",snap=>{
- const devices = snap.val();
- if(!devices) return;
-
- Object.keys(devices).forEach(k=>{
-   if(k.includes(id)){
-     currentDeviceData = devices[k];
-     drawDevice(k,devices[k]);
-   }
- });
-});
 
 
 let drawingNow = false;
@@ -1025,30 +985,18 @@ deviceRef.on("value",snap=>{
  if(!devices) return;
 
  Object.keys(devices).forEach(k=>{
-   if(!k.includes(id)) return;
+   if(k !== id) return;
 
    const newData = devices[k];
 
-   // ❌ لو فيه جلسة مفتوحة → لا تعيد الرسم
-   if(openedSession){
+   // 🔥 لا تعيد رسم الصفحة أبداً
+   if(!container.dataset.loadedOnce){
+     drawDevice(k,newData);
+     container.dataset.loadedOnce = "true";
+   } else {
      liveUpdateDevice(newData);
-     return;
    }
 
-   // ❌ لو الإعدادات مفتوحة سيبها
-   if(document.getElementById("deviceSettings")?.style.display==="block"){
-     liveUpdateDevice(newData);
-     return;
-   }
-
-   // ❌ لو المستخدم فاتح صفحات سيبها
-   if(openedPage){
-     liveUpdateDevice(newData);
-     return;
-   }
-
-   // 🔥 غير كده بس اعمل رسم
-   drawDevice(k,newData);
  });
 });
   function liveUpdateDevice(data){
@@ -1292,6 +1240,12 @@ db.ref(`${base}/pages/${pageName}/visits/${visitId}`).remove()
            db.ref(`${base}/flow/${key}`).remove();
          }
        });
+
+       db.ref(`${base}/pages`).once("value").then(pSnap=>{
+ if(!pSnap.exists()){
+   db.ref(`${base}`).remove(); // حذف الجلسة بالكامل
+ }
+});
 
      });
 
