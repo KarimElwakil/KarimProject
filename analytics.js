@@ -93,6 +93,9 @@ firebase.database()
   throw new Error("banned");
  }
 
+  // لو مش محظور يبدأ التحليلات
+startAnalytics();
+
 });
 
   
@@ -780,6 +783,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
