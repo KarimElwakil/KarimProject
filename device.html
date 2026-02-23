@@ -1029,10 +1029,11 @@ deviceRef.once("value",snap=>{
 });
 
 
-// 🔥 تحديث لايف بدون إعادة رسم الصفحة
-let firstLoadDone = false;
+let drawingNow = false;
 
 deviceRef.on("value",snap=>{
+ if(drawingNow) return; // 🔥 يمنع إعادة الرسم وقت التعديل
+
  const devices = snap.val();
  if(!devices) return;
 
@@ -1041,14 +1042,13 @@ deviceRef.on("value",snap=>{
 
    const newData = devices[k];
 
-   // لو فيه جلسة مفتوحة متعملش redraw
-   if(openedSession) {
+   // لو فاتح جلسة
+   if(openedSession){
      liveUpdateDevice(newData);
      return;
    }
 
    drawDevice(k,newData);
-
  });
 });
 
@@ -1209,54 +1209,61 @@ function deletePageMenu(){
   if(!browsers) return;
 
   let sessionCounter = 0;
+function deletePageMenu(){
+
+ const extra = document.getElementById("settingsExtra");
+ extra.innerHTML="<h3>حذف الصفحات</h3>";
+
+ db.ref("analytics/devices/"+id+"/browsers").once("value").then(snap=>{
+
+  const browsers = snap.val();
+  if(!browsers) return;
 
   Object.keys(browsers).forEach(browser=>{
 
-    const sessions = browsers[browser].sessions;
-    if(!sessions) return;
+   const sessions = browsers[browser].sessions;
+   if(!sessions) return;
 
-    Object.keys(sessions).forEach(sessionId=>{
-      sessionCounter++;
+   Object.keys(sessions).forEach(sessionId=>{
 
-      const pages = sessions[sessionId].pages;
-      if(!pages) return;
+    const pages = sessions[sessionId].pages;
+    if(!pages) return;
 
-      Object.keys(pages).forEach(pageName=>{
+    Object.keys(pages).forEach(pageName=>{
 
-        const visits = pages[pageName].visits;
-        if(!visits) return;
+      const visits = pages[pageName].visits;
+      if(!visits) return;
 
-        Object.keys(visits).forEach(visitId=>{
+      let block = `
+      <div style="background:#020617;padding:15px;border-radius:12px;margin:15px 0">
+      <b style="font-size:18px">📄 ${pageName}</b>
+      <br>جلسة: ${sessionId}
+      <br><br>
+      `;
 
-          const v = visits[visitId];
+      Object.keys(visits).forEach(vId=>{
 
-          const time = new Date(v.enterTimestamp || Date.now())
-          .toLocaleString();
+        const v = visits[vId];
+        const t = new Date(v.enterTimestamp||Date.now()).toLocaleString();
 
-          extra.innerHTML+=`
-          <div style="margin:10px 0;padding:10px;background:#020617;border-radius:10px">
+        block += `
+        <div style="margin:8px 0;padding:8px;background:#000;border-radius:8px">
+        🕒 ${t}
 
-          📄 ${pageName}
-          <br>
-          🧠 جلسة رقم: ${sessionCounter}
-          <br>
-          🕒 ${time}
+        <button onclick="deletePageReal('${browser}','${sessionId}','${pageName}','${vId}')"
+        style="background:red;border:none;padding:4px 12px;border-radius:6px;margin-right:10px">
+        حذف
+        </button>
 
-          <br><br>
-
-          <button onclick="deletePageReal('${browser}','${sessionId}','${pageName}','${visitId}')"
-          style="background:#dc2626;border:none;padding:6px 14px;border-radius:8px">
-          حذف الصفحة
-          </button>
-
-          </div>
-          `;
-
-        });
-
+        </div>`;
       });
 
+      block += `</div>`;
+      extra.innerHTML += block;
+
     });
+
+   });
 
   });
 
@@ -1265,11 +1272,26 @@ function deletePageMenu(){
 
 function deletePageReal(browser,sessionId,pageName,visitId){
 
-db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}/visits/${visitId}`)
-.remove()
-.then(()=>{
+drawingNow = true;
 
- deletePageMenu(); // تحديث القائمة فوراً
+const pageRef = db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}/visits/${visitId}`);
+
+pageRef.remove().then(()=>{
+
+ // نشوف هل باقي visits ولا لا
+ db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}/visits`)
+ .once("value")
+ .then(s=>{
+
+   if(!s.exists()){
+     // امسح الصفحة كلها
+     db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}`).remove();
+   }
+
+   deletePageMenu();
+   setTimeout(()=> drawingNow=false ,800);
+
+ });
 
 });
 }
@@ -1328,6 +1350,7 @@ db.ref(`analytics/devices/${id}/browsers/${browser}/sessions/${sessionId}/pages/
 }
 
 function deleteSession(deviceKey,browser,sessionId){
+  drawingNow = true; // 🔴 قبل الحذف
 
  db.ref(`analytics/devices/${deviceKey}/browsers/${browser}/sessions/${sessionId}`)
  .remove()
@@ -1336,6 +1359,7 @@ function deleteSession(deviceKey,browser,sessionId){
    document.querySelectorAll(`[id*="${sessionId}"]`).forEach(el=>{
      const card = el.closest(".card");
      if(card) card.remove();
+      setTimeout(()=> drawingNow=false ,800); // 🔴 بعد الحذف
    });
  });
 
