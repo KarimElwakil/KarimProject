@@ -864,96 +864,9 @@ document.addEventListener("visibilitychange", ()=>{
 }
 
 
-}); // ← دي نهاية DOMContentLoaded
+}); // نهاية then fingerprint
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}); // نهاية DOMContentLoaded
 
 
 
