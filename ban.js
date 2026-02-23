@@ -1,27 +1,28 @@
 (function(){
 
+let isBanned = false;
+
+// نخفي الصفحة لحين الفحص
+document.documentElement.style.visibility="hidden";
+
 function waitFirebase(){
   if(typeof firebase==="undefined" || !firebase.apps.length){
     setTimeout(waitFirebase,50);
     return;
   }
-  startBanSystem();
+  startBan();
 }
 waitFirebase();
 
-function startBanSystem(){
-
-document.documentElement.style.display="none";
-
-let wasBanned = false; // لمعرفة هل كان متبند قبل كده
+function startBan(){
 
 const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
-const res = screen.width + "x" + screen.height;
+const res = screen.width+"x"+screen.height;
 const lang = navigator.language;
 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const cores = navigator.hardwareConcurrency || "0";
 
-const fingerprint = btoa(ua + res + lang + tz + cores).substring(0,50);
+const fingerprint = btoa(ua+res+lang+tz+cores).substring(0,50);
 
 firebase.database()
 .ref("devicesIndex/"+fingerprint)
@@ -29,7 +30,8 @@ firebase.database()
 .then(snap=>{
 
  if(!snap.exists()){
-   document.documentElement.style.display="block";
+   document.documentElement.style.visibility="visible";
+   window.stopAllTracking=false;
    return;
  }
 
@@ -37,56 +39,61 @@ firebase.database()
 
  firebase.database()
  .ref("deviceSettings/"+deviceId+"/banned")
- .on("value",banSnap=>{
+ .on("value",snap=>{
 
-   const banned = banSnap.val()===true;
+   const banned = snap.val()===true;
 
-   // 🔴 لو متبند
    if(banned){
 
-     wasBanned = true;
+     isBanned = true;
      window.stopAllTracking = true;
 
-     document.documentElement.innerHTML=`
-     <div style="
-     position:fixed;
-     top:0;left:0;
-     width:100%;
-     height:100%;
-     background:black;
-     color:red;
-     display:flex;
-     align-items:center;
-     justify-content:center;
-     font-size:32px;
-     font-weight:bold;
-     z-index:999999">
-     🚫 تم حظر هذا الجهاز
-     </div>`;
-
-     document.body.style.overflow="hidden";
-     document.documentElement.style.overflow="hidden";
-
+     showBanOverlay();
      return;
    }
 
-   // 🟢 لو البان اتفك
+   // لو اتفك
    if(!banned){
 
      window.stopAllTracking = false;
 
-     // لو كان متبند فعلاً قبلها → reload مرة واحدة فقط
-     if(wasBanned){
+     if(isBanned){
        location.reload();
        return;
      }
 
-     document.documentElement.style.display="block";
+     document.documentElement.style.visibility="visible";
    }
 
  });
 
 });
+
+}
+
+function showBanOverlay(){
+
+  if(document.getElementById("banOverlay")) return;
+
+  const div = document.createElement("div");
+  div.id="banOverlay";
+  div.style.position="fixed";
+  div.style.top="0";
+  div.style.left="0";
+  div.style.width="100%";
+  div.style.height="100%";
+  div.style.background="black";
+  div.style.color="red";
+  div.style.display="flex";
+  div.style.alignItems="center";
+  div.style.justifyContent="center";
+  div.style.fontSize="34px";
+  div.style.fontWeight="bold";
+  div.style.zIndex="9999999";
+  div.innerHTML="🚫 تم حظر هذا الجهاز";
+
+  document.body.appendChild(div);
+  document.body.style.overflow="hidden";
 
 }
 
