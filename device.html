@@ -863,11 +863,6 @@ const closeBtn=document.getElementById("btn_close_"+id);
 closeBtn.style.display="inline-block";
 
 const box=document.getElementById("sess_"+safeId(id));
-const btnPages=document.getElementById("btn_pages_"+id);
-const btnDevice=document.getElementById("btn_device_"+id);
-
-const el = document.getElementById("btn_pages_"+sessionId);
-if(el) el.style.display="inline-block";
 
 loadSessionPages(id,box);
 }
@@ -875,11 +870,8 @@ loadSessionPages(id,box);
   
 function showDevice(id){
 
-// اقفل أي جلسة مفتوحة
 if(openedSession && openedSession !== id){
-
  document.getElementById("sess_"+safeId(openedSession)).innerHTML="";
-
  document.getElementById("btn_pages_"+openedSession).style.display="inline-block";
  document.getElementById("btn_device_"+openedSession).style.display="inline-block";
  document.getElementById("btn_close_"+openedSession).style.display="none";
@@ -891,11 +883,7 @@ const closeBtn=document.getElementById("btn_close_"+id);
 closeBtn.style.display="inline-block";
 
 const box=document.getElementById("sess_"+safeId(id));
-const btnPages=document.getElementById("btn_pages_"+id);
-const btnDevice=document.getElementById("btn_device_"+id);
 
-const el = document.getElementById("btn_pages_"+sessionId);
-if(el) el.style.display="inline-block";
 loadDeviceInfo(id,box);
 }
 
