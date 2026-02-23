@@ -91,54 +91,7 @@ settingsRef.once("value").then(snap=>{
 
 });
 
-  settingsRef.on("value",snap=>{
-
- const data = snap.val() || {};
-
- // 🔴 لو متبند
- if(data.banned === true){
-
-   stopAllTracking = true;
-
-  document.body.innerHTML = `
-<div style="
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-color:red;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:32px;
-font-weight:bold;
-z-index:999999;
-overflow:hidden">
-🚫 تم حظر هذا الجهاز
-</div>`;
-
-   return; // ⛔ وقف كل شيء
- }
-
- // 🟢 لو البان اتفك
- if(data.banned === false){
-
-   if(stopAllTracking){
-     location.reload(); // يرجع الموقع طبيعي
-     return;
-   }
-
-   // تشغيل مرة واحدة فقط
-   if(!window.analyticsStarted){
-     window.analyticsStarted = true;
-     startAnalytics();
-   }
- }
-
-});
-
+ startAnalytics();
 
 
 function sendTelegram(text){
@@ -204,7 +157,7 @@ function hideBanScreen(){
 
   
 function startAnalytics(){
-  if(stopAllTracking) return;
+  
 
   /* ================================
    TELEGRAM ALERT SYSTEM
@@ -879,6 +832,7 @@ document.addEventListener("visibilitychange", ()=>{
 }); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
