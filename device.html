@@ -156,8 +156,10 @@ margin-bottom:15px">
 
 const db = firebase.database();
 
+
 const url = new URL(location.href);
 const id = url.searchParams.get("id");
+  const settingsRef = db.ref("deviceSettings/"+id);
 
 const container = document.getElementById("info");
 container.innerHTML = "جاري تحميل بيانات الجهاز...";
@@ -220,7 +222,7 @@ function drawDevice(name,data){
      
       online = s.info?.isOnline === true;
 
-       if(s.info.lastActive){
+      if(s.info && s.info.lastActive){
          lastSeen = new Date(s.info.lastActive).toLocaleString();
        }
      
