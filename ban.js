@@ -1,11 +1,22 @@
 (function(){
 
-/* 🛑 اخفي الصفحة فوراً لحد ما نقرر */
+// 🔴 استنى لحد ما firebase يبقى جاهز
+function waitFirebase(){
+  if(typeof firebase === "undefined" || !firebase.apps.length){
+    setTimeout(waitFirebase,50);
+    return;
+  }
+  startBanSystem();
+}
+
+waitFirebase();
+
+function startBanSystem(){
+
+// اخفي الموقع لحين التحقق
 document.documentElement.style.display="none";
 
-let stopAllTracking = false;
-
-/* نفس fingerprint القديم بالظبط */
+// fingerprint نفس القديم
 const fingerprint = btoa(
 navigator.userAgent +
 screen.width +
@@ -14,7 +25,6 @@ navigator.language +
 Intl.DateTimeFormat().resolvedOptions().timeZone
 ).substring(0,50);
 
-/* هات deviceId */
 firebase.database()
 .ref("devicesIndex/"+fingerprint)
 .once("value")
@@ -27,18 +37,15 @@ firebase.database()
 
  const deviceId = snap.val();
 
- const banRef = firebase.database().ref("deviceSettings/"+deviceId+"/banned");
-
- /* 🔴 مراقبة لحظية للبان */
- banRef.on("value",banSnap=>{
+ firebase.database()
+ .ref("deviceSettings/"+deviceId+"/banned")
+ .on("value",banSnap=>{
 
    const banned = banSnap.val()===true;
 
    if(banned){
 
-     stopAllTracking = true;
-
-     /* امسح الصفحة كلها */
+     // وقف الموقع بالكامل
      document.documentElement.innerHTML=`
      <div style="
      position:fixed;
@@ -56,35 +63,20 @@ firebase.database()
      🚫 تم حظر هذا الجهاز
      </div>`;
 
-     /* امنع الاسكرول */
      document.body.style.overflow="hidden";
      document.documentElement.style.overflow="hidden";
 
-     /* 🛑 وقف أي فايربيز */
-     firebase.database().goOffline();
-
+     window.stop(); // ⛔ يمنع أي تحميل
      return;
    }
 
-   /* 🟢 لو البان اتفك */
-   if(!banned){
-
-     /* رجع الاتصال */
-     firebase.database().goOnline();
-
-     /* لو كان متبند قبل كده */
-     if(stopAllTracking){
-       location.reload(); // يرجع الموقع طبيعي
-       return;
-     }
-
-     document.documentElement.style.display="block";
-   }
+   // لو مش متبند
+   document.documentElement.style.display="block";
 
  });
 
 });
 
+}
+
 })();
-
-
