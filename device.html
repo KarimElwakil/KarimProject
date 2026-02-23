@@ -86,12 +86,13 @@ transform:scale(1.05);
 .setting-switch{
 display:flex;
 align-items:center;
-justify-content:space-between;
+gap:15px;
 background:#0f172a;
-padding:14px 18px;
+padding:12px 20px;
 border-radius:14px;
-margin:8px 0;
+margin:10px 0;
 font-weight:bold;
+justify-content:flex-start;
 }
 
 .switch-btn{
@@ -1162,6 +1163,65 @@ Ban الجهاز 🚫
  `;
 }
 
+ function deletePageMenu(){
+
+ const extra = document.getElementById("settingsExtra");
+ extra.innerHTML="<h4>اختر الصفحة:</h4>";
+
+ db.ref("analytics/devices").once("value").then(snap=>{
+
+  const devices = snap.val();
+  if(!devices) return;
+
+  Object.keys(devices).forEach(deviceKey=>{
+    if(!deviceKey.includes(id)) return;
+
+    const device = devices[deviceKey];
+    if(!device.browsers) return;
+
+    Object.keys(device.browsers).forEach(browser=>{
+      const sessions=device.browsers[browser].sessions;
+      if(!sessions) return;
+
+      Object.keys(sessions).forEach(sessionId=>{
+
+        const pages = sessions[sessionId].pages;
+        if(!pages) return;
+
+        Object.keys(pages).forEach(pageName=>{
+
+          extra.innerHTML+=`
+          <div style="margin:8px 0">
+          ${pageName}
+          <button onclick="deletePage('${deviceKey}','${browser}','${sessionId}','${pageName}')"
+          style="margin-right:10px;background:#dc2626;border:none;padding:4px 10px;border-radius:6px">
+          حذف
+          </button>
+          </div>
+          `;
+
+        });
+
+      });
+
+    });
+
+  });
+
+ });
+
+}
+
+  function deletePage(deviceKey,browser,sessionId,pageName){
+
+ db.ref(`analytics/devices/${deviceKey}/browsers/${browser}/sessions/${sessionId}/pages/${pageName}`)
+ .remove()
+ .then(()=>{
+   deletePageMenu();
+ });
+
+}
+
   function deleteDeviceFull(){
 
  if(!confirm("هل انت متأكد انك عايز تحذف الجهاز بالكامل؟")) return;
@@ -1218,26 +1278,16 @@ Ban الجهاز 🚫
 function deleteSession(deviceKey,browser,sessionId){
 
  db.ref(`analytics/devices/${deviceKey}/browsers/${browser}/sessions/${sessionId}`)
- .remove();
+ .remove()
+ .then(()=>{
 
- alert("تم حذف الجلسة");
+   // امسحها من الواجهة فوراً
+   const card = document.getElementById("sess_"+safeId(sessionId))?.closest(".card");
+   if(card) card.remove();
+
+ });
 
 }
-
-
-/* ================================
-   SWITCH SYSTEM FINAL
-================================ */
-
-const settingsRef = db.ref("deviceSettings/"+id);
-
-// تحميل الحالة
-settingsRef.on("value",snap=>{
- const s = snap.val()||{};
-
- updateSwitch("notifySwitch", s.notify);
- updateSwitch("banSwitch", s.banned);
-});
 
 function updateSwitch(el,val){
  const btn=document.getElementById(el);
