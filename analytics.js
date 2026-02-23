@@ -70,7 +70,7 @@ db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
   localStorage.setItem("deviceId", deviceId);
 
- firebase.database()
+firebase.database()
 .ref("deviceSettings/"+deviceId+"/banned")
 .on("value",snap=>{
 
@@ -78,8 +78,9 @@ db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
  if(banned){
 
-   // وقف كل حاجة فوراً
-   document.documentElement.innerHTML = `
+   stopAllTracking = true;
+
+   document.documentElement.innerHTML=`
    <div style="
    background:black;
    color:red;
@@ -89,10 +90,16 @@ db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
    justify-content:center;
    font-size:28px;
    font-weight:bold">
-   🚫 تم حظر هذا الجهاز
+   🚫 تم حظر هذا الجهاز من الموقع
    </div>`;
 
-   throw new Error("banned"); // يوقف السكربت بالكامل
+   return;
+ }
+
+ // لو مش متبند
+ if(!window.analyticsStarted){
+   window.analyticsStarted = true;
+   startAnalytics();
  }
 
 });
@@ -165,6 +172,7 @@ function hideBanScreen(){
 
   
 function startAnalytics(){
+  if(window.stopAllTracking) return;
 
   /* ================================
    TELEGRAM ALERT SYSTEM
@@ -837,6 +845,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
