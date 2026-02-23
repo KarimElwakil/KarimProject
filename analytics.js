@@ -70,31 +70,32 @@ db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
 
   localStorage.setItem("deviceId", deviceId);
 
-  // 🔴🔥 فحص البان قبل تشغيل الموقع
-  firebase.database().ref("bannedDevices/"+deviceId).once("value")
-  .then(banSnap=>{
+  // 🔴 مراقبة البان realtime
+firebase.database()
+.ref("deviceSettings/"+deviceId+"/banned")
+.on("value",snap=>{
 
-    if(banSnap.exists()){
-      document.body.innerHTML = `
-      <div style="
-      background:black;
-      color:red;
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:28px;
-      font-weight:bold">
-      🚫 تم حظر هذا الجهاز من دخول الموقع
-      </div>`;
-      throw new Error("device banned");
-    }
+ if(snap.val()===true){
 
-    // لو مش محظور يبدأ التحليلات
-    startAnalytics();
+  document.body.innerHTML = `
+  <div style="
+  background:black;
+  color:red;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:bold">
+  🚫 تم حظر هذا الجهاز من الموقع
+  </div>`;
 
-  });
+  throw new Error("banned");
+ }
 
+});
+
+  
 });
 
 function startAnalytics(){
@@ -779,6 +780,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
