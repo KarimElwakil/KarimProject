@@ -105,24 +105,51 @@ function sendTelegram(text){
 
 }
 
-  function showBanScreen(){
- document.body.innerHTML=`
- <div style="
- background:black;
- color:red;
- height:100vh;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:28px;
- font-weight:bold">
- 🚫 تم حظر هذا الجهاز من الموقع
- </div>`;
+let banVisible = false;
+
+function showBanScreen(){
+
+ if(banVisible) return;
+ banVisible = true;
+
+ let banBox = document.getElementById("banOverlay");
+
+ if(!banBox){
+   banBox = document.createElement("div");
+   banBox.id="banOverlay";
+   banBox.style.position="fixed";
+   banBox.style.top="0";
+   banBox.style.left="0";
+   banBox.style.width="100%";
+   banBox.style.height="100%";
+   banBox.style.background="black";
+   banBox.style.display="flex";
+   banBox.style.alignItems="center";
+   banBox.style.justifyContent="center";
+   banBox.style.fontSize="28px";
+   banBox.style.fontWeight="bold";
+   banBox.style.color="red";
+   banBox.style.zIndex="999999";
+   banBox.innerHTML="🚫 تم حظر هذا الجهاز من الموقع";
+   document.body.appendChild(banBox);
+ }
+
+ document.body.style.overflow="hidden";
+ document.documentElement.style.overflow="hidden";
 }
 
 function hideBanScreen(){
- location.reload();
+
+ banVisible = false;
+
+ const banBox = document.getElementById("banOverlay");
+ if(banBox) banBox.remove();
+
+ document.body.style.overflow="";
+ document.documentElement.style.overflow="";
 }
+
+
   
 function startAnalytics(){
 
@@ -217,14 +244,7 @@ const deviceName =
  detectDevice() + " | " +
  screen.width+"x"+screen.height;
 
-sendTelegram(
-"📲 جهاز دخل الموقع\n" +
-"━━━━━━━━━━\n" +
-"📱 "+deviceName+"\n"+
-"🌐 "+detectBrowser()+"\n"+
-"💻 "+detectOS()+"\n"+
-"🕒 "+new Date().toLocaleString()
-);
+
 
 // لما يقفل الموقع
 window.addEventListener("beforeunload",()=>{
@@ -804,6 +824,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
