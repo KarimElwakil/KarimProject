@@ -101,44 +101,43 @@ settingsRef.once("value").then(snap=>{
 
 });
 
-firebase.database()
-.ref("deviceSettings/"+deviceId+"/banned")
-.on("value",snap=>{
+  settingsRef.on("value",snap=>{
 
- const banned = snap.val()===true;
+ const data = snap.val() || {};
 
- if(banned){
+ // 🔴 لو متبند
+ if(data.banned === true){
 
    stopAllTracking = true;
 
-   document.documentElement.innerHTML=`
-   <div style="
-   background:black;
-   color:red;
-   height:100vh;
-   display:flex;
-   align-items:center;
-   justify-content:center;
-   font-size:28px;
-   font-weight:bold">
+   document.body.innerHTML = `
+   <div style="background:black;color:red;height:100vh;
+   display:flex;align-items:center;justify-content:center;
+   font-size:30px;font-weight:bold">
    🚫 تم حظر هذا الجهاز
    </div>`;
 
-   return;
+   return; // ⛔ وقف كل شيء
  }
 
- // لو اتفك
- if(stopAllTracking){
-   stopAllTracking=false;
-   startAnalytics();
+ // 🟢 لو البان اتفك
+ if(data.banned === false){
+
+   if(stopAllTracking){
+     location.reload(); // يرجع الموقع طبيعي
+     return;
+   }
+
+   // تشغيل مرة واحدة فقط
+   if(!window.analyticsStarted){
+     window.analyticsStarted = true;
+     startAnalytics();
+   }
  }
 
 });
 
-  // 🔥 هنا فقط مرة واحدة
-  startAnalytics();
 
-});
 
 function sendTelegram(text){
 
@@ -876,6 +875,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
 }); // ← دي نهاية DOMContentLoaded
+
 
 
 
