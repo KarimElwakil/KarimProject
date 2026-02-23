@@ -1,20 +1,19 @@
 (function(){
 
-let isBanned = false;
+window.stopAllTracking = true; // افتراضياً وقف التتبع
 
-// نخفي الصفحة لحين الفحص
-document.documentElement.style.visibility="hidden";
+let overlayShown = false;
 
 function waitFirebase(){
   if(typeof firebase==="undefined" || !firebase.apps.length){
     setTimeout(waitFirebase,50);
     return;
   }
-  startBan();
+  start();
 }
 waitFirebase();
 
-function startBan(){
+function start(){
 
 const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
 const res = screen.width+"x"+screen.height;
@@ -30,7 +29,6 @@ firebase.database()
 .then(snap=>{
 
  if(!snap.exists()){
-   document.documentElement.style.visibility="visible";
    window.stopAllTracking=false;
    return;
  }
@@ -45,24 +43,24 @@ firebase.database()
 
    if(banned){
 
-     isBanned = true;
      window.stopAllTracking = true;
 
-     showBanOverlay();
+     if(!overlayShown){
+       showBan();
+       overlayShown=true;
+     }
+
      return;
    }
 
-   // لو اتفك
+   // لو مش متبند
    if(!banned){
 
-     window.stopAllTracking = false;
+     window.stopAllTracking=false;
 
-     if(isBanned){
-       location.reload();
-       return;
+     if(overlayShown){
+       location.reload(); // يرجع الموقع
      }
-
-     document.documentElement.style.visibility="visible";
    }
 
  });
@@ -71,29 +69,28 @@ firebase.database()
 
 }
 
-function showBanOverlay(){
+function showBan(){
 
-  if(document.getElementById("banOverlay")) return;
+document.body.innerHTML="";
 
-  const div = document.createElement("div");
-  div.id="banOverlay";
-  div.style.position="fixed";
-  div.style.top="0";
-  div.style.left="0";
-  div.style.width="100%";
-  div.style.height="100%";
-  div.style.background="black";
-  div.style.color="red";
-  div.style.display="flex";
-  div.style.alignItems="center";
-  div.style.justifyContent="center";
-  div.style.fontSize="34px";
-  div.style.fontWeight="bold";
-  div.style.zIndex="9999999";
-  div.innerHTML="🚫 تم حظر هذا الجهاز";
+const div = document.createElement("div");
+div.style.position="fixed";
+div.style.top="0";
+div.style.left="0";
+div.style.width="100%";
+div.style.height="100%";
+div.style.background="black";
+div.style.color="red";
+div.style.display="flex";
+div.style.alignItems="center";
+div.style.justifyContent="center";
+div.style.fontSize="35px";
+div.style.fontWeight="bold";
+div.style.zIndex="999999999";
+div.innerHTML="🚫 تم حظر هذا الجهاز";
 
-  document.body.appendChild(div);
-  document.body.style.overflow="hidden";
+document.body.appendChild(div);
+document.body.style.overflow="hidden";
 
 }
 
