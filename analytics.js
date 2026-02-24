@@ -1,5 +1,5 @@
 console.log("Analytics system starting...");
-if(window.stopAllTracking) throw new Error("BANNED");
+
 
 console.log("Firebase working test");
 
@@ -830,6 +830,7 @@ document.addEventListener("visibilitychange", ()=>{
 }); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
