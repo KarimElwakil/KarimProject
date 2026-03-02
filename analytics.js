@@ -597,6 +597,8 @@ function getPageName(){
 }
 
 const pageName = getPageName();
+  
+ nextPageName = pageName;
 
 /* =========================
    PAGE ENTER TELEGRAM
@@ -786,15 +788,19 @@ document.addEventListener("click",()=>{
  localStorage.setItem("tg_pages",JSON.stringify(sessionPages));
 });
 
-window.addEventListener("scroll",()=>{
- if(!currentPage) return;
+setInterval(()=>{
+ if(!sessionPages.length) return;
+
+ let last=sessionPages[sessionPages.length-1];
 
  const h = document.body.scrollHeight-window.innerHeight;
  const sc = Math.round((window.scrollY/h)*100);
- if(sc>currentPage.scroll) currentPage.scroll=sc;
 
- localStorage.setItem("tg_pages",JSON.stringify(sessionPages));
-});
+ if(sc>last.scroll){
+   last.scroll=sc;
+   localStorage.setItem("tg_pages",JSON.stringify(sessionPages));
+ }
+},1500);
 
 // تسجيل الكليك
 document.addEventListener("click",(e)=>{
@@ -958,12 +964,15 @@ document.addEventListener("visibilitychange", ()=>{
   // ===== TELEGRAM EDIT =====
 if(tgMessageId){
 
- const staySec = Math.floor((Date.now() - pageStartTG)/1000);
+ const staySec = Math.floor((Date.now()-last.start)/1000);
+const min = Math.floor(staySec/60);
+const sec = staySec%60;
+const stay = `${min} دقيقة ${sec} ثانية`;
 
  const finalMsg =
 `📄 صفحة: ${pageName}
 
-⏱️ المدة: ${staySec} ثانية
+⏱️ المدة: ${stayText}
 📜 Scroll: ${maxScroll || 0}%
 🖱️ Clicks تم تسجيلها
 📱 ${navigator.userAgent}
@@ -990,6 +999,8 @@ if(tgMessageId){
    PAGE EXIT / NAVIGATION
 ========================= */
 
+let nextPageName = "خروج";
+
 function closeTelegramPage(nextPage="exit"){
 
  if(!sessionPages.length) return;
@@ -997,20 +1008,24 @@ function closeTelegramPage(nextPage="exit"){
  let last = sessionPages[sessionPages.length-1];
  if(!last.msgId) return;
 
- const stay = Math.floor((Date.now()-last.start)/1000);
+ const staySec = Math.floor((Date.now()-last.start)/1000);
+ const min = Math.floor(staySec/60);
+ const sec = staySec%60;
 
  const text =
 `📄 صفحة: ${last.page}
 
-⏱️ المدة: ${stay} ثانية
+⏱️ المدة: ${min} دقيقة ${sec} ثانية
 📜 Scroll: ${last.scroll||0}%
-🖱️ Clicks: ${last.clicks||0}
 
-➡️ انتقل إلى: ${nextPage}`;
+🎨 Theme: ${document.documentElement.getAttribute("data-theme")||"light"}
+
+➡️ انتقل إلى: ${nextPageName}`;
 
  tgEdit(last.msgId,text);
 }
 
+  
 /* انتقال صفحة */
 window.addEventListener("beforeunload",()=>{
  closeTelegramPage("صفحة أخرى");
@@ -1076,6 +1091,7 @@ summaryTimer=setTimeout(sendFinalSummary,1200000); //20 min
   }
 
 }); // نهاية DOMContentLoaded
+
 
 
 
