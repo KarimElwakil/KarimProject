@@ -51,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
    DEVICE SYSTEM ULTRA FIXED
 =============================== */
 
-let deviceId = null;
 
 // بصمة قوية للجهاز
 const ua = navigator.userAgent.replace(/[.#$[\]]/g,"");
@@ -871,6 +870,7 @@ document.addEventListener("visibilitychange", ()=>{
 }); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
