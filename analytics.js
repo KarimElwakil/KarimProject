@@ -158,6 +158,59 @@ function hideBanScreen(){
   
 function startAnalytics(){
 
+  /* =========================================
+   TELEGRAM ULTRA TRACKING ENGINE
+========================================= */
+
+let tgMessageId = null;
+let pageStartTG = Date.now();
+let inactiveTimer = null;
+let offlineTimer = null;
+let summaryTimer = null;
+
+let sessionPages = JSON.parse(localStorage.getItem("tg_pages") || "[]");
+let sessionStartTG = localStorage.getItem("tg_session_start");
+
+if(!sessionStartTG){
+  sessionStartTG = Date.now();
+  localStorage.setItem("tg_session_start", sessionStartTG);
+}
+
+/* ===== helper ===== */
+function tgSend(text){
+ return fetch(`https://api.telegram.org/bot8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k/sendMessage`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"5986160897",
+    text:text
+  })
+ }).then(r=>r.json());
+}
+
+function tgEdit(id,text){
+ return fetch(`https://api.telegram.org/bot8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k/editMessageText`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"5986160897",
+    message_id:id,
+    text:text
+  })
+ });
+}
+
+function tgDelete(id){
+ return fetch(`https://api.telegram.org/bot8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k/deleteMessage`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"5986160897",
+    message_id:id
+  })
+ });
+}
+
   /* ========================================
    SMART ENTRY SYSTEM (ANTI SPAM)
 ======================================== */
@@ -562,49 +615,43 @@ function getPageName(){
 
 const pageName = getPageName();
 
-  /* =========================================
-   TELEGRAM PAGE TRACKING (EDIT SYSTEM)
-========================================= */
+/* =========================
+   PAGE ENTER TELEGRAM
+========================= */
 
-let telegramMessageId = null;
-let pageEnterTimeTG = Date.now();
-
-// هل الاشعارات مفعلة
 firebase.database()
 .ref("deviceSettings/"+deviceId+"/notify")
 .once("value")
 .then(snap=>{
+ if(snap.val()!==true) return;
 
- if(snap.val() !== true) return;
-
- sendPageEnterTelegram();
-
-});
-
-  function sendPageEnterTelegram(){
+ // لو refresh → لا ترسل
+ const nav = performance.getEntriesByType("navigation")[0];
+ if(nav && nav.type==="reload") return;
 
  const msg =
 `📄 دخول صفحة: ${pageName}
 🕒 ${new Date().toLocaleString()}
 ⏳ جاري التتبع...`;
 
- fetch(`https://api.telegram.org/bot8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k/sendMessage`,{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({
-    chat_id:"5986160897",
-    text:msg
-  })
- })
- .then(r=>r.json())
- .then(d=>{
+ tgSend(msg).then(d=>{
    if(d.result){
-     telegramMessageId = d.result.message_id;
+     tgMessageId = d.result.message_id;
+
+     sessionPages.push({
+       page:pageName,
+       msgId:tgMessageId,
+       start:Date.now(),
+       clicks:0,
+       scroll:0
+     });
+
+     localStorage.setItem("tg_pages",JSON.stringify(sessionPages));
    }
  });
 
-}
-
+});
+  
   /* تسجيل مشاهدة صفحة عالمياً */
 const globalPageRef = db.ref("analytics/pages/"+pageName);
 
@@ -744,6 +791,26 @@ document.addEventListener("mousemove",(e)=>{
     y:e.clientY,
     t:Date.now()
   });
+});
+
+  /* ===== TRACK INTERACTION ===== */
+
+let currentPage = sessionPages[sessionPages.length-1];
+
+document.addEventListener("click",()=>{
+ if(!currentPage) return;
+ currentPage.clicks++;
+ localStorage.setItem("tg_pages",JSON.stringify(sessionPages));
+});
+
+window.addEventListener("scroll",()=>{
+ if(!currentPage) return;
+
+ const h = document.body.scrollHeight-window.innerHeight;
+ const sc = Math.round((window.scrollY/h)*100);
+ if(sc>currentPage.scroll) currentPage.scroll=sc;
+
+ localStorage.setItem("tg_pages",JSON.stringify(sessionPages));
 });
 
 // تسجيل الكليك
@@ -938,8 +1005,95 @@ if(telegramMessageId){
 }
 
 
+  /* =========================
+   PAGE EXIT / NAVIGATION
+========================= */
+
+function closeTelegramPage(nextPage="exit"){
+
+ if(!sessionPages.length) return;
+
+ let last = sessionPages[sessionPages.length-1];
+ if(!last.msgId) return;
+
+ const stay = Math.floor((Date.now()-last.start)/1000);
+
+ const text =
+`📄 صفحة: ${last.page}
+
+⏱️ المدة: ${stay} ثانية
+📜 Scroll: ${last.scroll||0}%
+🖱️ Clicks: ${last.clicks||0}
+
+➡️ انتقل إلى: ${nextPage}`;
+
+ tgEdit(last.msgId,text);
+}
+
+/* انتقال صفحة */
+window.addEventListener("beforeunload",()=>{
+ closeTelegramPage("صفحة أخرى");
+});
+
+  /* =========================
+   INACTIVE 5 MIN
+========================= */
+
+function resetInactive(){
+ clearTimeout(inactiveTimer);
+
+ inactiveTimer=setTimeout(()=>{
+   closeTelegramPage("inactive");
+ },300000); // 5 min
+}
+
+["click","scroll","mousemove","keydown"].forEach(e=>{
+ document.addEventListener(e,resetInactive);
+});
+
+resetInactive();
+
+
+  /* =========================
+   FINAL SUMMARY 20 MIN
+========================= */
+
+function sendFinalSummary(){
+
+ let pages = JSON.parse(localStorage.getItem("tg_pages")||"[]");
+ if(!pages.length) return;
+
+ let text=`📊 ملخص الزيارة\n\n`;
+
+ text+=`📱 جهاز:\n`;
+ text+=navigator.userAgent+"\n";
+ text+=screen.width+"x"+screen.height+"\n\n";
+
+ pages.forEach(p=>{
+  const stay=Math.floor((Date.now()-p.start)/1000);
+
+  text+=`📄 ${p.page}\n`;
+  text+=`⏱️ ${stay}ث\n`;
+  text+=`📜 ${p.scroll||0}%\n`;
+  text+=`🖱️ ${p.clicks||0}\n\n`;
+ });
+
+ tgSend(text);
+
+ // حذف كل الرسائل القديمة
+ pages.forEach(p=>{
+  if(p.msgId) tgDelete(p.msgId);
+ });
+
+ localStorage.removeItem("tg_pages");
+ localStorage.removeItem("tg_session_start");
+}
+
+summaryTimer=setTimeout(sendFinalSummary,1200000); //20 min
+
 
 }); // نهاية DOMContentLoaded
+
 
 
 
