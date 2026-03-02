@@ -867,9 +867,9 @@ document.addEventListener("visibilitychange", ()=>{
 }
 
 
-}); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
