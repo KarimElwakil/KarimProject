@@ -519,26 +519,7 @@ db.ref("analytics/sources/" + source + "/visits")
   .transaction(v => (v || 0) + 1);
 
 
-fetch("https://ipapi.co/json/")
-  .then(res => res.json())
-  .then(loc => {
 
-    baseSessionData.country = loc.country_name || "Unknown";
-    baseSessionData.city = loc.city || "";
-
-    sessionRef.update(baseSessionData);
-
-
-
-  })
-  .catch(() => {
-
-    baseSessionData.country = "Unknown";
-
-    sessionRef.update(baseSessionData);
-
-
-  });
 
 
 
@@ -975,7 +956,7 @@ document.addEventListener("visibilitychange", ()=>{
 
 
   // ===== TELEGRAM EDIT =====
-if(telegramMessageId){
+if(tgMessageId){
 
  const staySec = Math.floor((Date.now() - pageEnterTimeTG)/1000);
 
@@ -994,7 +975,7 @@ if(telegramMessageId){
   headers:{"Content-Type":"application/json"},
   body:JSON.stringify({
     chat_id:"5986160897",
-    message_id: telegramMessageId,
+    message_id: tgMessageId,
     text: finalMsg
   })
  });
@@ -1093,6 +1074,7 @@ summaryTimer=setTimeout(sendFinalSummary,1200000); //20 min
 
 
 }); // نهاية DOMContentLoaded
+
 
 
 
