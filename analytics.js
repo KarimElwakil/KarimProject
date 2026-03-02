@@ -80,19 +80,18 @@ const settingsRef = firebase.database().ref("deviceSettings/"+deviceId);
 
 settingsRef.once("value").then(snap=>{
 
- // لو الجهاز جديد خالص
  if(!snap.exists()){
-
    settingsRef.set({
-     notify:true,   // افتراضي ON
-     banned:false   // مش متبند
+     notify:true,
+     banned:false
+   }).then(()=>{
+      startAnalytics(); // بعد الحفظ
    });
-
+ }else{
+   startAnalytics(); // موجود أصلاً
  }
 
 });
-
- startAnalytics();
 
 
 function sendTelegram(text){
@@ -830,6 +829,7 @@ document.addEventListener("visibilitychange", ()=>{
 }); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
