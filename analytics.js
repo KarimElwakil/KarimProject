@@ -86,7 +86,7 @@ settingsRef.once("value").then(snap=>{
     settingsRef.set({
       notify:true,
       banned:false
-   .then(()=>{
+   }).then(()=>{
       startAnalytics();
     });
   }else{
@@ -1074,6 +1074,7 @@ summaryTimer=setTimeout(sendFinalSummary,1200000); //20 min
 
 
 }); // نهاية DOMContentLoaded
+
 
 
 
