@@ -999,7 +999,7 @@ const stay = `${min} دقيقة ${sec} ثانية`;
    PAGE EXIT / NAVIGATION
 ========================= */
 
-let nextPageName = "خروج";
+ nextPageName = "خروج";
 
 function closeTelegramPage(nextPage="exit"){
 
@@ -1091,6 +1091,7 @@ summaryTimer=setTimeout(sendFinalSummary,1200000); //20 min
   }
 
 }); // نهاية DOMContentLoaded
+
 
 
 
