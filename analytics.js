@@ -841,9 +841,7 @@ function savePageExit() {
 
 
 
-  const avgScrollSpeed =
-  scrollCount > 0 ? (scrollSpeedSum / scrollCount).toFixed(0) : 0;
-
+ 
 
 
   const sessionDurationSec =
@@ -960,7 +958,7 @@ document.addEventListener("visibilitychange", ()=>{
   // ===== TELEGRAM EDIT =====
 if(tgMessageId){
 
- const staySec = Math.floor((Date.now() - pageEnterTimeTG)/1000);
+ const staySec = Math.floor((Date.now() - pageStartTG)/1000);
 
  const finalMsg =
 `📄 صفحة: ${pageName}
@@ -1076,6 +1074,7 @@ summaryTimer=setTimeout(sendFinalSummary,1200000); //20 min
 
 
 }); // نهاية DOMContentLoaded
+
 
 
 
