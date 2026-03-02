@@ -585,12 +585,7 @@ firebase.database()
 
  const msg =
 `📄 دخول صفحة: ${pageName}
-
-ID: ${deviceId}
 🕒 ${new Date().toLocaleString()}
-📱 ${navigator.userAgent}
-🖥️ ${screen.width}x${screen.height}
-
 ⏳ جاري التتبع...`;
 
  fetch(`https://api.telegram.org/bot8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k/sendMessage`,{
@@ -945,6 +940,7 @@ if(telegramMessageId){
 
 
 }); // نهاية DOMContentLoaded
+
 
 
 
