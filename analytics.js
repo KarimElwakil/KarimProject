@@ -1071,9 +1071,10 @@ function sendFinalSummary(){
 }
 
 summaryTimer=setTimeout(sendFinalSummary,1200000); //20 min
-
+});
 
 }); // نهاية DOMContentLoaded
+
 
 
 
