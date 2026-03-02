@@ -60,39 +60,40 @@ const lang = navigator.language;
 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const cores = navigator.hardwareConcurrency || "0";
 
-const fingerprint = btoa(ua + res + lang + tz + cores).substring(0,50);
+/* ===============================
+   DEVICE ID FIXED (جهاز واحد فقط)
+=============================== */
 
-db.ref("devicesIndex/"+fingerprint).once("value").then(snap=>{
+let deviceId = localStorage.getItem("deviceId");
 
- 
-
-  if(snap.exists()){
-    deviceId = snap.val();
-  }else{
-    deviceId = "device_" + Math.random().toString(36).substring(2,10);
-    db.ref("devicesIndex/"+fingerprint).set(deviceId);
-  }
-
+if(!deviceId){
+  deviceId = "dev_" + Math.random().toString(36).substring(2,12);
   localStorage.setItem("deviceId", deviceId);
 
-  // 🔔 إنشاء إعدادات أول مرة فقط
+  // تسجيل أول مرة فقط
+  firebase.database().ref("devices/"+deviceId).set({
+    firstSeen: Date.now(),
+    ua: navigator.userAgent,
+    res: screen.width+"x"+screen.height,
+    lang: navigator.language
+  });
+}
+
 const settingsRef = firebase.database().ref("deviceSettings/"+deviceId);
 
+// إنشاء الإعدادات أول مرة
 settingsRef.once("value").then(snap=>{
-
- if(!snap.exists()){
-   settingsRef.set({
-     notify:true,
-     banned:false
-   }).then(()=>{
-      startAnalytics(); // بعد الحفظ
-   });
- }else{
-   startAnalytics(); // موجود أصلاً
- }
-
+  if(!snap.exists()){
+    settingsRef.set({
+      notify:true,
+      banned:false
+    }).then(()=>{
+      startAnalytics();
+    });
+  }else{
+    startAnalytics();
+  }
 });
-
 
 function sendTelegram(text){
 
@@ -870,6 +871,7 @@ document.addEventListener("visibilitychange", ()=>{
 }); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
