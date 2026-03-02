@@ -562,6 +562,54 @@ function getPageName(){
 
 const pageName = getPageName();
 
+  /* =========================================
+   TELEGRAM PAGE TRACKING (EDIT SYSTEM)
+========================================= */
+
+let telegramMessageId = null;
+let pageEnterTimeTG = Date.now();
+
+// هل الاشعارات مفعلة
+firebase.database()
+.ref("deviceSettings/"+deviceId+"/notify")
+.once("value")
+.then(snap=>{
+
+ if(snap.val() !== true) return;
+
+ sendPageEnterTelegram();
+
+});
+
+  function sendPageEnterTelegram(){
+
+ const msg =
+`📄 دخول صفحة: ${pageName}
+
+ID: ${deviceId}
+🕒 ${new Date().toLocaleString()}
+📱 ${navigator.userAgent}
+🖥️ ${screen.width}x${screen.height}
+
+⏳ جاري التتبع...`;
+
+ fetch(`https://api.telegram.org/bot8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k/sendMessage`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"5986160897",
+    text:msg
+  })
+ })
+ .then(r=>r.json())
+ .then(d=>{
+   if(d.result){
+     telegramMessageId = d.result.message_id;
+   }
+ });
+
+}
+
   /* تسجيل مشاهدة صفحة عالمياً */
 const globalPageRef = db.ref("analytics/pages/"+pageName);
 
@@ -864,11 +912,40 @@ document.addEventListener("visibilitychange", ()=>{
 });
 
 
+  // ===== TELEGRAM EDIT =====
+if(telegramMessageId){
+
+ const staySec = Math.floor((Date.now() - pageEnterTimeTG)/1000);
+
+ const finalMsg =
+`📄 صفحة: ${pageName}
+
+⏱️ المدة: ${staySec} ثانية
+📜 Scroll: ${maxScroll || 0}%
+🖱️ Clicks تم تسجيلها
+📱 ${navigator.userAgent}
+
+🕒 خرج: ${new Date().toLocaleString()}`;
+
+ fetch(`https://api.telegram.org/bot8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k/editMessageText`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"5986160897",
+    message_id: telegramMessageId,
+    text: finalMsg
+  })
+ });
+
+}
+
+
 }
 
 
 
 }); // نهاية DOMContentLoaded
+
 
 
 
