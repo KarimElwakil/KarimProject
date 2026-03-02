@@ -234,42 +234,7 @@ ID: ${deviceId}
 
 }
   
-if(window.stopAllTracking) return;
 
-const TELEGRAM_BOT = "8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k";
-const TELEGRAM_CHAT = "5986160897";
-
-// نتحقق هل الاشعار مفعل للجهاز ده
-firebase.database()
-.ref("deviceSettings/"+deviceId+"/notify")
-.once("value")
-.then(snap=>{
-
- if(!snap.exists()) return;
- if(snap.val() !== true) return;
-
- sendTelegramAlert();
-
-});
-
-function sendTelegramAlert(){
-
- const msg =
-`📱 جهاز دخل الموقع
-ID: ${deviceId}
-🕒 ${new Date().toLocaleString()}
-📱 ${navigator.userAgent}`;
-
- fetch(`https://api.telegram.org/bot${TELEGRAM_BOT}/sendMessage`,{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({
-    chat_id:TELEGRAM_CHAT,
-    text:msg
-  })
- });
-
-}
 
 
 /* ===============================
@@ -905,6 +870,7 @@ document.addEventListener("visibilitychange", ()=>{
 }); // نهاية then fingerprint
 
 }); // نهاية DOMContentLoaded
+
 
 
 
