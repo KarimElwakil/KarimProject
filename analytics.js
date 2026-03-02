@@ -161,12 +161,14 @@ function startAnalytics(){
   /* =========================================
    TELEGRAM ULTRA TRACKING ENGINE
 ========================================= */
+let inactiveTimer = null;
+  let summaryTimer = null;
 
+  
 let tgMessageId = null;
 let pageStartTG = Date.now();
-let inactiveTimer = null;
 let offlineTimer = null;
-let summaryTimer = null;
+
 
 let sessionPages = JSON.parse(localStorage.getItem("tg_pages") || "[]");
 let sessionStartTG = localStorage.getItem("tg_session_start");
@@ -1074,6 +1076,7 @@ summaryTimer=setTimeout(sendFinalSummary,1200000); //20 min
 
 
 }); // نهاية DOMContentLoaded
+
 
 
 
