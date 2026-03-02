@@ -598,7 +598,7 @@ function getPageName(){
 
 const pageName = getPageName();
   
- nextPageName = pageName;
+let nextPageName = pageName;
 
 /* =========================
    PAGE ENTER TELEGRAM
@@ -1091,6 +1091,7 @@ summaryTimer=setTimeout(sendFinalSummary,1200000); //20 min
   }
 
 }); // نهاية DOMContentLoaded
+
 
 
 
