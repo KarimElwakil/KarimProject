@@ -157,6 +157,82 @@ function hideBanScreen(){
 
   
 function startAnalytics(){
+
+  /* ========================================
+   SMART ENTRY SYSTEM (ANTI SPAM)
+======================================== */
+
+const entryRef = firebase.database().ref("analyticsEntry/"+deviceId);
+
+// آخر دخول محفوظ
+entryRef.once("value").then(snap=>{
+
+ const now = Date.now();
+
+ // أول مرة يدخل في حياته
+ if(!snap.exists()){
+
+   sendEntryMessage("🆕 جهاز جديد دخل الموقع لأول مرة");
+
+   entryRef.set({
+     first: now,
+     last: now
+   });
+
+   return;
+ }
+
+ const data = snap.val();
+ const last = data.last || 0;
+
+ // رجع بعد ساعة
+ if(now - last > 3600000){
+
+   sendEntryMessage("🔁 جهاز رجع للموقع بعد غياب");
+
+   entryRef.update({
+     last: now
+   });
+
+ }else{
+   // دخل خلال ساعة → لا نرسل شيء
+   entryRef.update({
+     last: now
+   });
+ }
+
+});
+
+
+function sendEntryMessage(title){
+
+firebase.database()
+.ref("deviceSettings/"+deviceId+"/notify")
+.once("value")
+.then(snap=>{
+
+ if(snap.val() !== true) return;
+
+ const msg =
+`${title}
+
+ID: ${deviceId}
+🕒 ${new Date().toLocaleString()}
+📱 ${navigator.userAgent}
+🖥️ ${screen.width}x${screen.height}`;
+
+ fetch(`https://api.telegram.org/bot8492890302:AAEdVpPK_3o8J6DmUcNlZk-vOQzR4eHyZ2k/sendMessage`,{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({
+    chat_id:"5986160897",
+    text:msg
+  })
+ });
+
+});
+
+}
   
 if(window.stopAllTracking) return;
 
